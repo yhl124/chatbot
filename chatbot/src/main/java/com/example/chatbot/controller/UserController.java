@@ -13,8 +13,17 @@ public class UserController {
 	@Autowired
 	IUserService userService;
 	
-	@GetMapping({"", "/main"})
-    public String mainpage() {
-        return "Hello World";
+	/*
+	 * @GetMapping({"", "/main"}) public String mainpage() { return "main"; }
+	 */
+	
+    @GetMapping("/main")
+    public String home() {
+        return "main";
+    }
+	
+    @GetMapping("/login")
+    public String target() {
+        return "login";
     }
 }

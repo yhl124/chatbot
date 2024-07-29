@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="h-screen bg-white indigo">
+    <div class="h-full flex flex-col justify-center items-center">
+        <div class="mt-8">
+            <span class="text-indigo-600 text-3xl font-bold font-['Inter']">청년</span>
+            <span class="text-black text-3xl font-bold font-['Inter']">온기</span>
+            <span class="text-red-500 text-3xl font-bold font-['Inter']"> </span>
+        </div>
+        <form th:action="@{/login}" method="post" id="loginForm">
+            <div class="mt-8 w-80 px-6 pt-6 bg-white rounded-lg border border-zinc-300 flex flex-col justify-start items-start gap-6">
+                <div class="self-stretch h-16 flex-col justify-start items-start gap-2 flex">
+                    <div class="self-stretch text-stone-900 text-base font-normal font-['Inter'] leading-snug">아이디</div>
+                    <input type="text" class="self-stretch h-12 px-4 py-2 bg-white rounded-lg border border-zinc-300 focus:outline-none focus:border-[#5856d6]">
+                </div>
+                <div class="self-stretch h-16 flex-col justify-start items-start gap-2 flex">
+                    <div class="self-stretch text-stone-900 text-base font-normal font-['Inter'] leading-snug">비밀번호</div>
+                    <input type="password" class="self-stretch h-12 px-4 py-2 bg-white rounded-lg border border-zinc-300 focus:outline-none focus:border-[#5856d6]">
+                </div>
+                <div class="mt-4 h-12 self-stretch justify-start items-center gap-4 inline-flex">
+                    <button type="submit" class="hover:bg-[#5856d6] h-12 w-full p-3 bg-zinc-800 rounded-lg  justify-center items-center flex">
+                        <div class="text-neutral-100 text-base font-normal font-['Inter'] leading-none">로그인</div>
+                    </button>
+                </div>
+                <a href="" class="w-64 h-10 relative">
+                    <div class="left-0 top-[10px] absolute justify-start items-start inline-flex">
+                        <div class="text-stone-900 text-base font-normal font-['Inter'] underline leading-snug hover:text-[#5856d6]">회원가입</div>
+                    </div>
+                </a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
