@@ -1,6 +1,9 @@
 package com.example.chatbot.service;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.example.chatbot.model.User;
 
 public interface IUserService {
-	User getUserInfo(String userId);
+	int getUserCount();
+	UserDetails loadUserByUsername(String username);
 }

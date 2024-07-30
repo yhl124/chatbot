@@ -15,14 +15,19 @@
             <span class="text-red-500 text-3xl font-bold font-['Inter']"> </span>
         </div>
         <form th:action="@{/login}" method="post" id="loginForm">
+	        <div th:if="${param.error}">
+	            <div class="alert alert-danger">
+	                사용자ID 또는 비밀번호를 확인해 주세요.
+	            </div>
+	        </div>
             <div class="mt-8 w-80 px-6 pt-6 bg-white rounded-lg border border-zinc-300 flex flex-col justify-start items-start gap-6">
                 <div class="self-stretch h-16 flex-col justify-start items-start gap-2 flex">
                     <div class="self-stretch text-stone-900 text-base font-normal font-['Inter'] leading-snug">아이디</div>
-                    <input type="text" class="self-stretch h-12 px-4 py-2 bg-white rounded-lg border border-zinc-300 focus:outline-none focus:border-[#5856d6]">
+                    <input type="text" name="username" id="username" class="self-stretch h-12 px-4 py-2 bg-white rounded-lg border border-zinc-300 focus:outline-none focus:border-[#5856d6]">
                 </div>
                 <div class="self-stretch h-16 flex-col justify-start items-start gap-2 flex">
                     <div class="self-stretch text-stone-900 text-base font-normal font-['Inter'] leading-snug">비밀번호</div>
-                    <input type="password" class="self-stretch h-12 px-4 py-2 bg-white rounded-lg border border-zinc-300 focus:outline-none focus:border-[#5856d6]">
+                    <input type="password" name="password" id="password" class="self-stretch h-12 px-4 py-2 bg-white rounded-lg border border-zinc-300 focus:outline-none focus:border-[#5856d6]">
                 </div>
                 <div class="mt-4 h-12 self-stretch justify-start items-center gap-4 inline-flex">
                     <button type="submit" class="hover:bg-[#5856d6] h-12 w-full p-3 bg-zinc-800 rounded-lg  justify-center items-center flex">
