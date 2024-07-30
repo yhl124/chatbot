@@ -9,4 +9,5 @@ public interface IUserRepository {
 	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
 	int getUserCount();
+	void insertUser(User user);
 }

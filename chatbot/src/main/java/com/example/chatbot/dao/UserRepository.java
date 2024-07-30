@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.chatbot.model.User;
@@ -19,6 +20,9 @@ public class UserRepository implements IUserRepository, UserDetailsService{
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 	
 	private class UserMapper implements RowMapper<User>{
 		@Override
@@ -53,4 +57,15 @@ public class UserRepository implements IUserRepository, UserDetailsService{
 	        throw new RuntimeException("Database error", e);
 	    }
 	}
+	
+	@Override
+	public void insertUser(User user) {
+        // 비밀번호를 BCrypt로 암호화
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
+		
+        String sql = "INSERT INTO users (user_id, password, user_name, birthday, gender, email) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, user.getUserId(), user.getPassword(), user.getName(), user.getBirthday(), user.getGender(), user.getEmail());
+    }
+
 }

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.chatbot.dao.IUserRepository;
+import com.example.chatbot.model.User;
 
 @Service
 public class UserService implements IUserService {
@@ -22,5 +23,10 @@ public class UserService implements IUserService {
 	public int getUserCount() {
 		// TODO Auto-generated method stub
 		return userRepository.getUserCount();
+	}
+	
+	@Override
+	public void insertUser(User user) {
+		userRepository.insertUser(user);
 	}
 }
