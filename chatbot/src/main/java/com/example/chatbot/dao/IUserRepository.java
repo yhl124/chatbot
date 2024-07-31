@@ -11,4 +11,5 @@ public interface IUserRepository {
 	int getUserCount();
 	void insertUser(User user);
 	User getUserInfoById(String userId);
+	User getUserInfoByEmail(String email);
 }

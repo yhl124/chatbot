@@ -33,4 +33,9 @@ public class UserService implements IUserService {
 	public User getUserInfoById(String userId) {
 		return userRepository.getUserInfoById(userId);
 	}
+	
+	@Override
+	public User getUserInfoByEmail(String email) {
+		return userRepository.getUserInfoByEmail(email);
+	}
 }

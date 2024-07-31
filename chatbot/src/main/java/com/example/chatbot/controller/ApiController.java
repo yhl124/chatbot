@@ -35,4 +35,18 @@ public class ApiController {
 		
 		return new ResponseEntity<>(map, HttpStatus.OK);
     }
+    
+    @PostMapping("/user/check/email")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam String email) {
+        User user = userService.getUserInfoByEmail(email);
+        Map<String, Object> map = new HashMap<String, Object>();
+        
+        if(user == null)
+			map.put("result", "success");
+		else
+			map.put("result", "failed");
+		
+		return new ResponseEntity<>(map, HttpStatus.OK);
+    }
 }

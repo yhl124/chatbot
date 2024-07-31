@@ -83,4 +83,14 @@ public class UserRepository implements IUserRepository, UserDetailsService {
 			return null;
 		}
 	}
+	
+	@Override
+	public User getUserInfoByEmail(String email) {
+		String sql = "select * from users where email = ?";
+		try {
+			return jdbcTemplate.queryForObject(sql, new UserMapper(), email);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }

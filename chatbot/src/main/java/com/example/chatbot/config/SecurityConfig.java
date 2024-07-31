@@ -17,9 +17,11 @@ public class SecurityConfig {
 	@Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+       	
         	.csrf(csrf -> csrf
-                .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**")) // /api/** 경로에 대해 CSRF 비활성화
+                .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**")) // /api/** 경로에 대해 CSRF 비활성화 
             )
+//        	.csrf(csrf -> csrf.disable()) // CSRF 비활성화
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll() // /api/** 경로에 대해 접근 허용
                 .requestMatchers(new AntPathRequestMatcher("/**")).permitAll() // 나머지 경로에 대해 접근 허용
