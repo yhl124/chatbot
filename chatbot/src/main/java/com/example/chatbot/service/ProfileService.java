@@ -31,8 +31,7 @@ public class ProfileService implements IProfileService {
 
 	@Override
 	public Profile getProfileByUserId(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		return profileRepository.getProfileByUserId(userId);
 	}
 	
 }

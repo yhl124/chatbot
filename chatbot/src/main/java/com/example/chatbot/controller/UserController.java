@@ -1,19 +1,16 @@
 package com.example.chatbot.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -62,24 +59,41 @@ public class UserController {
     public String insertUser(User user, @RequestParam("file") MultipartFile file, RedirectAttributes model) {
     	log.info(file.getOriginalFilename());
     	try {
-			userService.insertUser(user);
-			User newUser = userService.getUserInfoById(user.getUserId());
-			log.info(newUser.getUserId());
-			
-			if(file != null && !file.isEmpty()) {
-				Profile profile = new Profile();
-				profile.setUserId(newUser.getUserId());
-				profile.setFileName(file.getOriginalFilename());
-				profile.setFileSize(file.getSize());
-				profile.setFileContentType(file.getContentType());
-				profile.setFileData(file.getBytes());
-				profileService.uploadFile(profile);
-			}
-			model.addFlashAttribute("message", "회원가입에 성공하였습니다.");
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			model.addFlashAttribute("message", e.getMessage());
-		}
+            userService.insertUser(user);
+            User newUser = userService.getUserInfoById(user.getUserId());
+            log.info("New User ID: " + newUser.getUserId());
+
+            Profile profile = new Profile();
+            profile.setUserId(newUser.getUserId());
+
+            if (file != null && !file.isEmpty()) {
+                profile.setFileName(file.getOriginalFilename());
+                profile.setFileSize(file.getSize());
+                profile.setFileContentType(file.getContentType());
+                profile.setFileData(file.getBytes());
+            } else {
+                // 기본 프로필 이미지를 설정하는 로직
+                profile.setFileName("defaultprofile.jpg");
+                profile.setFileContentType("image/jpeg");
+                // 기본 프로필 이미지의 바이트 데이터를 읽어와서 설정
+                try {
+                    ClassPathResource resource = new ClassPathResource("static/images/defaultprofile.jpg");
+                    byte[] defaultProfileImageData = Files.readAllBytes(resource.getFile().toPath());
+                    profile.setFileData(defaultProfileImageData);
+                    profile.setFileSize((long) defaultProfileImageData.length);
+                } catch (IOException e) {
+                    log.error("Failed to load default profile image", e);
+                    throw new RuntimeException("Failed to load default profile image", e);
+                }
+            }
+
+            profileService.uploadFile(profile);
+
+            model.addFlashAttribute("message", "회원가입에 성공하였습니다.");
+        } catch (Exception e) {
+            log.error("Error during signup: " + e.getMessage(), e);
+            model.addFlashAttribute("message", "회원가입에 실패하였습니다: " + e.getMessage());
+        }
         return "redirect:/login";
     }
     

@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -56,7 +57,12 @@ public class ProfileRepository implements IProfileRepository {
 
 	@Override
 	public Profile getProfileByUserId(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "SELECT profile_id, user_id, file_name, file_size, "
+				+ "file_content_type, file_data FROM profiles WHERE user_id=?";
+		try {
+			return jdbcTemplate.queryForObject(sql, new ProfileMapper(), userId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 }
