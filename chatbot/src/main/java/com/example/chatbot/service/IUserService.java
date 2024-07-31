@@ -7,4 +7,5 @@ public interface IUserService {
 	int getUserCount();
 	UserDetails loadUserByUsername(String username);
 	void insertUser(User user);
+	User getUserInfoById(String userId);
 }

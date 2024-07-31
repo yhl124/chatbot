@@ -18,14 +18,14 @@ import org.springframework.stereotype.Repository;
 import com.example.chatbot.model.User;
 
 @Repository
-public class UserRepository implements IUserRepository, UserDetailsService{
+public class UserRepository implements IUserRepository, UserDetailsService {
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
-	
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
-	
+
     private class UserMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -39,16 +39,15 @@ public class UserRepository implements IUserRepository, UserDetailsService{
             return user;
         }
     }
-	
-	@Override
-	public int getUserCount() {
-		String sql = "select count(*) from users";
-		//String sql = "select count(*) from employees";
-		System.out.println("UserRepository - getUserCount");
-		return jdbcTemplate.queryForObject(sql, Integer.class);
-	}
 
-	@Override
+    @Override
+    public int getUserCount() {
+        String sql = "SELECT count(*) FROM users";
+        System.out.println("UserRepository - getUserCount");
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
             User user = jdbcTemplate.queryForObject("SELECT * FROM users WHERE user_id = ?", new UserMapper(), username);
@@ -56,26 +55,32 @@ public class UserRepository implements IUserRepository, UserDetailsService{
                 throw new UsernameNotFoundException("User not found");
             }
             // 기본적으로 ROLE_USER 권한을 부여
-            return new org.springframework.security.core.userdetails.User(
-                user.getUserId(), 
-                user.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-            );
+            user.setAuthorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
+            return user;
         } catch (EmptyResultDataAccessException e) {
             throw new UsernameNotFoundException("User not found");
         } catch (Exception e) {
             throw new RuntimeException("Database error", e);
         }
     }
-	
-	@Override
-	public void insertUser(User user) {
+
+    @Override
+    public void insertUser(User user) {
         // 비밀번호를 BCrypt로 암호화
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-		
+
         String sql = "INSERT INTO users (user_id, password, user_name, birthday, gender, email) VALUES (?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql, user.getUserId(), user.getPassword(), user.getName(), user.getBirthday(), user.getGender(), user.getEmail());
     }
 
+	@Override
+	public User getUserInfoById(String userId) {
+		String sql = "select * from users where user_id = ?";
+		try {
+			return jdbcTemplate.queryForObject(sql, new UserMapper(), userId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
 }

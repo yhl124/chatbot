@@ -15,20 +15,28 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 	@Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-		http
-			.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-					. requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-			.formLogin((formLogin) -> formLogin
-					.loginPage("/login")
-					.defaultSuccessUrl("/"))
-			.logout((logout) -> logout
-	                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-	                .logoutSuccessUrl("/")
-	                .invalidateHttpSession(true))
-		;
-		return http.build();
-	}
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+        	.csrf(csrf -> csrf
+                .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**")) // /api/** 경로에 대해 CSRF 비활성화
+            )
+            .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                .requestMatchers(new AntPathRequestMatcher("/api/**")).permitAll() // /api/** 경로에 대해 접근 허용
+                .requestMatchers(new AntPathRequestMatcher("/**")).permitAll() // 나머지 경로에 대해 접근 허용
+            )
+            .formLogin((formLogin) -> formLogin
+                .loginPage("/login")
+                .defaultSuccessUrl("/")
+                .permitAll()
+            )
+            .logout((logout) -> logout
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .permitAll()
+            );
+        return http.build();
+    }
 	
 	@Bean
 	PasswordEncoder passwordEncoder() {

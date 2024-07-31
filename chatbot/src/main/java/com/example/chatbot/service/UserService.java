@@ -10,23 +10,27 @@ import com.example.chatbot.model.User;
 
 @Service
 public class UserService implements IUserService {
-	
-	@Autowired
-	IUserRepository userRepository;
+
+    @Autowired
+    IUserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.loadUserByUsername(username);
     }
 
+    @Override
+    public int getUserCount() {
+        return userRepository.getUserCount();
+    }
+
+    @Override
+    public void insertUser(User user) {
+        userRepository.insertUser(user);
+    }
+
 	@Override
-	public int getUserCount() {
-		// TODO Auto-generated method stub
-		return userRepository.getUserCount();
-	}
-	
-	@Override
-	public void insertUser(User user) {
-		userRepository.insertUser(user);
+	public User getUserInfoById(String userId) {
+		return userRepository.getUserInfoById(userId);
 	}
 }

@@ -12,20 +12,21 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
 @Getter
-@ToString
-public class User implements UserDetails{
-	private String userId;
-	private String password;
-	private String name;
-	private Date birthday;
-	private String gender;
-	private String email;
-	
-	 @Override
+@Setter
+@ToString(exclude = "password")
+public class User implements UserDetails {
+    private String userId;
+    private String password;
+    private String name;
+    private Date birthday;
+    private String gender;
+    private String email;
+    private Collection<? extends GrantedAuthority> authorities;
+
+    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
+        return authorities != null ? authorities : Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override

@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>청년온기 회원가입</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-
 <body>
     <div class="w-full h-auto relative overflow-hidden bg-white mx-auto">
         <p class="absolute left-1/2 transform -translate-x-1/2 top-6 text-2xl md:text-4xl font-bold text-left">
@@ -16,47 +15,43 @@
         </p>
         <form th:action="@{/signup}" method="post" id="signupForm" accept-charset="UTF-8">
             <div class="flex flex-col justify-start items-center w-full max-w-sm mx-auto p-6 mt-20 gap-6 rounded-lg bg-white border border-[#d9d9d9]">
-				
-<!-- 				<div class="flex justify-center items-center w-full relative overflow-hidden gap-2">
-                    <div class="w-16 h-16 relative">
-                        <img src="avatars-/-3d_avatar_14.png" class="w-16 h-16 absolute object-cover" />
-                    </div>
-                    <button class="w-8 h-8 flex justify-center items-center bg-transparent border-none p-0 m-0">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M28 20V25.3333C28 26.0406 27.719 26.7189 27.219 27.219C26.7189 27.719 26.0406 28 25.3333 28H6.66667C5.95942 28 5.28115 27.719 4.78105 27.219C4.28095 26.7189 4 26.0406 4 25.3333V20M22.6667 10.6667L16 4M16 4L9.33333 10.6667M16 4V20" stroke="#1E1E1E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </button>
-                    <button class="w-8 h-8 flex justify-center items-center bg-transparent border-none p-0 m-0">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 7.99996H6.66667M6.66667 7.99996H28M6.66667 7.99996V26.6666C6.66667 27.3739 6.94762 28.0521 7.44772 28.5522C7.94781 29.0523 8.62609 29.3333 9.33333 29.3333H22.6667C23.3739 29.3333 24.0522 29.0523 24.5523 28.5522C25.0524 28.0521 25.3333 27.3739 25.3333 26.6666V7.99996M10.6667 7.99996V5.33329C10.6667 4.62605 10.9476 3.94777 11.4477 3.44767C11.9478 2.94758 12.6261 2.66663 13.3333 2.66663H18.6667C19.3739 2.66663 20.0522 2.94758 20.5523 3.44767C21.0524 3.94777 21.3333 4.62605 21.3333 5.33329V7.99996M13.3333 14.6666V22.6666M18.6667 14.6666V22.6666" stroke="#1E1E1E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </button>
-                </div> -->
-				
+                
                 <div class="flex flex-col justify-start items-start w-full gap-2">
                     <div class="flex flex-col w-full gap-2">
                         <div class="flex justify-between items-center w-full">
                             <p class="text-base text-left text-[#1e1e1e]">아이디</p>
+                            <div id="userIdCheckResult" class="text-red-500 text-sm"></div>
                         </div>
                         <div class="flex justify-between items-center w-full gap-2">
-                            <input type="text" name="userId" id="userId" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
-                            <button type="button" class="hover:bg-[#5856d6] flex justify-center items-center h-10 px-3 whitespace-nowrap rounded-lg bg-[#2c2c2c]  text-neutral-100">중복확인</button>
-                        </div>
+                            <input type="text" name="userIdInput" id="userIdInput" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                            <button type="button" id="userIdCheckBtn" class="disabled:bg-slate-400 hover:bg-[#5856d6] flex justify-center items-center h-10 px-3 whitespace-nowrap rounded-lg bg-[#2c2c2c] text-neutral-100">중복확인</button>
+                        </div>  
                     </div>
+                    
                     <div class="flex flex-col w-full gap-2">
-                        <p class="text-base text-left text-[#1e1e1e]">비밀번호</p>
-                        <input type="password" name="password" id="password" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                    	<div class="flex justify-between items-center w-full">
+                            <p class="text-base text-left text-[#1e1e1e]">비밀번호</p>
+                            <div id="passwordCheck" class="text-red-500 text-sm"></div>
+                        </div>
+                        <input type="password" oninput="pwCheck()" name="password" id="password" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
                     </div>
                     <div class="flex flex-col w-full gap-2">
                         <p class="text-base text-left text-[#1e1e1e]">비밀번호 확인</p>
-                        <input type="password" name="passwordConfirm" id="passwordConfirm" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                        <input type="password" oninput="pwCheck()" name="passwordConfirm" id="passwordConfirm" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
                     </div>
+                    
                     <div class="flex flex-col w-full gap-2">
-                        <p class="text-base text-left text-[#1e1e1e]">이름</p>
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">이름</p>
+                        	<div id="nameInputCheck" class="text-red-500 text-sm"></div>
+                        </div>
                         <input type="text" name="name" id="name" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
                     </div>
                     <div class="flex flex-col w-full gap-2">
-                        <p class="text-base text-left text-[#1e1e1e]">성별</p>
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">성별</p>
+                        	<div id="genderInputCheck" class="text-red-500 text-sm"></div>
+                        </div>
                         <div class="flex gap-2">
                             <input type="radio" id="male" name="gender" value="male" class="hidden peer/male">
                             <label for="male" class="flex-1 h-10 px-4 py-2 rounded-lg bg-white hover:bg-violet-100 border border-[#d9d9d9] text-[#1e1e1e] text-center cursor-pointer peer-checked/male:bg-[#2c2c2c] peer-checked/male:text-white peer-checked/male:border-black">남자</label>
@@ -67,7 +62,10 @@
                     </div>
                     
                     <div class="flex flex-col w-full gap-2">
-                        <p class="text-base text-left text-[#1e1e1e]">생년월일</p>
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">생년월일</p>
+                        	<div id="birthInputCheck" class="text-red-500 text-sm"></div>
+                        </div>
                         <input type="date" name="birthday" max="" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9]" required />
                     </div>
                     
@@ -81,10 +79,11 @@
                     <div class="flex flex-col w-full gap-2">
                         <div class="flex justify-between items-center w-full">
                             <p class="text-base text-left text-[#1e1e1e]">이메일</p>
+                            <div id="emailCheckResult" class="text-red-500 text-sm"></div>
                         </div>
                         <div class="flex justify-between items-center w-full gap-2">
-                            <input type="email" name="email" id="email" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
-                            <button type="button" class="hover:bg-[#5856d6] flex justify-center items-center h-10 px-3 whitespace-nowrap rounded-lg bg-[#2c2c2c] text-neutral-100">중복확인</button>
+                            <input type="email" name="emailInput" id="emailInput" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                            <button type="button" id="emailCheckBtn" class="disabled:bg-slate-400 hover:bg-[#5856d6] flex justify-center items-center h-10 px-3 whitespace-nowrap rounded-lg bg-[#2c2c2c] text-neutral-100">중복확인</button>
                         </div>
                     </div>
                 </div>
@@ -94,6 +93,81 @@
             </div>
         </form>
     </div>
-</body>
+    <script>
+    
+	    function pwCheck(){
+	        if($('#password').val() == $('#passwordConfirm').val()){
+	            $('#passwordCheck').text('비밀번호 일치').css('color', 'green')
+	        }else{
+	            $('#passwordCheck').text('비밀번호 불일치').css('color', 'red')
+	        }
+	    }
+	    
+	    $(document).ready(function() {
+	        function toggleCheckBtn() {
+	            if ($('#userIdInput').val().trim() === '') {
+	                $('#userIdCheckBtn').attr('disabled', true);
+	            } else {
+	                $('#userIdCheckBtn').attr('disabled', false);
+	            }
+	            
+	            if ($('#emailInput').val().trim() === '') {
+	                $('#emailCheckBtn').attr('disabled', true);
+	            } else {
+	                $('#emailCheckBtn').attr('disabled', false);
+	            }
+	        }
 
+	        // 처음 로드 시 버튼 상태 설정
+	        toggleCheckBtn();
+	
+	        // 입력 필드 변경 시 버튼 상태 업데이트
+	        $('#userIdInput').on('input', function() {
+	            toggleCheckBtn();
+	        });
+	        $('#emailInput').on('input', function() {
+	            toggleCheckBtn();
+	        });
+	        
+	        
+	        $('#userIdCheckBtn').click(function() {
+	            var userId = $('#userIdInput').val();
+	            $.ajax({
+	                url: '/api/user/check/id',
+	                type: 'POST',
+	                data: { userId: userId },
+	                success: function(response) {
+	                    if (response.result === 'success') {
+	                        $('#userIdCheckResult').text('사용 가능한 아이디입니다.').css('color', 'green');
+	                    } else {
+	                        $('#userIdCheckResult').text('이미 사용 중인 아이디입니다.').css('color', 'red');
+	                    }
+	                },
+	                error: function() {
+	                    $('#userIdCheckResult').text('아이디 중복 체크 중 오류가 발생했습니다.').css('color', 'red');
+	                }
+	            });
+	        });
+	        
+	        $('#emailCheckBtn').click(function() {
+	            var userId = $('#emailInput').val();
+	            $.ajax({
+	                url: '/api/user/check/id', /////변경필요
+	                type: 'POST',
+	                data: { userId: userId }, /////변경필요
+	                success: function(response) {
+	                    if (response.result === 'success') {
+	                        $('#emailCheckResult').text('사용 가능한 메일입니다.').css('color', 'green');
+	                    } else {
+	                        $('#emailCheckResult').text('이미 사용 중인 메일입니다.').css('color', 'red');
+	                    }
+	                },
+	                error: function() {
+	                    $('#emailCheckResult').text('메일 중복 체크 중 오류가 발생했습니다.').css('color', 'red');
+	                }
+	            });
+	        });
+	    });
+    </script>
+</body>
 </html>
