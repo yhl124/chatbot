@@ -5,7 +5,9 @@ import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,6 +98,55 @@ public class UserController {
         }
         return "redirect:/login";
     }
+    
+    //마이 페이지 이동
+    @GetMapping("/mypage")
+    public String myPage(@AuthenticationPrincipal User user, Model model) {
+    	if (user != null) {
+            model.addAttribute("user", user);
+        }
+        return "mypage"; // mypage.html 템플릿을 렌더링
+    }
+    
+    //마이페이지 수정하기 버튼
+    @PostMapping("/mypage")
+    public String updateUser(User user, @RequestParam("file") MultipartFile file, RedirectAttributes model) {
+    	try {
+            userService.updateUser(user);
+
+            Profile profile = new Profile();
+            profile.setUserId(user.getUserId());
+
+            if (file != null && !file.isEmpty()) {
+                profile.setFileName(file.getOriginalFilename());
+                profile.setFileSize(file.getSize());
+                profile.setFileContentType(file.getContentType());
+                profile.setFileData(file.getBytes());
+            } else {
+                // 기본 프로필 이미지를 설정하는 로직
+                profile.setFileName("defaultprofile.jpg");
+                profile.setFileContentType("image/jpeg");
+                // 기본 프로필 이미지의 바이트 데이터를 읽어와서 설정
+                try {
+                    ClassPathResource resource = new ClassPathResource("static/images/defaultprofile.jpg");
+                    byte[] defaultProfileImageData = Files.readAllBytes(resource.getFile().toPath());
+                    profile.setFileData(defaultProfileImageData);
+                    profile.setFileSize((long) defaultProfileImageData.length);
+                } catch (IOException e) {
+                    log.error("Failed to load default profile image", e);
+                    throw new RuntimeException("Failed to load default profile image", e);
+                }
+            }
+            profileService.uploadFile(profile);
+
+            model.addFlashAttribute("message", "회원정보 수정에 성공하였습니다.");
+        } catch (Exception e) {
+            log.error("Error during signup: " + e.getMessage(), e);
+            model.addFlashAttribute("message", "회원정보 수정에 실패하였습니다: " + e.getMessage());
+        }
+        return "redirect:/mypage";
+    }
+    
     
 //    //업로드 테스트 페이지 이동
 //    @GetMapping("/upload")

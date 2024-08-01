@@ -22,6 +22,7 @@ public class ApiController {
 	@Autowired
     IUserService userService;
 
+	//중복 아이디 체크
     @PostMapping("/user/check/id")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> checkUsername(@RequestParam String userId) {
@@ -36,6 +37,7 @@ public class ApiController {
 		return new ResponseEntity<>(map, HttpStatus.OK);
     }
     
+    //중복 이메일 체크
     @PostMapping("/user/check/email")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> checkEmail(@RequestParam String email) {
@@ -43,6 +45,21 @@ public class ApiController {
         Map<String, Object> map = new HashMap<String, Object>();
         
         if(user == null)
+			map.put("result", "success");
+		else
+			map.put("result", "failed");
+		
+		return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+    
+    //나를 제외한 중복 이메일체크
+    @PostMapping("/user/check/otheremail")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> checkOtherEmail(@RequestParam String email, String userId) {
+        int user = userService.getUserInfoByOtherEmail(email, userId);
+        Map<String, Object> map = new HashMap<String, Object>();
+        
+        if(user < 1)
 			map.put("result", "success");
 		else
 			map.put("result", "failed");

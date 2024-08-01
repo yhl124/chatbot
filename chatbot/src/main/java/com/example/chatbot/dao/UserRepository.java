@@ -93,4 +93,20 @@ public class UserRepository implements IUserRepository, UserDetailsService {
 			return null;
 		}
 	}
+
+	@Override
+	public Integer getUserInfoByOtherEmail(String email, String userId) {
+		String sql = "select count(*) as email_count from users where email = ? and user_id <> ? ";
+		try {
+			return jdbcTemplate.queryForObject(sql, Integer.class, email, userId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public void updateUser(User user) {		
+		String sql = "update users set (user_name, gender, email) VALUES (?, ?, ?) where user_id =?";
+        jdbcTemplate.update(sql, user.getName(), user.getGender(), user.getEmail(), user.getUserId());
+	}
 }

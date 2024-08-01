@@ -9,4 +9,6 @@ public interface IUserService {
 	void insertUser(User user);
 	User getUserInfoById(String userId);
 	User getUserInfoByEmail(String email);
+	Integer getUserInfoByOtherEmail(String email, String userId);
+	void updateUser(User user);
 }

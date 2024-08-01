@@ -6,9 +6,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -36,7 +39,13 @@ public class SecurityConfig {
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .permitAll()
-            );
+            )
+            .sessionManagement(sessionManagement -> sessionManagement
+                    .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession) // 세션 고정 보호 활성화
+                    .maximumSessions(1) // 동시 세션의 최대 수 설정
+                    .maxSessionsPreventsLogin(false) // 최대 세션 수 초과 시 이전 세션 만료
+            )
+            ;
         return http.build();
     }
 	
