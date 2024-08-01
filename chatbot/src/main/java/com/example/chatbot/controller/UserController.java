@@ -5,12 +5,11 @@ import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,8 +57,9 @@ public class UserController {
 
     //회원가입 버튼
     @PostMapping("/signup")
-    public String insertUser(User user, @RequestParam("file") MultipartFile file, RedirectAttributes model) {
+    public String insertUser(@ModelAttribute User user, @RequestParam MultipartFile file, RedirectAttributes model) {
     	log.info(file.getOriginalFilename());
+    	log.info(user.getUserId());
     	try {
             userService.insertUser(user);
             User newUser = userService.getUserInfoById(user.getUserId());
@@ -110,14 +110,14 @@ public class UserController {
     
     //마이페이지 수정하기 버튼
     @PostMapping("/mypage")
-    public String updateUser(User user, @RequestParam("file") MultipartFile file, RedirectAttributes model) {
+    public String updateUser(@ModelAttribute User user, @RequestParam MultipartFile file, RedirectAttributes model) {
     	try {
+    		log.info(user.getUserId());
             userService.updateUser(user);
-
             Profile profile = new Profile();
-            profile.setUserId(user.getUserId());
-
+            
             if (file != null && !file.isEmpty()) {
+            	profile.setUserId(user.getUserId());
                 profile.setFileName(file.getOriginalFilename());
                 profile.setFileSize(file.getSize());
                 profile.setFileContentType(file.getContentType());
@@ -146,6 +146,7 @@ public class UserController {
         }
         return "redirect:/mypage";
     }
+    
     
     
 //    //업로드 테스트 페이지 이동

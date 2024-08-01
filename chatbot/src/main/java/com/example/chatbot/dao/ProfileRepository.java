@@ -13,6 +13,7 @@ import com.example.chatbot.model.Profile;
 
 
 
+
 @Repository
 public class ProfileRepository implements IProfileRepository {
 	@Autowired

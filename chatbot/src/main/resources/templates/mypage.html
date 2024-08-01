@@ -39,7 +39,7 @@
                 <div class="flex flex-col justify-start items-start w-full gap-2">
                     <p class="self-stretch text-base text-left text-[#1e1e1e]">아이디</p>
                     <!-- <div class="flex justify-between items-center w-full gap-2"> -->
-                        <input type="text" id="userId" th:value="${user.userId}" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9]" readonly disabled  />
+                        <input type="text" id="userId" name="userId" th:value="${user.userId}" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9]" readonly disabled  />
                     <!-- </div> -->
                 </div>
         
@@ -62,7 +62,7 @@
                 <div class="flex flex-col justify-start items-start w-full gap-2">
                     <p class="self-stretch text-base text-left text-[#1e1e1e]">생년월일</p>
                     <div class="flex justify-start items-center w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9]">
-                        <p class="flex-grow text-base text-left text-black" th:text=${user.birthday}></p>
+                        <p class="flex-grow text-base text-left text-black" name="birthday" th:text=${user.birthday}></p>
                     </div>
                 </div>
         
