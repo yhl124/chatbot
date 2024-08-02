@@ -149,7 +149,7 @@
     </style>
 </head>
 
-<body class="bg-gray-100 h-screen flex">
+<body class="bg-gray-100 h-screen flex">    
     <!-- Sidebar -->
     <div id="sidebar" class="w-64 bg-white h-full shadow-md flex flex-col justify-between transition-all duration-300">
         <div>
@@ -170,14 +170,10 @@
             	
             </div>
             <div class="p-4 sidebar-item">
-                <button
-                    class="new-chat-button w-full border text-gray-500 p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 flex justify-center items-center"
-                    id="addChattingButton">
+                <button  id="addChattingButton" class="new-chat-button w-full border text-gray-500 p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 flex justify-center items-center">
                     <span class="sidebar-text">+ 새 대화</span>
                 </button>
-                <button
-                    class="new-chat-icon flex justify-center items-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-200"
-                    id="addChattingIconButton">
+                <button id="addChattingIconButton" class="new-chat-icon flex justify-center items-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-200" >
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -292,7 +288,12 @@
         </div>
     </div>
 
-    <script>
+    <script th:inline="javascript">
+    
+	    /*<![CDATA[*/
+	    var user = /*[[${user}]]*/ {};
+	    /*]]>*/
+	    
         const menuButton = document.getElementById('menuButton');
         const sidebar = document.getElementById('sidebar');
         const messageInput = document.getElementById('messageInput');
@@ -304,7 +305,7 @@
         const addChattingButton = document.getElementById('addChattingButton');
         const addChattingIconButton = document.getElementById('addChattingIconButton');
         const chatList = document.getElementById('chatList');
-
+        
         menuButton.addEventListener('click', () => {
             sidebar.classList.toggle('sidebar-collapsed');
         });
@@ -371,45 +372,66 @@
         addChattingIconButton.addEventListener('click', addNewChat);
 
         function addNewChat() {
-            const newChatItem = document.createElement('div');
-            newChatItem.className = 'p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item';
-            newChatItem.innerHTML = `
-                <div class="flex items-center ellipsis">
-                    <i class="far fa-comment-alt"></i>
-                    <span class="ml-2 text-gray-700 sidebar-text">새로운 대화</span>
-                    <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
-                </div>
-                <div class="menu-button relative">
-                    <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
-                    <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
-                        <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="enableRenameChat(this)">
-                            <i class="fas fa-pen"></i>
-                            이름 바꾸기
+            // 새 채팅방을 생성하는 API 호출
+            fetch('/chat/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                	 userId: user.userId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.userId) {
+                    // 새로운 채팅방 요소 생성
+                    const newChatItem = document.createElement('div');
+                    newChatItem.className = 'p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item';
+                    newChatItem.innerHTML = `
+                        <div class="flex items-center ellipsis">
+                            <i class="far fa-comment-alt"></i>
+                            <span class="ml-2 text-gray-700 sidebar-text">${data.roomName}</span>
+                            <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
                         </div>
-                        <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="deleteChat(this)">
-                            <i class="far fa-trash-alt"></i>
-                            삭제
+                        <div class="menu-button relative">
+                            <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
+                            <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
+                                <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="enableRenameChat(this)">
+                                    <i class="fas fa-pen"></i>
+                                    이름 바꾸기
+                                </div>
+                                <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="deleteChat(this)">
+                                    <i class="far fa-trash-alt"></i>
+                                    삭제
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            `;
-            chatList.appendChild(newChatItem);
+                    `;
+                    chatList.appendChild(newChatItem);
 
-            // 새로운 항목의 '...' 버튼에 이벤트 리스너 추가
-            newChatItem.querySelector('.menu-button').addEventListener('click', function (event) {
-                event.stopPropagation(); // 이벤트 전파 중지
+                    // 새로운 항목의 '...' 버튼에 이벤트 리스너 추가
+                    newChatItem.querySelector('.menu-button').addEventListener('click', function (event) {
+                        event.stopPropagation(); // 이벤트 전파 중지
 
-                // 모든 메뉴를 닫기
-                document.querySelectorAll('.menu').forEach(menu => {
-                    menu.style.display = 'none';
-                });
+                        // 모든 메뉴를 닫기
+                        document.querySelectorAll('.menu').forEach(menu => {
+                            menu.style.display = 'none';
+                        });
 
-                // 현재 클릭된 메뉴만 열기
-                const menu = this.querySelector('.menu');
-                const rect = this.getBoundingClientRect();
-                menu.style.top = `${rect.bottom}px`;
-                menu.style.left = `${rect.right - menu.clientWidth}px`;
-                menu.style.display = 'block';
+                        // 현재 클릭된 메뉴만 열기
+                        const menu = this.querySelector('.menu');
+                        const rect = this.getBoundingClientRect();
+                        menu.style.top = `${rect.bottom}px`;
+                        menu.style.left = `${rect.right - menu.clientWidth}px`;
+                        menu.style.display = 'block';
+                    });
+                } else {
+                    console.error('새 채팅방 생성 실패', data);
+                }
+            })
+            .catch(error => {
+                console.error('API 호출 중 오류 발생', error);
             });
         }
 

@@ -23,6 +23,7 @@ public class SecurityConfig {
        	
         	.csrf(csrf -> csrf
                 .ignoringRequestMatchers(new AntPathRequestMatcher("/api/**")) // /api/** 경로에 대해 CSRF 비활성화 
+                .ignoringRequestMatchers(new AntPathRequestMatcher("/chat/**"))
             )
 //        	.csrf(csrf -> csrf.disable()) // CSRF 비활성화
             .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
