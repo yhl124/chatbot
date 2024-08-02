@@ -18,8 +18,8 @@ public class ProfileService implements IProfileService {
 	}
 
 	@Override
-	public void deleteFile(int profileId) {
-		// TODO Auto-generated method stub
+	public void deleteFileByUserId(String userId) {
+		profileRepository.deleteFileByUserId(userId);
 		
 	}
 

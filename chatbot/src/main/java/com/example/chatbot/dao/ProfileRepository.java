@@ -45,9 +45,10 @@ public class ProfileRepository implements IProfileRepository {
 	}
 
 	@Override
-	public void deleteFile(int profileId) {
-		// TODO Auto-generated method stub
-		
+	public void deleteFileByUserId(String userId) {
+		String sql = "delete from profiles where user_id=?";
+
+		jdbcTemplate.update(sql, userId);
 	}
 
 	@Override

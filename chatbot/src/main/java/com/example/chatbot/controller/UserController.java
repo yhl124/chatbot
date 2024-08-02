@@ -5,7 +5,10 @@ import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +40,7 @@ public class UserController {
     public String mainpage(@AuthenticationPrincipal User user, Model model) {
         if (user != null) {
             model.addAttribute("user", user);
-        }
-        //System.out.println(model);
+        } 
         return "main";
     }
 
@@ -108,22 +110,30 @@ public class UserController {
         return "mypage"; // mypage.html 템플릿을 렌더링
     }
     
+    
     //마이페이지 수정하기 버튼
     @PostMapping("/mypage")
-    public String updateUser(@ModelAttribute User user, @RequestParam MultipartFile file, RedirectAttributes model) {
-    	try {
-    		log.info(user.getUserId());
+    public String updateUser(@ModelAttribute User user, @RequestParam MultipartFile file, @RequestParam String deleteProfileImage, Authentication authentication, RedirectAttributes model) {
+        try {
             userService.updateUser(user);
             Profile profile = new Profile();
             
+            //프사 변경
             if (file != null && !file.isEmpty()) {
-            	profile.setUserId(user.getUserId());
+                profile.setUserId(user.getUserId());
                 profile.setFileName(file.getOriginalFilename());
                 profile.setFileSize(file.getSize());
                 profile.setFileContentType(file.getContentType());
                 profile.setFileData(file.getBytes());
-            } else {
+                profileService.deleteFileByUserId(user.getUserId());
+                profileService.uploadFile(profile);
+            } 
+            // 프사 삭제
+            else if ("true".equals(deleteProfileImage)) {
+                profileService.deleteFileByUserId(user.getUserId());
+
                 // 기본 프로필 이미지를 설정하는 로직
+                profile.setUserId(user.getUserId());
                 profile.setFileName("defaultprofile.jpg");
                 profile.setFileContentType("image/jpeg");
                 // 기본 프로필 이미지의 바이트 데이터를 읽어와서 설정
@@ -132,20 +142,32 @@ public class UserController {
                     byte[] defaultProfileImageData = Files.readAllBytes(resource.getFile().toPath());
                     profile.setFileData(defaultProfileImageData);
                     profile.setFileSize((long) defaultProfileImageData.length);
+                    profileService.uploadFile(profile);
                 } catch (IOException e) {
                     log.error("Failed to load default profile image", e);
                     throw new RuntimeException("Failed to load default profile image", e);
                 }
+            } 
+            //프사 유지
+            else {
+                profile = profileService.getProfileByUserId(user.getUserId());
+                if (profile != null) {
+                    profile.setUserId(user.getUserId());
+                }
             }
-            profileService.uploadFile(profile);
+            
+            // Spring Security 컨텍스트 업데이트
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), authentication.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
 
             model.addFlashAttribute("message", "회원정보 수정에 성공하였습니다.");
         } catch (Exception e) {
-            log.error("Error during signup: " + e.getMessage(), e);
+            log.error("Error during profile update: " + e.getMessage(), e);
             model.addFlashAttribute("message", "회원정보 수정에 실패하였습니다: " + e.getMessage());
         }
-        return "redirect:/mypage";
+        return "redirect:/main";
     }
+
     
     
     

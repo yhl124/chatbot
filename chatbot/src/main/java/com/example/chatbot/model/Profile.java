@@ -14,4 +14,5 @@ public class Profile {
 	private long fileSize;
 	private String fileContentType;
 	private byte[] fileData;
+	private String tmpFileName;
 }
