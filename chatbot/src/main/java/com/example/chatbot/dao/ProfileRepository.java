@@ -47,7 +47,6 @@ public class ProfileRepository implements IProfileRepository {
 	@Override
 	public void deleteFileByUserId(String userId) {
 		String sql = "delete from profiles where user_id=?";
-
 		jdbcTemplate.update(sql, userId);
 	}
 

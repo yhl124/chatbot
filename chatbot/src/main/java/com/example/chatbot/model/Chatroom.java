@@ -12,7 +12,7 @@ import lombok.ToString;
 public class Chatroom {
 	private int roomId;
 	private String userId;
-	private String RoomName;
-	private Date LastUse;
-	private Date GenerationTime;
+	private String roomName;
+	private Date lastUse;
+	private Date generationTime;
 }

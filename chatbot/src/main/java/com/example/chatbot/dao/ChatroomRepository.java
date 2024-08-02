@@ -2,6 +2,7 @@ package com.example.chatbot.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -55,7 +56,31 @@ public class ChatroomRepository implements IChatroomRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
-		
+	}
+	
+	@Override
+	public List<Chatroom> getChatroomByUserId(String userId) {
+		String sql = "select room_id, user_id, room_name, last_use, generation_time from chatroom where user_id = ?"
+				+ "order by last_use desc";
+		try {
+			return jdbcTemplate.query(sql, new ChatroomMapper(), userId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+	
+	@Override
+	public void deleteChatroomByRoomId(String userId, int roomId) {
+		String sql = "delete from chatroom where user_id = ? and room_id = ?";
+		jdbcTemplate.update(sql, userId, roomId);
+	}
+	
+	
+
+	@Override
+	public void renameChatroomByRoomId(String roomName, String userId, int roomId) {
+		String sql = "update chatroom set room_name = ? where user_id = ? and room_id = ?";
+		jdbcTemplate.update(sql, roomName, userId, roomId);
 	}
 
 }

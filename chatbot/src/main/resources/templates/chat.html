@@ -193,29 +193,27 @@
         <div class="overflow-y-auto flex-1 flex-col">
             <div class="flex-1" id="chatList">
                 <!-- Chat List Items -->
-                <!-- 
-                <div class="p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item">
-                    <div class="flex items-center ellipsis">
-                        <i class="far fa-comment-alt"></i>
-                        <span class="ml-2 text-gray-700 sidebar-text">서울시 청년 주거 정책</span>
-                        <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
-                    </div>
-                    <div class="menu-button relative">
-                        <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
-                        <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
-                            <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="enableRenameChat(this)">
-                                <i class="fas fa-pen"></i>
-                                이름 바꾸기
-                            </div>
-                            <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="deleteChat(this)">
-                                <i class="far fa-trash-alt"></i>
-                                삭제
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 -->
-                <!-- More chat items can be added here -->
+                <div th:each="cr : ${chatroom}" class="p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item">
+				    <div class="flex items-center ellipsis">
+				        <i class="far fa-comment-alt"></i>
+				        <span class="ml-2 text-gray-700 sidebar-text" th:text="${cr.roomName}">Chat Room Name</span>
+				        <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
+				    </div>
+				    <div class="menu-button relative">
+				        <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
+				        <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
+				            <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" th:onclick="enableRenameChat(this, /*[[${cr.roomId}]]*/)">
+				                <i class="fas fa-pen"></i>
+				                이름 바꾸기
+				            </div>
+				            <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" th:onclick="deleteChat(this, /*[[${cr.roomId}]]*/)">
+				                <i class="far fa-trash-alt"></i>
+				                삭제
+				            </div>
+				        </div>
+				    </div>
+				</div>
+
             </div>
         </div>
         <div class="p-4 border-t border-gray-300 sidebar-item">
@@ -288,242 +286,293 @@
         </div>
     </div>
 
-    <script th:inline="javascript">
+	<script th:inline="javascript">
     
-	    /*<![CDATA[*/
-	    var user = /*[[${user}]]*/ {};
-	    /*]]>*/
-	    
-        const menuButton = document.getElementById('menuButton');
-        const sidebar = document.getElementById('sidebar');
-        const messageInput = document.getElementById('messageInput');
-        const sendButton = document.getElementById('sendButton');
-        const chatForm = document.getElementById('chat-form');
-        const chatWindow = document.getElementById('chat-window');
-        const questionCards = document.getElementById('question-cards');
-        const chatMessages = document.getElementById('chat-messages');
-        const addChattingButton = document.getElementById('addChattingButton');
-        const addChattingIconButton = document.getElementById('addChattingIconButton');
-        const chatList = document.getElementById('chatList');
-        
-        menuButton.addEventListener('click', () => {
-            sidebar.classList.toggle('sidebar-collapsed');
-        });
+		/*<![CDATA[*/
+		var user = /*[[${user}]]*/ {};
+		/*]]>*/
+	
+		const menuButton = document.getElementById('menuButton');
+		const sidebar = document.getElementById('sidebar');
+		const messageInput = document.getElementById('messageInput');
+		const sendButton = document.getElementById('sendButton');
+		const chatForm = document.getElementById('chat-form');
+		const chatWindow = document.getElementById('chat-window');
+		const questionCards = document.getElementById('question-cards');
+		const chatMessages = document.getElementById('chat-messages');
+		const addChattingButton = document.getElementById('addChattingButton');
+		const addChattingIconButton = document.getElementById('addChattingIconButton');
+		const chatList = document.getElementById('chatList');
+	
+		menuButton.addEventListener('click', () => {
+		    sidebar.classList.toggle('sidebar-collapsed');
+		});
+	
+		messageInput.addEventListener('keydown', function (event) {
+		    if (event.key === 'Enter' && !event.shiftKey) {
+		        event.preventDefault();
+		        chatForm.dispatchEvent(new Event('submit'));
+		    }
+		});
+	
+		messageInput.addEventListener('input', () => {
+		    sendButton.disabled = messageInput.value.trim() === '';
+		    messageInput.style.height = 'auto';
+		    messageInput.style.height = (messageInput.scrollHeight) + 'px';
+		});
+	
+		chatForm.addEventListener('submit', function(event) {
+		    event.preventDefault();
+		    const message = messageInput.value.trim();
+		    if (message) {
+		        // Hide question cards
+		        questionCards.style.display = 'none';
+		        chatMessages.classList.remove('hidden');
+	
+		        const userMessage = document.createElement('div');
+		        userMessage.classList.add('flex', 'justify-end', 'mb-1');
+		        userMessage.innerHTML = `
+		            <div class="bg-indigo-300 text-black rounded-lg message-bubble">
+		                <p class="message-content">${message}</p>
+		            </div>
+		            <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4"></div>
+		        `;
+		        chatWindow.appendChild(userMessage);
+		        chatWindow.scrollTop = chatWindow.scrollHeight;
+		        messageInput.value = '';
+		        sendButton.disabled = true;
+		        messageInput.style.height = 'auto';
+	
+		        // Skeleton bubble for bot response
+		        const botSkeleton = document.createElement('div');
+		        botSkeleton.classList.add('flex', 'mb-1');
+		        botSkeleton.innerHTML = `
+		            <div class="w-10 h-10 rounded-full bg-gray-300 mr-4"></div>
+		            <div class="bg-gray-300 text-black rounded-lg message-bubble skeleton"></div>
+		        `;
+		        chatWindow.appendChild(botSkeleton);
+		        chatWindow.scrollTop = chatWindow.scrollHeight;
+	
+		        // Bot response after 1 second
+		        setTimeout(() => {
+		            botSkeleton.innerHTML = `
+		                <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
+		                <div class="bg-purple-50 text-black rounded-lg message-bubble">
+		                    <p class="message-content">This is a response from the bot.</p>
+		                </div>
+		            `;
+		            chatWindow.scrollTop = chatWindow.scrollHeight;
+		        }, 1000);
+		    }
+		});
+	
+		addChattingButton.addEventListener('click', addNewChat);
+		addChattingIconButton.addEventListener('click', addNewChat);
+	
+		function addNewChat() {
+		    // 새 채팅방을 생성하는 API 호출
+		    fetch('/chat/create', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify({
+		            userId: user.userId
+		        })
+		    })
+		    .then(response => response.json())
+		    .then(data => {
+		        if (data.userId) {
+		            // 새로운 채팅방 요소 생성
+		            const newChatItem = document.createElement('div');
+		            newChatItem.className = 'p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item';
+		            newChatItem.innerHTML = `
+		                <div class="flex items-center ellipsis">
+		                    <i class="far fa-comment-alt"></i>
+		                    <span class="ml-2 text-gray-700 sidebar-text">${data.roomName}</span>
+		                    <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
+		                </div>
+		                <div class="menu-button relative">
+		                    <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
+		                    <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
+		                        <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="enableRenameChat(this, ${data.roomId})">
+		                            <i class="fas fa-pen"></i>
+		                            이름 바꾸기
+		                        </div>
+		                        <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="deleteChat(this, ${data.roomId})">
+		                            <i class="far fa-trash-alt"></i>
+		                            삭제
+		                        </div>
+		                    </div>
+		                </div>
+		            `;
+		            
+		            // 새로운 요소를 div의 맨 위에 추가
+		            const firstChild = chatList.firstChild;
+		            if (firstChild) {
+		                chatList.insertBefore(newChatItem, firstChild);
+		            } else {
+		                chatList.appendChild(newChatItem);
+		            }
+	
+		            // 새로운 항목의 '...' 버튼에 이벤트 리스너 추가
+		            newChatItem.querySelector('.menu-button').addEventListener('click', function (event) {
+		                event.stopPropagation(); // 이벤트 전파 중지
+	
+		                // 모든 메뉴를 닫기
+		                document.querySelectorAll('.menu').forEach(menu => {
+		                    menu.style.display = 'none';
+		                });
+	
+		                // 현재 클릭된 메뉴만 열기
+		                const menu = this.querySelector('.menu');
+		                const rect = this.getBoundingClientRect();
+		                menu.style.top = `${rect.bottom}px`;
+		                menu.style.left = `${rect.right - menu.clientWidth}px`;
+		                menu.style.display = 'block';
+		            });
+		        } else {
+		            console.error('새 채팅방 생성 실패', data);
+		        }
+		    })
+		    .catch(error => {
+		        console.error('API 호출 중 오류 발생', error);
+		    });
+		}
+	
+		function enableRenameChat(element, roomId) {
+		    // 모든 메뉴를 닫기
+		    document.querySelectorAll('.menu').forEach(menu => {
+		        menu.style.display = 'none';
+		    });
+	
+		    const chatItem = element.closest('.sidebar-item');
+		    const chatTitle = chatItem.querySelector('.sidebar-text');
+		    const chatInput = chatItem.querySelector('input');
+	
+		    chatTitle.classList.add('hidden');
+		    chatInput.classList.remove('hidden');
+		    chatInput.value = chatTitle.innerText;
+		    chatInput.focus();
+		    chatInput.select();  // 입력 필드의 텍스트를 선택
+	
+		    chatInput.addEventListener('keydown', function (event) {
+		        if (event.key === 'Enter') {
+		            renameChat(chatInput, roomId);
+		        }
+		    });
+	
+		    document.addEventListener('click', function onClickOutside(event) {
+		        if (!chatItem.contains(event.target)) {
+		            renameChat(chatInput, roomId);
+		            document.removeEventListener('click', onClickOutside);
+		        }
+		    });
+	
+		    event.stopPropagation();  // 이벤트 전파 중지
+		}
+	
+		function renameChat(inputElement, roomId) {
+		    const chatItem = inputElement.closest('.sidebar-item');
+		    const chatTitle = chatItem.querySelector('.sidebar-text');
+		    const newName = inputElement.value.trim();
+	
+		    if (newName) {
+		        fetch(`/chat/rename/${roomId}`, {
+		            method: 'POST',
+		            headers: {
+		                'Content-Type': 'application/json'
+		            },
+		            body: JSON.stringify({
+		                userId: user.userId,
+		                roomName: newName
+		            })
+		        })
+		        .then(response => response.json())
+		        .then(data => {
+		            if (data.roomName) {
+		                chatTitle.innerText = data.roomName;
+		            } else {
+		                console.error('채팅방 이름 변경 실패');
+		            }
+		        })
+		        .catch(error => {
+		            console.error('API 호출 중 오류 발생', error);
+		        });
+		    }
+		    
+		    chatTitle.classList.remove('hidden');
+		    inputElement.classList.add('hidden');
+		}
+	
+		function deleteChat(element, roomId) {
+		    fetch(`/chat/delete/${roomId}`, {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify({
+		            userId: user.userId
+		        })
+		    })
+		    .then(response => {
+		        if (response.ok) {
+		            const chatItem = element.closest('.sidebar-item');
+		            chatItem.remove();
+		        } else {
+		            console.error('채팅방 삭제 실패');
+		        }
+		    })
+		    .catch(error => {
+		        console.error('API 호출 중 오류 발생', error);
+		    });
+		}
+	
+		function selectQuestion(question) {
+		    messageInput.value = question;
+		    messageInput.style.height = (messageInput.scrollHeight) + 'px';
+		    sendButton.disabled = false;
+		    questionCards.style.display = 'none';
+		    chatMessages.classList.remove('hidden');
+		}
+	
+		const handleResize = () => {
+		    if (window.innerWidth < 768) {
+		        sidebar.classList.add('sidebar-collapsed');
+		    } else {
+		        sidebar.classList.remove('sidebar-collapsed');
+		    }
+		};
+	
+		window.addEventListener('resize', handleResize);
+		window.addEventListener('load', handleResize);
+	
+		document.querySelectorAll('.menu-button').forEach(button => {
+		    button.addEventListener('click', function (event) {
+		        event.stopPropagation(); // 이벤트 전파 중지
+	
+		        // 모든 메뉴를 닫기
+		        document.querySelectorAll('.menu').forEach(menu => {
+		            menu.style.display = 'none';
+		        });
+	
+		        // 현재 클릭된 메뉴만 열기
+		        const menu = this.querySelector('.menu');
+		        const rect = this.getBoundingClientRect();
+		        menu.style.top = `${rect.bottom}px`;
+		        menu.style.left = `${rect.right - menu.clientWidth}px`;
+		        menu.style.display = 'block';
+		    });
+		});
+	
+		document.addEventListener('click', function (event) {
+		    if (!event.target.closest('.menu-button')) {
+		        document.querySelectorAll('.menu').forEach(menu => {
+		            menu.style.display = 'none';
+		        });
+		    }
+		});
 
-        messageInput.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                chatForm.dispatchEvent(new Event('submit'));
-            }
-        });
-
-        messageInput.addEventListener('input', () => {
-            sendButton.disabled = messageInput.value.trim() === '';
-            messageInput.style.height = 'auto';
-            messageInput.style.height = (messageInput.scrollHeight) + 'px';
-        });
-
-        chatForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const message = messageInput.value.trim();
-            if (message) {
-                // Hide question cards
-                questionCards.style.display = 'none';
-                chatMessages.classList.remove('hidden');
-
-                const userMessage = document.createElement('div');
-                userMessage.classList.add('flex', 'justify-end', 'mb-1');
-                userMessage.innerHTML = `
-                    <div class="bg-indigo-300 text-black rounded-lg message-bubble">
-                        <p class="message-content">${message}</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4"></div>
-                `;
-                chatWindow.appendChild(userMessage);
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-                messageInput.value = '';
-                sendButton.disabled = true;
-                messageInput.style.height = 'auto';
-
-                // Skeleton bubble for bot response
-                const botSkeleton = document.createElement('div');
-                botSkeleton.classList.add('flex', 'mb-1');
-                botSkeleton.innerHTML = `
-                    <div class="w-10 h-10 rounded-full bg-gray-300 mr-4"></div>
-                    <div class="bg-gray-300 text-black rounded-lg message-bubble skeleton"></div>
-                `;
-                chatWindow.appendChild(botSkeleton);
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-
-                // Bot response after 1 second
-                setTimeout(() => {
-                    botSkeleton.innerHTML = `
-                        <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
-                        <div class="bg-purple-50 text-black rounded-lg message-bubble">
-                            <p class="message-content">This is a response from the bot.</p>
-                        </div>
-                    `;
-                    chatWindow.scrollTop = chatWindow.scrollHeight;
-                }, 1000);
-            }
-        });
-
-        addChattingButton.addEventListener('click', addNewChat);
-        addChattingIconButton.addEventListener('click', addNewChat);
-
-        function addNewChat() {
-            // 새 채팅방을 생성하는 API 호출
-            fetch('/chat/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                	 userId: user.userId
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.userId) {
-                    // 새로운 채팅방 요소 생성
-                    const newChatItem = document.createElement('div');
-                    newChatItem.className = 'p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item';
-                    newChatItem.innerHTML = `
-                        <div class="flex items-center ellipsis">
-                            <i class="far fa-comment-alt"></i>
-                            <span class="ml-2 text-gray-700 sidebar-text">${data.roomName}</span>
-                            <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
-                        </div>
-                        <div class="menu-button relative">
-                            <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
-                            <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
-                                <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="enableRenameChat(this)">
-                                    <i class="fas fa-pen"></i>
-                                    이름 바꾸기
-                                </div>
-                                <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="deleteChat(this)">
-                                    <i class="far fa-trash-alt"></i>
-                                    삭제
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    chatList.appendChild(newChatItem);
-
-                    // 새로운 항목의 '...' 버튼에 이벤트 리스너 추가
-                    newChatItem.querySelector('.menu-button').addEventListener('click', function (event) {
-                        event.stopPropagation(); // 이벤트 전파 중지
-
-                        // 모든 메뉴를 닫기
-                        document.querySelectorAll('.menu').forEach(menu => {
-                            menu.style.display = 'none';
-                        });
-
-                        // 현재 클릭된 메뉴만 열기
-                        const menu = this.querySelector('.menu');
-                        const rect = this.getBoundingClientRect();
-                        menu.style.top = `${rect.bottom}px`;
-                        menu.style.left = `${rect.right - menu.clientWidth}px`;
-                        menu.style.display = 'block';
-                    });
-                } else {
-                    console.error('새 채팅방 생성 실패', data);
-                }
-            })
-            .catch(error => {
-                console.error('API 호출 중 오류 발생', error);
-            });
-        }
-
-        function enableRenameChat(element) {
-            // 모든 메뉴를 닫기
-            document.querySelectorAll('.menu').forEach(menu => {
-                menu.style.display = 'none';
-            });
-
-            const chatItem = element.closest('.sidebar-item');
-            const chatTitle = chatItem.querySelector('.sidebar-text');
-            const chatInput = chatItem.querySelector('input');
-
-            chatTitle.classList.add('hidden');
-            chatInput.classList.remove('hidden');
-            chatInput.value = chatTitle.innerText;
-            chatInput.focus();
-
-            chatInput.addEventListener('keydown', function (event) {
-                if (event.key === 'Enter') {
-                    renameChat(chatInput);
-                }
-            });
-
-            document.addEventListener('click', function onClickOutside(event) {
-                if (!chatItem.contains(event.target)) {
-                    renameChat(chatInput);
-                    document.removeEventListener('click', onClickOutside);
-                }
-            });
-        }
-
-        function renameChat(inputElement) {
-            const chatItem = inputElement.closest('.sidebar-item');
-            const chatTitle = chatItem.querySelector('.sidebar-text');
-
-            if (inputElement.value.trim()) {
-                chatTitle.innerText = inputElement.value.trim();
-            }
-            chatTitle.classList.remove('hidden');
-            inputElement.classList.add('hidden');
-        }
-
-        function deleteChat(element) {
-            const chatItem = element.closest('.sidebar-item');
-            chatItem.remove();
-        }
-
-        function selectQuestion(question) {
-            messageInput.value = question;
-            messageInput.style.height = (messageInput.scrollHeight) + 'px';
-            sendButton.disabled = false;
-            questionCards.style.display = 'none';
-            chatMessages.classList.remove('hidden');
-        }
-
-        const handleResize = () => {
-            if (window.innerWidth < 768) {
-                sidebar.classList.add('sidebar-collapsed');
-            } else {
-                sidebar.classList.remove('sidebar-collapsed');
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-        window.addEventListener('load', handleResize);
-
-        document.querySelectorAll('.menu-button').forEach(button => {
-            button.addEventListener('click', function (event) {
-                event.stopPropagation(); // 이벤트 전파 중지
-
-                // 모든 메뉴를 닫기
-                document.querySelectorAll('.menu').forEach(menu => {
-                    menu.style.display = 'none';
-                });
-
-                // 현재 클릭된 메뉴만 열기
-                const menu = this.querySelector('.menu');
-                const rect = this.getBoundingClientRect();
-                menu.style.top = `${rect.bottom}px`;
-                menu.style.left = `${rect.right - menu.clientWidth}px`;
-                menu.style.display = 'block';
-            });
-        });
-
-        document.addEventListener('click', function (event) {
-            if (!event.target.closest('.menu-button')) {
-                document.querySelectorAll('.menu').forEach(menu => {
-                    menu.style.display = 'none';
-                });
-            }
-        });
     </script>
 </body>
 

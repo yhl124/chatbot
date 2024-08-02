@@ -20,7 +20,6 @@ public class ProfileService implements IProfileService {
 	@Override
 	public void deleteFileByUserId(String userId) {
 		profileRepository.deleteFileByUserId(userId);
-		
 	}
 
 	@Override
