@@ -49,6 +49,16 @@ public class ChatController {
         return ResponseEntity.ok(newChatroom);
     }
 	
+	@GetMapping("/chat/{roomId}")
+	public String getChatroom(@AuthenticationPrincipal User user, @PathVariable int roomId, Model model) {
+		Chatroom chatroom = chatroomService.getChatroomByRoomId(roomId);
+		
+		model.addAttribute("user", user);
+		model.addAttribute("chatRoom", chatroom);
+		
+		return "chat";
+	}
+	
 	@PostMapping("/chat/delete/{roomId}")
 	public ResponseEntity<?> deleteChatroom(@PathVariable int roomId, @RequestBody Map<String, String> request) {
 	    String userId = request.get("userId");

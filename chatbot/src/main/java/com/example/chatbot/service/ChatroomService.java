@@ -39,4 +39,9 @@ public class ChatroomService implements IChatroomService {
 	public void renameChatroomByRoomId(String roomName, String userId, int roomId) {
 		chatroomRepository.renameChatroomByRoomId(roomName, userId, roomId);
 	}
+
+	@Override
+	public Chatroom getChatroomByRoomId(int roomId) {
+		return chatroomRepository.getChatroomByRoomId(roomId);
+	}
 }

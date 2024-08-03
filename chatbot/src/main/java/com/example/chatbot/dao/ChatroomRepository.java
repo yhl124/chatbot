@@ -83,4 +83,14 @@ public class ChatroomRepository implements IChatroomRepository {
 		jdbcTemplate.update(sql, roomName, userId, roomId);
 	}
 
+	@Override
+	public Chatroom getChatroomByRoomId(int roomId) {
+		String sql = "select room_id, user_id, room_name, last_use, generation_time from chatroom where room_id = ?";
+		try {
+			return jdbcTemplate.queryForObject(sql, new ChatroomMapper(), roomId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
+	}
+
 }
