@@ -12,5 +12,5 @@ public interface IChatroomRepository {
 	void deleteChatroomByRoomId(String userId, int roomId);
 	List<Chatroom> getChatroomByUserId(String userId);
 	void renameChatroomByRoomId(String roomName, String userId, int roomId);
-	Chatroom getChatroomByRoomId(int roomId);
+	Chatroom getChatroomByRoomId(String userId, int roomId);
 }

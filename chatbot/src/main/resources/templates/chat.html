@@ -170,10 +170,10 @@
             	
             </div>
             <div class="p-4 sidebar-item">
-                <button  id="addChattingButton" class="new-chat-button w-full border text-gray-500 p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 flex justify-center items-center">
+                <button id="addChattingButton" th:onclick="window.location.href='/chat'" class="new-chat-button w-full border text-gray-500 p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 flex justify-center items-center">
                     <span class="sidebar-text">+ 새 대화</span>
                 </button>
-                <button id="addChattingIconButton" class="new-chat-icon flex justify-center items-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-200" >
+                <button id="addChattingIconButton" th:onclick="window.location.href='/chat'" class="new-chat-icon flex justify-center items-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-200" >
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -193,20 +193,22 @@
         <div class="overflow-y-auto flex-1 flex-col">
             <div class="flex-1" id="chatList">
                 <!-- Chat List Items -->
-				<div th:each="cr : ${chatroom}" class="p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item"
-		             th:onclick="window.location.href='/chat/' + /*[[${cr.roomId}]]*/">
+                <div th:each="chatRoom : ${chatRooms}" 
+				     class="p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item"
+				     th:onclick="chatRoomClick(/*[[${chatRoom.roomId}]]*/)">
+
 		            <div class="flex items-center ellipsis">
 		                <i class="far fa-comment-alt"></i>
-		                <span class="ml-2 text-gray-700 sidebar-text" th:text="${cr.roomName}">Chat Room Name</span>
+		                <span class="ml-2 text-gray-700 sidebar-text" th:text="${chatRoom.roomName}">Chat Room Name</span>
 		                <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
 		            </div>
 		            <div class="menu-button relative">
 		                <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
 		                <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
-		                    <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" th:onclick="enableRenameChat(this, /*[[${cr.roomId}]]*/)">
+		                    <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" th:onclick="enableRenameChat(this, /*[[${chatRoom.roomId}]]*/)">
 		                        <i class="fas fa-pen"></i> 이름 바꾸기
 		                    </div>
-		                    <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" th:onclick="deleteChat(this, /*[[${cr.roomId}]]*/)">
+		                    <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" th:onclick="deleteChat(this, /*[[${chatRoom.roomId}]]*/)">
 		                        <i class="far fa-trash-alt"></i> 삭제
 		                    </div>
 		                </div>
@@ -318,6 +320,8 @@
 		    messageInput.style.height = 'auto';
 		    messageInput.style.height = (messageInput.scrollHeight) + 'px';
 		});
+		
+
 	
 		chatForm.addEventListener('submit', function(event) {
 		    event.preventDefault();
@@ -363,10 +367,13 @@
 		        }, 1000);
 		    }
 		});
-	
+		
+		
+		/*
 		addChattingButton.addEventListener('click', addNewChat);
 		addChattingIconButton.addEventListener('click', addNewChat);
-	
+		
+		
 		function addNewChat() {
 		    // 새 채팅방을 생성하는 API 호출
 		    fetch('/chat/create', {
@@ -437,6 +444,18 @@
 		        console.error('API 호출 중 오류 발생', error);
 		    });
 		}
+		*/
+		
+		function chatRoomClick(roomId) {
+			window.location.href = '/chat/' + roomId;
+		}
+		
+	    document.addEventListener('DOMContentLoaded', function() {
+	        if (window.location.pathname.startsWith('/chat/')) {
+	            questionCards.style.display = 'none';
+	            chatMessages.classList.remove('hidden');
+	        }
+	    });
 	
 		function enableRenameChat(element, roomId) {
 		    // 모든 메뉴를 닫기
@@ -504,6 +523,11 @@
 		}
 	
 		function deleteChat(element, roomId) {
+		    // 현재 접속한 roomId를 URL에서 추출
+		    const currentRoomId = window.location.pathname.split('/').pop();
+		    console.log('Current Room ID:', currentRoomId);
+		    console.log('Room ID to delete:', roomId);
+
 		    fetch(`/chat/delete/${roomId}`, {
 		        method: 'POST',
 		        headers: {
@@ -517,6 +541,12 @@
 		        if (response.ok) {
 		            const chatItem = element.closest('.sidebar-item');
 		            chatItem.remove();
+		            
+		            // 현재 접속한 roomId와 삭제할 roomId가 같으면 /chat 페이지로 이동
+		            if (currentRoomId === String(roomId).trim()) {
+		                console.log('Navigating to /chat');
+		                window.location.href = '/chat';
+		            }
 		        } else {
 		            console.error('채팅방 삭제 실패');
 		        }
@@ -525,6 +555,7 @@
 		        console.error('API 호출 중 오류 발생', error);
 		    });
 		}
+
 	
 		function selectQuestion(question) {
 		    messageInput.value = question;
@@ -532,7 +563,8 @@
 		    sendButton.disabled = false;
 		    questionCards.style.display = 'none';
 		    chatMessages.classList.remove('hidden');
-		}
+		    chatForm.dispatchEvent(new Event('submit'));
+		}		
 	
 		const handleResize = () => {
 		    if (window.innerWidth < 768) {

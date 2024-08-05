@@ -41,7 +41,7 @@ public class ChatroomService implements IChatroomService {
 	}
 
 	@Override
-	public Chatroom getChatroomByRoomId(int roomId) {
-		return chatroomRepository.getChatroomByRoomId(roomId);
+	public Chatroom getChatroomByRoomId(String userId, int roomId) {
+		return chatroomRepository.getChatroomByRoomId(userId, roomId);
 	}
 }

@@ -30,11 +30,11 @@ public class ChatController {
         if (user != null) {
             model.addAttribute("user", user);
             // 사용자 ID로 채팅 목록을 가져오기
-            List<Chatroom> chatroom = chatroomService.getChatroomByUserId(user.getUserId());
-            if (chatroom != null) {
-                model.addAttribute("chatroom", chatroom);
+            List<Chatroom> chatrooms = chatroomService.getChatroomByUserId(user.getUserId());
+            if (chatrooms != null) {
+                model.addAttribute("chatRooms", chatrooms);
             } else {
-                model.addAttribute("chatroom", List.of()); // 빈 리스트 추가
+                model.addAttribute("chatRooms", List.of()); // 빈 리스트 추가
             }
         } 
         return "chat";
@@ -51,9 +51,15 @@ public class ChatController {
 	
 	@GetMapping("/chat/{roomId}")
 	public String getChatroom(@AuthenticationPrincipal User user, @PathVariable int roomId, Model model) {
-		Chatroom chatroom = chatroomService.getChatroomByRoomId(roomId);
+		List<Chatroom> chatrooms = chatroomService.getChatroomByUserId(user.getUserId());
+		Chatroom chatroom = chatroomService.getChatroomByRoomId(user.getUserId(), roomId);
 		
 		model.addAttribute("user", user);
+		if (chatroom != null) {
+            model.addAttribute("chatRooms", chatrooms);
+        } else {
+            model.addAttribute("chatRooms", List.of()); // 빈 리스트 추가 대신 에러 전달로 변경 필요
+        }
 		model.addAttribute("chatRoom", chatroom);
 		
 		return "chat";

@@ -84,10 +84,12 @@ public class ChatroomRepository implements IChatroomRepository {
 	}
 
 	@Override
-	public Chatroom getChatroomByRoomId(int roomId) {
-		String sql = "select room_id, user_id, room_name, last_use, generation_time from chatroom where room_id = ?";
+	public Chatroom getChatroomByRoomId(String userId, int roomId) {
+		String sql = "select room_id, user_id, room_name, last_use, generation_time from chatroom where user_id = ? and room_id = ?";
 		try {
-			return jdbcTemplate.queryForObject(sql, new ChatroomMapper(), roomId);
+			log.info("userid : "+userId);
+			log.info("roomid : "+roomId);
+			return jdbcTemplate.queryForObject(sql, new ChatroomMapper(),userId, roomId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
