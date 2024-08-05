@@ -36,23 +36,23 @@ public class ChatroomRepository implements IChatroomRepository {
     }
 
 	@Override
-	public void insertChatroom(User user) {
+	public void insertChatroom(String userId) {
 		String sql = "INSERT INTO chatroom (room_id, user_id, room_name, last_use, generation_time) "
 				+ "VALUES (chatroom_seq.NEXTVAL, "
 				+ "?, '새 대화', "
 				+ "sysdate, sysdate)";
 		
-		log.info(user.getUserId());
-        jdbcTemplate.update(sql, user.getUserId());
+		log.info("새로운 채팅방 추가 유저 : " +userId);
+        jdbcTemplate.update(sql, userId);
 	}
 	
 	@Override
-	public Chatroom getLastChatroomForUser(User user) {
+	public Chatroom getLastChatroomForUserId(String userId) {
 		String sql = "SELECT room_id, user_id, room_name, last_use, generation_time FROM chatroom "
 				+ " where user_id = ? order BY room_id DESC "
 				+ "FETCH FIRST 1 ROWS ONLY";
 		try {
-			return jdbcTemplate.queryForObject(sql, new ChatroomMapper(), user.getUserId());
+			return jdbcTemplate.queryForObject(sql, new ChatroomMapper(), userId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
@@ -87,8 +87,8 @@ public class ChatroomRepository implements IChatroomRepository {
 	public Chatroom getChatroomByRoomId(String userId, int roomId) {
 		String sql = "select room_id, user_id, room_name, last_use, generation_time from chatroom where user_id = ? and room_id = ?";
 		try {
-			log.info("userid : "+userId);
-			log.info("roomid : "+roomId);
+			//log.info("userid : "+userId);
+			//log.info("roomid : "+roomId);
 			return jdbcTemplate.queryForObject(sql, new ChatroomMapper(),userId, roomId);
 		} catch (EmptyResultDataAccessException e) {
 			return null;

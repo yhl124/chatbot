@@ -7,8 +7,8 @@ import com.example.chatbot.model.User;
 
 public interface IChatroomRepository {
 
-	void insertChatroom(User user);
-	Chatroom getLastChatroomForUser(User user);
+	void insertChatroom(String userId);
+	Chatroom getLastChatroomForUserId(String userId);
 	void deleteChatroomByRoomId(String userId, int roomId);
 	List<Chatroom> getChatroomByUserId(String userId);
 	void renameChatroomByRoomId(String roomName, String userId, int roomId);

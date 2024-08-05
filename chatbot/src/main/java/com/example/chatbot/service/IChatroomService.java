@@ -7,10 +7,11 @@ import com.example.chatbot.model.User;
 
 public interface IChatroomService {
 	
-	public void insertChatroom(User user);
-	public Chatroom getLastChatroomForUser(User user);
+	public void insertChatroom(String UserId);
+	public Chatroom getLastChatroomForUserId(String userId);
 	void deleteChatroomByRoomId(String userId, int roomId);
 	List<Chatroom> getChatroomByUserId(String userId);
 	void renameChatroomByRoomId(String roomName, String userId, int roomId);
 	Chatroom getChatroomByRoomId(String userId, int roomId);
+	public boolean isNumeric(String strNum);
 }

@@ -16,13 +16,13 @@ public class ChatroomService implements IChatroomService {
 	IChatroomRepository chatroomRepository;
 
 	@Override
-	public void insertChatroom(User user) {
-		chatroomRepository.insertChatroom(user);
+	public void insertChatroom(String userId) {
+		chatroomRepository.insertChatroom(userId);
 	}
 
 	@Override
-	public Chatroom getLastChatroomForUser(User user) {
-		return chatroomRepository.getLastChatroomForUser(user);
+	public Chatroom getLastChatroomForUserId(String userId) {
+		return chatroomRepository.getLastChatroomForUserId(userId);
 	}
 	
 	@Override
@@ -43,5 +43,18 @@ public class ChatroomService implements IChatroomService {
 	@Override
 	public Chatroom getChatroomByRoomId(String userId, int roomId) {
 		return chatroomRepository.getChatroomByRoomId(userId, roomId);
+	}
+	
+	@Override
+	public boolean isNumeric(String strNum) {
+	    if (strNum == null) {
+	        return false;
+	    }
+	    try {
+	        double d = Double.parseDouble(strNum);
+	    } catch (NumberFormatException nfe) {
+	        return false;
+	    }
+	    return true;
 	}
 }
