@@ -137,7 +137,7 @@
             width: 6rem;
         }
 
-        @media (max-width: 768px) {
+/*         @media (max-width: 768px) {
             .input-container {
                 width: 100%;
             }
@@ -145,7 +145,7 @@
             .message-bubble {
                 width: 100%;
             }
-        }
+        } */
     </style>
 </head>
 
@@ -250,18 +250,27 @@
             </div>
             <!-- Chat messages will go here -->
             <div id="chat-messages" class="hidden">
-                <!-- <div class="flex mb-1">
-                    <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
-                    <div class="bg-purple-50 text-black rounded-lg message-bubble">
-                        <p class="message-content p-2">Hello! How can I help you today?</p>
-                    </div>
-                </div>
-                <div class="flex justify-end mb-1">
-                    <div class="bg-indigo-300 text-black rounded-lg message-bubble">
-                        <p class="message-content p-2">Can you tell me about Tailwind CSS?</p>
-                    </div>
-                    <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4"></div>
-                </div> -->
+            	<div th:each="chat : ${chats}" >
+            		<!-- 보낸 채팅 -->
+            		<div class="flex justify-end mb-1">
+	                    <div class="bg-indigo-300 text-black rounded-lg message-bubble">
+	                        <p class="message-content p-2" th:text="${chat.sendText}">send text</p>
+	                    </div>
+	                    <!-- <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4"></div> -->
+	                    
+	                    <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4">
+							<img id="profileImage" th:src="@{'/profile/file/' + ${user.userId}}" class="w-full h-full rounded-full object-cover" />
+				        </div>
+	                </div>
+	                <!-- 받은 채팅 -->
+	            	<div class="flex mb-1">
+	                    <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
+	                    <div class="bg-purple-50 text-black rounded-lg message-bubble">
+	                        <p class="message-content p-2" th:text="${chat.recvText}">recv text</p>
+	                    </div>
+	                </div>
+	                
+				</div>                
             </div>
         </div>
         <div class="p-4 bg-gray-50">
@@ -333,12 +342,19 @@
 	
 		        const userMessage = document.createElement('div');
 		        userMessage.classList.add('flex', 'justify-end', 'mb-1');
+
+		    	// 사용자 아이디를 사용하여 이미지 URL 설정
+		        const profileImageUrl = `/profile/file/${user.userId}`;
+
 		        userMessage.innerHTML = `
 		            <div class="bg-indigo-300 text-black rounded-lg message-bubble">
 		                <p class="message-content">${message}</p>
 		            </div>
-		            <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4"></div>
+		            <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4">
+		                <img src="${profileImageUrl}" class="w-full h-full rounded-full object-cover" />
+		            </div>
 		        `;
+		        
 		        chatWindow.appendChild(userMessage);
 		        chatWindow.scrollTop = chatWindow.scrollHeight;
 		        messageInput.value = '';

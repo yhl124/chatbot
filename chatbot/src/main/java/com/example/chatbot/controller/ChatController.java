@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.example.chatbot.model.Chat;
 import com.example.chatbot.model.Chatroom;
 import com.example.chatbot.model.User;
+import com.example.chatbot.service.IChatService;
 import com.example.chatbot.service.IChatroomService;
 
 @Controller
@@ -23,6 +25,9 @@ public class ChatController {
 	
 	@Autowired
 	IChatroomService chatroomService;
+	
+	@Autowired
+	IChatService chatService;
 	
 	
 	@GetMapping("/chat")
@@ -53,15 +58,23 @@ public class ChatController {
 	public String getChatroom(@AuthenticationPrincipal User user, @PathVariable int roomId, Model model) {
 		List<Chatroom> chatrooms = chatroomService.getChatroomByUserId(user.getUserId());
 		Chatroom chatroom = chatroomService.getChatroomByRoomId(user.getUserId(), roomId);
+		List<Chat> chats = chatService.getChatsByRoomId(roomId);
 		
 		model.addAttribute("user", user);
+		
 		if (chatroom != null) {
             model.addAttribute("chatRooms", chatrooms);
         } else {
             model.addAttribute("chatRooms", List.of()); // 빈 리스트 추가 대신 에러 전달로 변경 필요
         }
-		model.addAttribute("chatRoom", chatroom);
 		
+		if (chats != null) {
+            model.addAttribute("chats", chats);
+        } else {
+            model.addAttribute("chats", List.of());
+        }
+		
+		model.addAttribute("chatRoom", chatroom);
 		return "chat";
 	}
 	
