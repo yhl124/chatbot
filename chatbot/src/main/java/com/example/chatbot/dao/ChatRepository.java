@@ -51,7 +51,7 @@ public class ChatRepository implements IChatRepository {
 		String sql = "insert into chats (chat_id, room_id, send_text, send_time, recv_text, recv_time) "
 				+ "VALUES (chats_seq.NEXTVAL, ?, ?, ?, ?, ?)";
 		
-		log.info("채팅로그 "+roomId + " " + sendText+ " " + sendTime+ " " + recvText+ " " + recvTime);
+		log.info("채팅로그 : "+roomId + " 보낸 메시지 : " + sendText+ " 보낸 시간 : " + sendTime+ " 받은 메시지 : " + recvText+ " 받은 시간 : " + recvTime);
         jdbcTemplate.update(sql, roomId, sendText, sendTime, recvText, recvTime);
 	}
 

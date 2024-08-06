@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>청년온기</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .sidebar-collapsed {
+            width: 4rem;
+        }
+
+        .sidebar-collapsed .sidebar-text {
+            display: none;
+        }
+
+        .sidebar-collapsed .new-chat-icon {
+            display: flex;
+        }
+
+        .new-chat-icon {
+            display: none;
+        }
+
+        .sidebar-collapsed .menu-button {
+            display: none;
+        }
+
+        .sidebar-collapsed .new-chat-button {
+            display: none;
+        }
+
+        .menu {
+            display: none;
+            position: fixed;
+            z-index: 10;
+        }
+
+        .ellipsis {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 12rem;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: flex-start;
+            border: 1px solid #ccc;
+            border-radius: 1rem;
+            padding: 0.0rem;
+            position: relative;
+            width: 70%;
+            margin: 0 auto;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-container textarea {
+            flex: 1;
+            resize: none;
+            border: none;
+            outline: none;
+            overflow-y: auto;
+            min-height: 2.5rem;
+            max-height: 10.5rem;
+            margin: 0 2rem;
+        }
+
+        .input-container textarea:focus {
+            outline: none;
+        }
+
+        .input-container:focus-within {
+            border-color: #C240D7;
+        }
+
+        .input-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .input-icon {
+            position: absolute;
+            bottom: 0.3rem;
+            height: 2rem;
+            width: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .input-icon.left {
+            left: 0.3rem;
+        }
+
+        .input-icon.right {
+            right: 0.5rem;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: padding 0.3s ease;
+            position: relative;
+        }
+
+        .sidebar-collapsed .sidebar-item {
+            justify-content: center;
+        }
+
+        .message-content {
+            white-space: pre-wrap;
+            padding: 0.5rem 0.5rem;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-color: #e0e0e0;
+            }
+
+            100% {
+                background-color: #f5f5f5;
+            }
+        }
+
+        .skeleton {
+            animation: pulse 1.5s infinite;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            border-radius: 1rem;
+            display: inline-block;
+            height: 1rem;
+            width: 6rem;
+        }
+		
+		/* 전환 애니메이션 */
+		.fade-in {
+		    opacity: 0;
+		    transition: opacity 0.5s ease-in;
+		}
+		
+		.fade-in.show {
+		    opacity: 1;
+		}
+		
+    </style>
+</head>
+
+<body class="bg-gray-100 h-screen flex">    
+    <!-- Sidebar -->
+    <div id="sidebar" class="w-64 bg-white h-full shadow-md flex flex-col justify-between transition-all duration-300">
+        <div>
+            <div class="p-4 flex items-center border-b sidebar-item header h-16">
+                <button id="menuButton" class="mr-3 focus:outline-none">
+                    <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+                
+                <p th:onclick="window.location.href='/'" class="cursor-pointer sm:text-[32px] font-bold text-xl sidebar-text">
+					<span class="text-[4vw] sm:text-[32px] font-bold text-left text-blue-700">청년</span>
+	                <span class="text-[4vw] sm:text-[32px] font-bold text-left text-black">온기</span>
+	                <span class="text-[4vw] sm:text-[32px] font-bold text-left text-[#ff3b30]"> </span>
+            	</p>
+            	
+            </div>
+            <div class="p-4 sidebar-item">
+                <button id="addChattingButton" th:onclick="window.location.href='/chat'" class="new-chat-button w-full border text-gray-500 p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 flex justify-center items-center">
+                    <span class="sidebar-text">+ 새 대화</span>
+                </button>
+                <button id="addChattingIconButton" th:onclick="window.location.href='/chat'" class="new-chat-icon flex justify-center items-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-200" >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4 border-b sidebar-item">
+                <div class="flex justify-between items-center text-gray-500">
+                    <span class="sidebar-text">대화 리스트</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <div class="overflow-y-auto flex-1 flex-col">
+            <div class="flex-1" id="chatList">
+                <!-- Chat List Items -->
+                <div th:each="chatRoom : ${chatRooms}" 
+				     class="p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item"
+				     th:onclick="chatRoomClick(/*[[${chatRoom.roomId}]]*/)">
+				
+				    <div class="flex items-center ellipsis">
+				        <i class="far fa-comment-alt"></i>
+				        <span class="ml-2 text-gray-700 sidebar-text" th:text="${chatRoom.roomName}">Chat Room Name</span>
+				        <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
+				    </div>
+				    <div class="menu-button relative">
+				        <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
+				        <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
+				            <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" th:attr="onclick='enableRenameChat(this, [[${chatRoom.roomId}]])'">
+				                <i class="fas fa-pen"></i> 이름 바꾸기
+				            </div>
+				            <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" th:attr="onclick='deleteChat(this, [[${chatRoom.roomId}]])'">
+				                <i class="far fa-trash-alt"></i> 삭제								
+				            </div>
+				        </div>
+				    </div>
+				</div>
+
+            </div>
+        </div>
+        <div class="p-4 border-t border-gray-300 sidebar-item">
+            <a th:href="@{/mypage}" class="block w-10 h-10 rounded-full overflow-hidden">
+                <img id="profileImage" th:src="@{'/profile/file/' + ${user.userId}}" class="w-full h-full object-cover" />
+            </a>
+            <a th:href="@{/logout}" class="block text-left overflow-hidden sidebar-text">
+                <span>로그아웃</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="flex-1 flex flex-col">
+        <div class="p-4 border-b bg-white header h-16">
+            <h1 class="text-xl font-bold text-gray-800">채팅</h1>
+        </div>
+        <div class="p-4 overflow-y-auto flex-1 bg-gray-50" id="chat-window">
+            <!-- Initial question cards -->
+            <div id="question-cards" class="space-y-4 flex flex-col items-center justify-end mb-6"
+                style="min-height: calc(100% - 6rem);">
+                <div class="w-full max-w-lg p-4 bg-white hover:bg-gray-200 border rounded-lg shadow cursor-pointer md:w-3/5"
+                    onclick="selectQuestion('청년 창업 교육 지원비 신청 방법을 알려줘.')">
+                    <div class="font-bold mb-2">교육</div>
+                    <div>청년 창업 교육 지원비 신청 방법을 알려줘.</div>
+                </div>
+                <div class="w-full max-w-lg p-4 bg-white hover:bg-gray-200 border rounded-lg shadow cursor-pointer md:w-3/5"
+                    onclick="selectQuestion('청년 전용 보증금 대출 조건과 신청 방법을 알려줘.')">
+                    <div class="font-bold mb-2">주거</div>
+                    <div>청년 전용 보증금 대출 조건과 신청 방법을 알려줘.</div>
+                </div>
+                <div class="w-full max-w-lg p-4 bg-white hover:bg-gray-200 border rounded-lg shadow cursor-pointer md:w-3/5"
+                    onclick="selectQuestion('구직 활동 중인 청년을 위한 정부 지원금 정보 알려줘.')">
+                    <div class="font-bold mb-2">일자리</div>
+                    <div>구직 활동 중인 청년을 위한 정부 지원금 정보 알려줘.</div>
+                </div>
+            </div>
+            <!-- Chat messages will go here -->
+            <div id="chat-messages" class="hidden">
+            	<div th:each="chat : ${chats}" >
+            		<!-- 보낸 채팅 -->
+            		<div class="flex justify-end mb-1">
+	                    <div class="bg-indigo-300 text-black items-center rounded-lg message-bubble">
+	                        <p class="message-content p-2" th:text="${chat.sendText}">send text</p>
+	                    </div>
+	                    <!-- <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4"></div> -->
+	                    
+	                    <div class="w-11 h-11 rounded-full bg-indigo-300 ml-4">
+							<img id="profileImage" th:src="@{'/profile/file/' + ${user.userId}}" class="w-full h-full border-2 border-indigo-300 rounded-full object-cover" />
+				        </div>
+	                </div>
+	                <!-- 받은 채팅 -->
+	            	<div class="flex mb-1">
+	                    <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
+	                    <div class="bg-purple-50 text-black rounded-lg message-bubble">
+	                        <p class="message-content p-2" th:text="${chat.recvText}">recv text</p>
+	                    </div>
+	                </div>
+	                
+				</div>                
+            </div>
+        </div>
+        <div class="p-4 bg-gray-50">
+            <form id="chat-form" class="flex flex-col items-center">
+                <div
+                    class="input-container flex items-start border border-gray-300 rounded-lg p-0 w-4/5 focus-within:border-pink-500 transition-colors">
+                    <button type="button"
+                        class="input-icon left focus:outline-none absolute bottom-1 left-1 flex items-center justify-center w-8 h-8">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <textarea id="messageInput"
+                        class="flex-grow bg-gray-50 p-2 border-none focus:outline-none resize-none overflow-y-auto min-h-[2.5rem] max-h-[10.5rem] mx-10"
+                        placeholder="청년 복지 정책과 관련하여 자유롭게 대화해 보세요." rows="1"></textarea>
+                    <button type="submit" id="sendButton"
+                        class="input-icon right focus:outline-none absolute bottom-1 right-1 flex items-center justify-center w-8 h-8"
+                        disabled>
+                        <i class="fas fa-arrow-circle-up fa-lg" style="color: #a16df6;"></i>
+                    </button>
+                </div>
+                <span class="text-xs text-gray-500 mt-2 text-center">메시지를 입력해 주세요.</span>
+            </form>
+        </div>
+    </div>
+	<script th:inline="javascript">
+    
+		/*<![CDATA[*/
+		var user = /*[[${user}]]*/ {};
+		/*]]>*/
+	
+		const menuButton = document.getElementById('menuButton');
+		const sidebar = document.getElementById('sidebar');
+		const messageInput = document.getElementById('messageInput');
+		const sendButton = document.getElementById('sendButton');
+		const chatForm = document.getElementById('chat-form');
+		const chatWindow = document.getElementById('chat-window');
+		const questionCards = document.getElementById('question-cards');
+		const chatMessages = document.getElementById('chat-messages');
+		const addChattingButton = document.getElementById('addChattingButton');
+		const addChattingIconButton = document.getElementById('addChattingIconButton');
+		const chatList = document.getElementById('chatList');
+	
+		menuButton.addEventListener('click', () => {
+		    sidebar.classList.toggle('sidebar-collapsed');
+		});
+	
+		messageInput.addEventListener('keydown', function (event) {
+		    if (event.key === 'Enter' && !event.shiftKey) {
+		        event.preventDefault();
+		        chatForm.dispatchEvent(new Event('submit'));
+		    }
+		});
+	
+		messageInput.addEventListener('input', () => {
+		    sendButton.disabled = messageInput.value.trim() === '';
+		    messageInput.style.height = 'auto';
+		    messageInput.style.height = (messageInput.scrollHeight) + 'px';
+		});
+		
+		
+		chatForm.addEventListener('submit', function(event) {
+		    event.preventDefault();
+		    const message = messageInput.value.trim();
+		    if (message) {
+		        // Hide question cards
+		        questionCards.style.display = 'none';
+		        chatMessages.classList.remove('hidden');
+
+		        const userMessage = document.createElement('div');
+		        userMessage.classList.add('flex', 'justify-end', 'mb-1');
+
+		        // 사용자 아이디를 사용하여 이미지 URL 설정
+		        const profileImageUrl = `/profile/file/${user.userId}`;
+
+		        userMessage.innerHTML = `
+		            <div class="bg-indigo-300 text-black rounded-lg message-bubble">
+		                <p class="message-content">${message}</p>
+		            </div>
+		            <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4">
+		                <img src="${profileImageUrl}" class="w-full h-full border-2 border-indigo-300 rounded-full object-cover" />
+		            </div>
+		        `;
+		        chatWindow.appendChild(userMessage);
+		        chatWindow.scrollTop = chatWindow.scrollHeight;
+		        messageInput.value = '';
+		        sendButton.disabled = true;
+		        messageInput.style.height = 'auto';
+
+		        // Skeleton bubble for bot response
+		        const botSkeleton = document.createElement('div');
+		        botSkeleton.classList.add('flex', 'mb-1');
+		        botSkeleton.innerHTML = `
+		            <div class="w-10 h-10 rounded-full bg-gray-300 mr-4"></div>
+		            <div class="bg-gray-300 text-black rounded-lg message-bubble skeleton"></div>
+		        `;
+		        chatWindow.appendChild(botSkeleton);
+		        chatWindow.scrollTop = chatWindow.scrollHeight;
+		        
+		        const currentRoomId = window.location.pathname.split('/').pop();
+
+		        // 메시지를 서버로 전송
+		        fetch('/chat/send', {
+		            method: 'POST',
+		            headers: {
+		                'Content-Type': 'application/json'
+		            },
+		            body: JSON.stringify({
+		                message: message,
+		                userId: user.userId,
+		                roomId: currentRoomId
+		            })
+		        })
+		        .then(response => response.json())
+		        .then(data => {
+		            // 챗봇의 응답으로 스켈레톤 교체
+		            const botMessage = document.createElement('div');
+		            botMessage.classList.add('flex', 'mb-1', 'fade-in');
+		            botMessage.innerHTML = `
+		                <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
+		                <div class="bg-purple-50 text-black rounded-lg message-bubble">
+		                    <p class="message-content">${data.bot_response}</p>
+		                </div>
+		            `;
+
+		            // 스켈레톤을 실제 메시지로 대체
+		            botSkeleton.replaceWith(botMessage);
+
+		            // 트랜지션 효과를 적용하기 위해 약간의 지연 후에 클래스 추가
+		            setTimeout(() => {
+		                botMessage.classList.add('show');
+		            }, 10);
+
+		            chatWindow.scrollTop = chatWindow.scrollHeight;
+		            
+		            if (data.isNewRoom == "true") {
+			            // 새로운 채팅방 요소 생성
+			            const newChatItem = document.createElement('div');
+			            newChatItem.className = 'p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item';
+			            newChatItem.innerHTML = `
+			                <div class="flex items-center ellipsis">
+			                    <i class="far fa-comment-alt"></i>
+			                    <span class="ml-2 text-gray-700 sidebar-text">${data.roomName}</span>
+			                    <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
+			                </div>
+			                <div class="menu-button relative">
+			                    <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
+			                    <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
+			                        <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="enableRenameChat(this, ${data.roomId})">
+			                            <i class="fas fa-pen"></i>
+			                            이름 바꾸기
+			                        </div>
+			                        <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="deleteChat(this, ${data.roomId})">
+			                            <i class="far fa-trash-alt"></i>
+			                            삭제
+			                        </div>
+			                    </div>
+			                </div>
+			            `;
+			            
+			            // 새로운 요소를 div의 맨 위에 추가
+			            const firstChild = chatList.firstChild;
+			            if (firstChild) {
+			                chatList.insertBefore(newChatItem, firstChild);
+			            } else {
+			                chatList.appendChild(newChatItem);
+			            }
+		
+			            // 새로운 항목의 '...' 버튼에 이벤트 리스너 추가
+			            newChatItem.querySelector('.menu-button').addEventListener('click', function (event) {
+			                event.stopPropagation(); // 이벤트 전파 중지
+		
+			                // 모든 메뉴를 닫기
+			                document.querySelectorAll('.menu').forEach(menu => {
+			                    menu.style.display = 'none';
+			                });
+		
+			                // 현재 클릭된 메뉴만 열기
+			                const menu = this.querySelector('.menu');
+			                const rect = this.getBoundingClientRect();
+			                menu.style.top = `${rect.bottom}px`;
+			                menu.style.left = `${rect.right - menu.clientWidth}px`;
+			                menu.style.display = 'block';
+			            });
+			            
+			            window.location.href = '/chat/' + data.roomId;
+			            
+			        } else {
+			            console.error('새 채팅방 생성 실패', data);
+			        }
+		        })
+		        .catch(error => {
+		            console.error('Error:', error);
+		            // 에러 발생 시 스켈레톤 제거
+		            botSkeleton.remove();
+		        });
+		    }
+		});
+
+		// 채팅방 클릭 시 선택된 채팅방 표시
+/* 		function chatRoomClick(element) {
+		    document.querySelectorAll('.sidebar-item').forEach(item => {
+		        item.removeAttribute('data-selected');
+		    });
+		    element.setAttribute('data-selected', 'true');
+		} */
+
+		
+		/*
+		addChattingButton.addEventListener('click', addNewChat);
+		addChattingIconButton.addEventListener('click', addNewChat);
+		*/
+		
+		/*
+		function addNewChat() {
+		    // 새 채팅방을 생성하는 API 호출
+		    fetch('/chat/create', {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify({
+		            userId: user.userId
+		        })
+		    })
+		    .then(response => response.json())
+		    .then(data => {
+		        if (data.userId) {
+		            // 새로운 채팅방 요소 생성
+		            const newChatItem = document.createElement('div');
+		            newChatItem.className = 'p-4 hover:bg-gray-200 cursor-pointer flex items-center sidebar-item';
+		            newChatItem.innerHTML = `
+		                <div class="flex items-center ellipsis">
+		                    <i class="far fa-comment-alt"></i>
+		                    <span class="ml-2 text-gray-700 sidebar-text">${data.roomName}</span>
+		                    <input type="text" class="sidebar-text hidden ml-2 p-1 border rounded" />
+		                </div>
+		                <div class="menu-button relative">
+		                    <i class="fas fa-ellipsis-h cursor-pointer p-1 rounded hover:bg-[#B197FC]"></i>
+		                    <div class="menu bg-white border border-gray-300 rounded shadow-md hidden">
+		                        <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="enableRenameChat(this, ${data.roomId})">
+		                            <i class="fas fa-pen"></i>
+		                            이름 바꾸기
+		                        </div>
+		                        <div class="menu-item p-2 cursor-pointer hover:bg-gray-200" onclick="deleteChat(this, ${data.roomId})">
+		                            <i class="far fa-trash-alt"></i>
+		                            삭제
+		                        </div>
+		                    </div>
+		                </div>
+		            `;
+		            
+		            // 새로운 요소를 div의 맨 위에 추가
+		            const firstChild = chatList.firstChild;
+		            if (firstChild) {
+		                chatList.insertBefore(newChatItem, firstChild);
+		            } else {
+		                chatList.appendChild(newChatItem);
+		            }
+	
+		            // 새로운 항목의 '...' 버튼에 이벤트 리스너 추가
+		            newChatItem.querySelector('.menu-button').addEventListener('click', function (event) {
+		                event.stopPropagation(); // 이벤트 전파 중지
+	
+		                // 모든 메뉴를 닫기
+		                document.querySelectorAll('.menu').forEach(menu => {
+		                    menu.style.display = 'none';
+		                });
+	
+		                // 현재 클릭된 메뉴만 열기
+		                const menu = this.querySelector('.menu');
+		                const rect = this.getBoundingClientRect();
+		                menu.style.top = `${rect.bottom}px`;
+		                menu.style.left = `${rect.right - menu.clientWidth}px`;
+		                menu.style.display = 'block';
+		            });
+		        } else {
+		            console.error('새 채팅방 생성 실패', data);
+		        }
+		    })
+		    .catch(error => {
+		        console.error('API 호출 중 오류 발생', error);
+		    });
+		}
+		*/
+		
+		function chatRoomClick(roomId) {
+			window.location.href = '/chat/' + roomId;
+		}
+		
+	    document.addEventListener('DOMContentLoaded', function() {
+	        if (window.location.pathname.startsWith('/chat/')) {
+	            questionCards.style.display = 'none';
+	            chatMessages.classList.remove('hidden');
+	        }
+	    });
+	
+		function enableRenameChat(element, roomId) {
+		    // 모든 메뉴를 닫기
+		    document.querySelectorAll('.menu').forEach(menu => {
+		        menu.style.display = 'none';
+		    });
+	
+		    const chatItem = element.closest('.sidebar-item');
+		    const chatTitle = chatItem.querySelector('.sidebar-text');
+		    const chatInput = chatItem.querySelector('input');
+	
+		    chatTitle.classList.add('hidden');
+		    chatInput.classList.remove('hidden');
+		    chatInput.value = chatTitle.innerText;
+		    chatInput.focus();
+		    chatInput.select();  // 입력 필드의 텍스트를 선택
+	
+		    chatInput.addEventListener('keydown', function (event) {
+		        if (event.key === 'Enter') {
+		            renameChat(chatInput, roomId);
+		        }
+		    });
+	
+		    document.addEventListener('click', function onClickOutside(event) {
+		        if (!chatItem.contains(event.target)) {
+		            renameChat(chatInput, roomId);
+		            document.removeEventListener('click', onClickOutside);
+		        }
+		    });
+	
+		    event.stopPropagation();  // 이벤트 전파 중지
+		}
+	
+		function renameChat(inputElement, roomId) {
+		    const chatItem = inputElement.closest('.sidebar-item');
+		    const chatTitle = chatItem.querySelector('.sidebar-text');
+		    const newName = inputElement.value.trim();
+	
+		    if (newName) {
+		        fetch(`/chat/rename/${roomId}`, {
+		            method: 'POST',
+		            headers: {
+		                'Content-Type': 'application/json'
+		            },
+		            body: JSON.stringify({
+		                userId: user.userId,
+		                roomName: newName
+		            })
+		        })
+		        .then(response => response.json())
+		        .then(data => {
+		            if (data.roomName) {
+		                chatTitle.innerText = data.roomName;
+		            } else {
+		                console.error('채팅방 이름 변경 실패');
+		            }
+		        })
+		        .catch(error => {
+		            console.error('API 호출 중 오류 발생', error);
+		        });
+		    }
+		    
+		    chatTitle.classList.remove('hidden');
+		    inputElement.classList.add('hidden');
+		}
+	
+		function deleteChat(element, roomId) {
+		    // 현재 접속한 roomId를 URL에서 추출
+		    const currentRoomId = window.location.pathname.split('/').pop();
+		    //console.log('Current Room ID:', currentRoomId);
+		    //console.log('Room ID to delete:', roomId);
+
+		    fetch(`/chat/delete/${roomId}`, {
+		        method: 'POST',
+		        headers: {
+		            'Content-Type': 'application/json'
+		        },
+		        body: JSON.stringify({
+		            userId: user.userId
+		        })
+		    })
+		    .then(response => {
+		        if (response.ok) {
+		            const chatItem = element.closest('.sidebar-item');
+		            chatItem.remove();
+		            
+		            // 현재 접속한 roomId와 삭제할 roomId가 같으면 /chat 페이지로 이동
+		            if (currentRoomId === String(roomId).trim()) {
+		                console.log('Navigating to /chat');
+		                window.location.href = '/chat';
+		            }
+		        } else {
+		            console.error('채팅방 삭제 실패');
+		        }
+		    })
+		    .catch(error => {
+		        console.error('API 호출 중 오류 발생', error);
+		    });
+		}
+
+	
+		function selectQuestion(question) {
+		    messageInput.value = question;
+		    messageInput.style.height = (messageInput.scrollHeight) + 'px';
+		    sendButton.disabled = false;
+		    questionCards.style.display = 'none';
+		    chatMessages.classList.remove('hidden');
+		    chatForm.dispatchEvent(new Event('submit'));
+		}		
+	
+		const handleResize = () => {
+		    if (window.innerWidth < 768) {
+		        sidebar.classList.add('sidebar-collapsed');
+		    } else {
+		        sidebar.classList.remove('sidebar-collapsed');
+		    }
+		};
+	
+		window.addEventListener('resize', handleResize);
+		window.addEventListener('load', handleResize);
+	
+		document.querySelectorAll('.menu-button').forEach(button => {
+		    button.addEventListener('click', function (event) {
+		        event.stopPropagation(); // 이벤트 전파 중지
+	
+		        // 모든 메뉴를 닫기
+		        document.querySelectorAll('.menu').forEach(menu => {
+		            menu.style.display = 'none';
+		        });
+	
+		        // 현재 클릭된 메뉴만 열기
+		        const menu = this.querySelector('.menu');
+		        const rect = this.getBoundingClientRect();
+		        menu.style.top = `${rect.bottom}px`;
+		        menu.style.left = `${rect.right - menu.clientWidth}px`;
+		        menu.style.display = 'block';
+		    });
+		});
+	
+		document.addEventListener('click', function (event) {
+		    if (!event.target.closest('.menu-button')) {
+		        document.querySelectorAll('.menu').forEach(menu => {
+		            menu.style.display = 'none';
+		        });
+		    }
+		});
+
+    </script>
+</body>
+
+</html>

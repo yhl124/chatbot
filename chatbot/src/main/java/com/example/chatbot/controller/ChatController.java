@@ -126,8 +126,9 @@ public class ChatController {
         Date sendTime = new java.sql.Date(System.currentTimeMillis());
         String roomId = request.get("roomId");
         String roomName = null;
+        String isNewRoom = "false";
         
-        //결과 전달용 response
+        //결과 전달용 변수 response
         Map<String, String> response = new HashMap<>();
         
         //새 채팅방에서 입력한 채팅이면
@@ -135,6 +136,8 @@ public class ChatController {
         	chatroomService.insertChatroom(userId);
             Chatroom newChatroom = chatroomService.getLastChatroomForUserId(userId);
             roomId = Integer.toString(newChatroom.getRoomId());
+            roomName = newChatroom.getRoomName();
+            isNewRoom = "true";
         }
 
         // 챗봇 서버의 URL
@@ -174,6 +177,8 @@ public class ChatController {
             // chatService.insertChatLog(roomId, 보낸텍스트, 보낸시간, 받은텍스트, 받은시간);
             chatService.insertChatLog(Integer.valueOf(roomId), message, sendTime, recvText, recvTime);
             
+            response.put("isNewRoom", isNewRoom);
+            response.put("userId", userId);
             response.put("bot_response", recvText);
             response.put("roomId", roomId);
             response.put("roomName", roomName);
