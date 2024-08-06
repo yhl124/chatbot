@@ -7,8 +7,11 @@
     <title>청년온기</title>
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" >
     <link href="/notyf/notyf.min.css" rel="stylesheet">
+    <script src="/silverBox/silverBox.min.js"></script>
+    <link href="/silverBox/silverBox.min.css" rel="stylesheet" />
+	
     <style>
         .sidebar-collapsed {
             width: 4rem;
@@ -156,7 +159,6 @@
 </head>
 
 <body class="bg-gray-100 h-screen flex">    
-	<div id="error-message" th:if="${errorMessage}" th:text="${errorMessage}" class="hidden"></div>
     <!-- Sidebar -->
     <div id="sidebar" class="w-64 bg-white h-full shadow-md flex flex-col justify-between transition-all duration-300">
         <div>
@@ -309,6 +311,7 @@
         </div>
     </div>
     	<script src="/notyf/notyf.min.js"></script>
+    	
         <script th:inline="javascript">
         /*<![CDATA[*/
         var user = /*[[${user}]]*/ {};
@@ -439,8 +442,8 @@
             })
             .then(response => response.json());
         }
-		//서버 응답 처리
-        function handleServerResponse(data, botSkeleton, chatList) {
+		//서버 응답 처리1
+/*         function handleServerResponse(data, botSkeleton, chatList) {
             const botMessage = createBotMessage(data.bot_response);
             botSkeleton.replaceWith(botMessage);
             chatWindow.scrollTop = chatWindow.scrollHeight;
@@ -451,8 +454,27 @@
             } else {
                 console.error('기존 채팅방에서의 채팅', data);
             }
-        }
-		//봇 메시지 생성
+        } */
+        
+        //서버 응답 처리2
+        function handleServerResponse(data, botSkeleton, chatList) {
+		    const botMessageElement = createBotMessageElement();
+		    botSkeleton.replaceWith(botMessageElement);
+		    chatWindow.scrollTop = chatWindow.scrollHeight;
+		
+		    if (data.isNewRoom == "true") {
+		        addNewChatRoom(data, chatList);
+		        // 메시지를 미리 추가하고 새로운 채팅방으로 이동
+		        typeWriter(data.bot_response, botMessageElement.querySelector('.message-content'), () => {
+		            window.location.href = '/chat/' + data.roomId;
+		        });
+		    } else {
+		        typeWriter(data.bot_response, botMessageElement.querySelector('.message-content'));
+		    }
+		}
+        
+
+/* 		//봇 메시지 생성1
         function createBotMessage(botResponse) {
             const botMessage = document.createElement('div');
             botMessage.classList.add('flex', 'mb-1', 'fade-in');
@@ -467,7 +489,40 @@
             }, 10);
 
             return botMessage;
+        } */
+
+        //봇 메시지 요소 생성2
+        function createBotMessageElement() {
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('flex', 'mb-1', 'fade-in');
+            botMessage.innerHTML = `
+                <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
+                <div class="bg-purple-50 text-black rounded-lg message-bubble">
+                    <p class="message-content"></p>
+                </div>
+            `;
+            setTimeout(() => {
+                botMessage.classList.add('show');
+            }, 10);
+
+            return botMessage;
         }
+
+      	//텍스트 생성 딜레이
+        function typeWriter(text, element, callback, delay = 30) {
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, delay);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            type();
+        }
+
 		//새 채팅방 추가
         function addNewChatRoom(data, chatList) {
             const newChatItem = document.createElement('div');
@@ -625,35 +680,55 @@
             chatTitle.classList.remove('hidden');
             inputElement.classList.add('hidden');
         }
-		//채팅방 삭제
+		//채팅방삭제
         function deleteChat(element, roomId) {
             const currentRoomId = window.location.pathname.split('/').pop();
+            
+            silverBox({
+                alertIcon: "error",
+                text: "삭제하면 복구할 수 없습니다.\n정말로 이 채팅방을 삭제하시겠습니까?",
+                centerContent: true,
+                confirmButton: {
+                	bgColor: "#e62e05",
+                	borderColor: "#e62e05",
+                    text: "확인",
+                    onClick : function() {
+                        fetch(`/chat/delete/${roomId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                userId: user.userId
+                            })
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                const chatItem = element.closest('.sidebar-item');
+                                chatItem.remove();
 
-            fetch(`/chat/delete/${roomId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    userId: user.userId
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    const chatItem = element.closest('.sidebar-item');
-                    chatItem.remove();
-
-                    if (currentRoomId === String(roomId).trim()) {
-                        window.location.href = '/chat';
+                                if (currentRoomId === String(roomId).trim()) {
+                                    window.location.href = '/chat';
+                                }
+                            } else {
+                                console.error('채팅방 삭제 실패');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('API 호출 중 오류 발생', error);
+                        });
                     }
-                } else {
-                    console.error('채팅방 삭제 실패');
+                },
+                cancelButton: {
+                    text: "취소",
+                    action: function() {
+                        // 취소 버튼 클릭 시 아무 작업도 하지 않음
+                        console.log('삭제가 취소되었습니다.');
+                    }
                 }
-            })
-            .catch(error => {
-                console.error('API 호출 중 오류 발생', error);
             });
         }
+		
 		//초기 질문 선택
         function selectQuestion(question) {
             messageInput.value = question;

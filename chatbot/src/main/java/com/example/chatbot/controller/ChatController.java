@@ -76,16 +76,14 @@ public class ChatController {
 	    List<Chat> chats = chatService.getChatsByRoomId(roomId);
 
 	    model.addAttribute("user", user);
-
-	    if (chatroom == null) {
-	        String referer = request.getHeader("Referer");
-	        redirectAttributes.addFlashAttribute("errorMessage", "Chatroom not found.");
-	        return "redirect:" + (referer != null ? referer : "/");
-	    }
-
 	    model.addAttribute("chatRooms", chatrooms);
 	    model.addAttribute("chats", chats != null ? chats : List.of());
 	    model.addAttribute("chatRoom", chatroom);
+	    
+	    if (chatroom == null) {
+	        redirectAttributes.addFlashAttribute("errorMessage", "잘못된 접근입니다");
+	        return "redirect:/chat";
+	    }
 
 	    return "chat";
 	}
