@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>로그인</title>
+    <link rel="stylesheet" href="/css/fontstyles.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" >
     <link href="/notyf/notyf.min.css" rel="stylesheet">
+
 </head>
 <body class="h-screen bg-white indigo">
     <div class="h-full flex flex-col justify-center items-center">
@@ -16,10 +18,8 @@
             <span class="text-red-500 text-3xl font-bold font-['Inter']"> </span>
         </div>
         <form th:action="@{/login}" method="post" id="loginForm" accept-charset="UTF-8">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-<!-- 	        <div th:if="${param.error}" id="loginError" class="alert alert-danger">
-	            사용자ID 또는 비밀번호를 확인해 주세요.
-	        </div> -->
+        	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
             <div class="mt-8 w-80 px-6 pt-6 bg-white rounded-lg border border-zinc-300 flex flex-col justify-start items-start gap-6">
                 <div class="self-stretch h-16 flex-col justify-start items-start gap-2 flex">
                     <div class="self-stretch text-stone-900 text-base font-normal font-['Inter'] leading-snug">아이디</div>

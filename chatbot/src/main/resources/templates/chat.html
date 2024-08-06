@@ -11,7 +11,8 @@
     <link href="/notyf/notyf.min.css" rel="stylesheet">
     <script src="/silverBox/silverBox.min.js"></script>
     <link href="/silverBox/silverBox.min.css" rel="stylesheet" />
-	
+    <link rel="stylesheet" href="/css/fontstyles.css">
+
     <style>
         .sidebar-collapsed {
             width: 4rem;
@@ -685,8 +686,8 @@
             const currentRoomId = window.location.pathname.split('/').pop();
             
             silverBox({
-                alertIcon: "error",
-                text: "삭제하면 복구할 수 없습니다.\n정말로 이 채팅방을 삭제하시겠습니까?",
+                alertIcon: "warning",
+                text: "정말 삭제하시겠습니까?",
                 centerContent: true,
                 confirmButton: {
                 	bgColor: "#e62e05",
