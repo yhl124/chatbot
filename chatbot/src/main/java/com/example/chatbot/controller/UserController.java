@@ -98,7 +98,7 @@ public class UserController {
             log.error("Error during signup: " + e.getMessage(), e);
             model.addFlashAttribute("message", "회원가입에 실패하였습니다: " + e.getMessage());
         }
-        return "redirect:/login";
+        return "redirect:/login?signup=true";
     }
     
     //마이 페이지 이동

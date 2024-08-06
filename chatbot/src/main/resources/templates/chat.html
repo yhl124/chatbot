@@ -8,6 +8,7 @@
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="/notyf/notyf.min.css" rel="stylesheet">
     <style>
         .sidebar-collapsed {
             width: 4rem;
@@ -155,6 +156,7 @@
 </head>
 
 <body class="bg-gray-100 h-screen flex">    
+	<div id="error-message" th:if="${errorMessage}" th:text="${errorMessage}" class="hidden"></div>
     <!-- Sidebar -->
     <div id="sidebar" class="w-64 bg-white h-full shadow-md flex flex-col justify-between transition-all duration-300">
         <div>
@@ -306,6 +308,7 @@
             </form>
         </div>
     </div>
+    	<script src="/notyf/notyf.min.js"></script>
         <script th:inline="javascript">
         /*<![CDATA[*/
         var user = /*[[${user}]]*/ {};
@@ -526,8 +529,9 @@
             window.location.href = '/chat/' + roomId;
         }
 		
-		//채팅방으로 이동하면 질문 카드 숨김
+		//페이지 로딩시 이벤트
         document.addEventListener('DOMContentLoaded', function() {
+        	//채팅방을 선택했으면 질문 카드 숨김
             if (window.location.pathname.startsWith('/chat/')) {
                 questionCards.style.display = 'none';
                 chatMessages.classList.remove('hidden');
@@ -541,7 +545,19 @@
             if (selectedChatItem) {
                 selectedChatItem.classList.add('selected');
             }
-        
+            
+            //잘못된 채팅방을 직접 입력해서 접속하면 에러메시지
+            const errorMessage = document.getElementById('error-message').textContent.trim();
+            if (errorMessage) {
+            	const notyf = new Notyf({
+                	position: {
+                	    x: 'center',
+                	    y: 'top',
+                	}
+                });
+                notyf.error(errorMessage);
+                history.replaceState(null, '', window.location.pathname); // URL에서 파라미터 제거
+            }
         });
         
 		//채팅방 이름 변경 활성화

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.chatbot.model.Chat;
 import com.example.chatbot.model.Chatroom;
@@ -30,6 +31,7 @@ import com.example.chatbot.service.IChatroomService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -68,28 +70,27 @@ public class ChatController {
     }
 	
 	@GetMapping("/chat/{roomId}")
-	public String getChatroom(@AuthenticationPrincipal User user, @PathVariable int roomId, Model model) {
-		List<Chatroom> chatrooms = chatroomService.getChatroomByUserId(user.getUserId());
-		Chatroom chatroom = chatroomService.getChatroomByRoomId(user.getUserId(), roomId);
-		List<Chat> chats = chatService.getChatsByRoomId(roomId);
-		
-		model.addAttribute("user", user);
-		
-		if (chatroom != null) {
-            model.addAttribute("chatRooms", chatrooms);
-        } else {
-            model.addAttribute("chatRooms", List.of()); // 빈 리스트 추가 대신 에러 전달로 변경 필요
-        }
-		
-		if (chats != null) {
-            model.addAttribute("chats", chats);
-        } else {
-            model.addAttribute("chats", List.of());
-        }
-		
-		model.addAttribute("chatRoom", chatroom);
-		return "chat";
+	public String getChatroom(@AuthenticationPrincipal User user, @PathVariable int roomId, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	    List<Chatroom> chatrooms = chatroomService.getChatroomByUserId(user.getUserId());
+	    Chatroom chatroom = chatroomService.getChatroomByRoomId(user.getUserId(), roomId);
+	    List<Chat> chats = chatService.getChatsByRoomId(roomId);
+
+	    model.addAttribute("user", user);
+
+	    if (chatroom == null) {
+	        String referer = request.getHeader("Referer");
+	        redirectAttributes.addFlashAttribute("errorMessage", "Chatroom not found.");
+	        return "redirect:" + (referer != null ? referer : "/");
+	    }
+
+	    model.addAttribute("chatRooms", chatrooms);
+	    model.addAttribute("chats", chats != null ? chats : List.of());
+	    model.addAttribute("chatRoom", chatroom);
+
+	    return "chat";
 	}
+
+
 	
 	@PostMapping("/chat/delete/{roomId}")
 	public ResponseEntity<?> deleteChatroom(@PathVariable int roomId, @RequestBody Map<String, String> request) {
