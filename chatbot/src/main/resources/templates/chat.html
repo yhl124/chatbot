@@ -183,7 +183,7 @@
                 <button id="addChattingButton" th:onclick="window.location.href='/chat'" class="new-chat-button w-full border text-gray-500 p-2 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 flex justify-center items-center">
                     <span class="sidebar-text">+ 새 대화</span>
                 </button>
-                <button id="addChattingIconButton" th:onclick="window.location.href='/chat'" class="new-chat-icon flex justify-center items-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-200" >
+                <button id="addChattingIconButton" th:onclick="window.location.href='/chat'" class="flex-shrink-0 new-chat-icon flex justify-center items-center w-10 h-10 rounded-full border border-gray-300 hover:bg-gray-200" >
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -231,7 +231,7 @@
             </div>
         </div>
         <div class="p-4 border-t border-gray-300 sidebar-item">
-            <a th:href="@{/mypage}" class="block w-10 h-10 rounded-full overflow-hidden">
+            <a th:href="@{/mypage}" class="flex-shrink-0 block w-10 h-10 rounded-full overflow-hidden">
                 <img id="profileImage" th:src="@{'/profile/file/' + ${user.userId}}" class="w-full h-full object-cover" />
             </a>
             <a th:href="@{/logout}" class="block text-left overflow-hidden sidebar-text">
@@ -270,22 +270,25 @@
             	<div th:each="chat : ${chats}" >
             		<!-- 보낸 채팅 -->
             		<div class="flex justify-end mb-1">
-	                    <div class="bg-indigo-300 text-black items-center rounded-lg message-bubble">
+	                    <div class="bg-indigo-300 text-black items-center rounded-lg inline-block w-auto max-w-full md:max-w-lg lg:max-w-2xl message-bubble">
 	                        <p class="message-content p-2" th:text="${chat.sendText}">send text</p>
 	                    </div>
 	                    <!-- <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4"></div> -->
 	                    
-	                    <div class="w-11 h-11 rounded-full bg-indigo-300 ml-4">
+	                    <div class="flex-shrink-0 w-11 h-11 rounded-full bg-indigo-300 ml-4">
 							<img id="profileImage" th:src="@{'/profile/file/' + ${user.userId}}" class="w-full h-full border-2 border-indigo-300 rounded-full object-cover" />
 				        </div>
 	                </div>
 	                <!-- 받은 채팅 -->
 	            	<div class="flex mb-1">
-	                    <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
-	                    <div class="bg-purple-50 text-black rounded-lg message-bubble">
-	                        <p class="message-content p-2" th:text="${chat.recvText}">recv text</p>
-	                    </div>
-	                </div>
+					    <div class="flex-shrink-0 w-11 h-11 rounded-full bg-purple-50 mr-4">
+					        <img id="botProfileImage" src='/images/botprofile.png' class="w-full h-full border-2 border-purple-300 rounded-full object-cover" />
+					    </div>
+					    <div class="bg-purple-50 text-black rounded-lg inline-block w-auto max-w-full md:max-w-lg lg:max-w-2xl message-bubble">
+					        <p class="message-content p-2" th:text="${chat.recvText}">recv text</p>
+					    </div>
+					</div>
+
 	                
 				</div>                
             </div>
@@ -389,7 +392,7 @@
 		        sendMessageToServer(message, currentRoomId)
 		            .then(data => {
 		                handleServerResponse(data, botSkeleton, chatList);
-		                messageInput.disabled = false; // 입력 창 활성화
+		                //messageInput.disabled = false; // 입력 창 활성화
 		            })
 		            .catch(error => {
 		                console.error('Error:', error);
@@ -407,10 +410,10 @@
             const profileImageUrl = `/profile/file/${user.userId}`;
 
             userMessage.innerHTML = `
-                <div class="bg-indigo-300 text-black rounded-lg message-bubble">
+                <div class="bg-indigo-300 text-black rounded-lg inline-block w-auto max-w-full md:max-w-lg lg:max-w-2xl message-bubble">
                     <p class="message-content">${message}</p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-indigo-300 ml-4">
+                <div class="flex-shrink-0 w-11 h-11 rounded-full bg-indigo-300 ml-4">
                     <img src="${profileImageUrl}" class="w-full h-full border-2 border-indigo-300 rounded-full object-cover" />
                 </div>
             `;
@@ -423,8 +426,8 @@
             const botSkeleton = document.createElement('div');
             botSkeleton.classList.add('flex', 'mb-1');
             botSkeleton.innerHTML = `
-                <div class="w-10 h-10 rounded-full bg-gray-300 mr-4"></div>
-                <div class="bg-gray-300 text-black rounded-lg message-bubble skeleton"></div>
+                <div class="w-11 h-11 rounded-full bg-gray-300 mr-4"></div>
+                <div class="bg-gray-300 text-black rounded-lg  message-bubble skeleton"></div>
             `;
             return botSkeleton;
         }
@@ -497,8 +500,10 @@
             const botMessage = document.createElement('div');
             botMessage.classList.add('flex', 'mb-1', 'fade-in');
             botMessage.innerHTML = `
-                <div class="w-10 h-10 rounded-full bg-purple-50 mr-4"></div>
-                <div class="bg-purple-50 text-black rounded-lg message-bubble">
+                <div class="flex-shrink-0 w-11 h-11 rounded-full bg-purple-50 mr-4">
+            		<img id="botProfileImage" src='/images/botprofile.png' class="w-full h-full border-2 border-indigo-300 rounded-full object-cover" />
+            	</div>
+                <div class="bg-purple-50 text-black rounded-lg inline-block w-auto max-w-full md:max-w-lg lg:max-w-2xl message-bubble">
                     <p class="message-content"></p>
                 </div>
             `;
@@ -509,20 +514,25 @@
             return botMessage;
         }
 
-      	//텍스트 생성 딜레이
+      //텍스트 생성 딜레이
         function typeWriter(text, element, callback, delay = 30) {
             let i = 0;
+            messageInput.disabled = true; // 입력 창 비활성화
             function type() {
                 if (i < text.length) {
                     element.innerHTML += text.charAt(i);
                     i++;
                     setTimeout(type, delay);
-                } else if (callback) {
-                    callback();
+                } else {
+                    messageInput.disabled = false; // 입력 창 활성화
+                    if (callback) {
+                        callback();
+                    }
                 }
             }
             type();
         }
+
 
 		//새 채팅방 추가
         function addNewChatRoom(data, chatList) {
