@@ -21,89 +21,27 @@
             <div class="text-left text-lg mb-4" th:text="${user.name}+'님이 혜택 받을 수 있는 정책'">OOO이 혜택 받을 수 있는 정책</div>
             <button class="bg-[#5856d6] text-center text-white mb-2 px-4 rounded hover:bg-indigo-600">전체 정보검색</button>
         </div>
-
+		
+		<!-- 추천 정책 -->
         <div class="multiple-items flex justify-center my-4 mx-2 lg:mx-36 xl:mx-60 2xl:mx-96 relative">
-            <div class="border-2 border-gray-300 p-4 rounded w-1/5">
-                <div class="text-lg font-bold truncate mb-2">청년 주택드림 청약통장</div>
-                <div class="text-gray-600 truncate mb-1">국토교통부</div>
-                <div class="text-red-500 truncate mb-4">D-day 160일</div>
-                <div class="flex justify-between pt-8 items-center">
-                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                    <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
-                </div>
-            </div>
+		    <div th:each="policy : ${policies}" class="border-2 border-gray-300 p-4 rounded w-1/5">
+		        <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
+		           th:text="${policy.polyBizSjnm}" 
+		           th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
+		        <div th:text="${policy.polyBizSecd}" class="text-gray-600 truncate mb-1">국토교통부</div>
+		        <div th:if="${policy.bizPrdCn}" th:text="${policy.bizPrdCn}" class="text-red-500 truncate mb-4">D-day 160일</div>
+		        <div th:unless="${policy.bizPrdCn}" class="text-red-500 truncate mb-4">없음</div>
+		        <div class="flex justify-between pt-8 items-center">
+		            <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
+		            <div th:text="${policy.polyRlmCd}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+		        </div>
+		    </div>
+		</div>
+
+
+
         
-            <div class="border-2 border-gray-300 p-4 rounded w-1/5">
-                <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                <div class="flex justify-between pt-8 items-center">
-                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                    <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                </div>
-            </div>
-        
-            <div class="border-2 border-gray-300 p-4 rounded w-1/5">
-                <div class="text-lg font-bold truncate mb-2">청년월세 특별지원</div>
-                <div class="text-gray-600 truncate mb-1">국토교통부</div>
-                <div class="text-red-500 truncate mb-4">D-day 216일</div>
-                <div class="flex justify-between pt-8 items-center">
-                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                    <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
-                </div>
-            </div>
-        
-            <div class="border-2 border-gray-300 p-4 rounded w-1/5">
-                <div class="text-lg font-bold truncate mb-2">국민취업지원제도</div>
-                <div class="text-gray-600 truncate mb-1">고용노동부</div>
-                <div class="text-purple-500 truncate mb-4">상시</div>
-                <div class="flex justify-between pt-8 items-center">
-                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                    <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">일자리분야</div>
-                </div>
-            </div>
-        
-            <div class="border-2 border-gray-300 p-4 rounded w-1/5">
-                <div class="text-lg font-bold truncate mb-2">청년 주택드림 청약통장1</div>
-                <div class="text-gray-600 truncate mb-1">국토교통부</div>
-                <div class="text-red-500 truncate mb-4">D-day 160일</div>
-                <div class="flex justify-between pt-8 items-center">
-                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                    <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
-                </div>
-            </div>
-        
-            <div class="border-2 border-gray-300 p-4 rounded w-1/5">
-                <div class="text-lg font-bold truncate mb-2">청년문화예술패스1</div>
-                <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                <div class="flex justify-between pt-8 items-center">
-                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                    <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                </div>
-            </div>
-        
-            <div class="border-2 border-gray-300 p-4 rounded w-1/5">
-                <div class="text-lg font-bold truncate mb-2">청년월세 특별지원1</div>
-                <div class="text-gray-600 truncate mb-1">국토교통부</div>
-                <div class="text-red-500 truncate mb-4">D-day 216일</div>
-                <div class="flex justify-between pt-8 items-center">
-                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                    <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
-                </div>
-            </div>
-        
-            <div class="border-2 border-gray-300 p-4 rounded w-1/5">
-                <div class="text-lg font-bold truncate mb-2">국민취업지원제도1</div>
-                <div class="text-gray-600 truncate mb-1">고용노동부</div>
-                <div class="text-purple-500 truncate mb-4">상시</div>
-                <div class="flex justify-between pt-8 items-center">
-                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                    <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">일자리분야</div>
-                </div>
-            </div>
-        </div>
-        
+        <!-- 전체 통계 -->
         <div class="flex flex-row justify-between border-b-2 border-b-gray-400 mt-20 h-auto mx-2 lg:mx-36 xl:mx-60 2xl:mx-96">
             <div class="text-left text-lg mb-4">전체 통계</div>
         </div>
@@ -130,7 +68,7 @@
         <script>
             $(document).ready(function(){
                 $('.multiple-items').slick({
-                    dots: true,
+                    dots: false,
                     infinite: true,
                     speed: 300,
                     slidesToShow: 4,

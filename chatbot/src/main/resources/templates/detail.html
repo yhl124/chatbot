@@ -1,0 +1,147 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정책 상세보기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
+</head>
+<body>
+    <div>
+		<th:block th:replace="~{fragments/header :: header}"></th:block>    
+		
+        <div class="text-3xl font-bold text-center text-[#5856d6] mb-8 whitespace-nowrap">정책 정보</div>
+
+        <div class="bg-white p-6 shadow-md rounded-md flex flex-col h-auto px-2 py-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
+            <div class="text-2xl font-bold mb-2">한 눈에 보는 정책 요약</div>
+            <table class="w-full border-collapse border border-gray-300 mb-6">
+                <tbody>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">정책 번호</td>
+                        <td class="p-2 border border-gray-300">파싱부터 db까지 추가해야됨 R2024020119403</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">정책 분야</td>
+                        <td th:text="${policy.polyRlmCd}" class="p-2 border border-gray-300">복지.문화분야</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">지원 내용</td>
+                        <td class="p-2 border border-gray-300">
+                            <ul class="list-disc list-inside">
+                                <li>정부와 기업, 근로자가 공동으로 비용 조성 후 휴가 시 국내여행에 사용</li>
+                                <li>부담비율: 정부 10만원, 기업 10만원, 근로자 20만원 / 총 40만원(적립금) 조성</li>
+                                <li>- 24년 기준 누적 참여 5년차 이상 중견기업: 정부 5만원, 기업 15만원, 근로자 20만원</li>
+                                <li>사용방식: 휴가샵 온라인몰에 40만원 포인트 부여 및 국내여행 관련 상품 구입</li>
+                                <li>사용기간: 적립포인트 부여시점 ~ 12.20.(금) 변동가능</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">사업 운영 기간</td>
+                        <td class="p-2 border border-gray-300">사업 신청 기간</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">사업 신청 기간</td>
+                        <td class="p-2 border border-gray-300">2024년 02월 01일 ~ 2024년 03월 31일</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">지원 규모(명)</td>
+                        <td class="p-2 border border-gray-300">최대 15만명</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">비고</td>
+                        <td class="p-2 border border-gray-300">정부지원금 예산소진시까지</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="text-2xl font-bold mb-2">한 눈에 보는 정책 요약</div>
+            <table class="w-full border-collapse border border-gray-300 mb-6">
+                <tbody>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">정책 번호</td>
+                        <td class="p-2 border border-gray-300">R2024020119403</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">정책 분야</td>
+                        <td class="p-2 border border-gray-300">복지.문화분야</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">지원 내용</td>
+                        <td class="p-2 border border-gray-300">
+                            <ul class="list-disc list-inside">
+                                <li>정부와 기업, 근로자가 공동으로 비용 조성 후 휴가 시 국내여행에 사용</li>
+                                <li>부담비율: 정부 10만원, 기업 10만원, 근로자 20만원 / 총 40만원(적립금) 조성</li>
+                                <li>- 24년 기준 누적 참여 5년차 이상 중견기업: 정부 5만원, 기업 15만원, 근로자 20만원</li>
+                                <li>사용방식: 휴가샵 온라인몰에 40만원 포인트 부여 및 국내여행 관련 상품 구입</li>
+                                <li>사용기간: 적립포인트 부여시점 ~ 12.20.(금) 변동가능</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">사업 운영 기간</td>
+                        <td class="p-2 border border-gray-300">사업 신청 기간</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">사업 신청 기간</td>
+                        <td class="p-2 border border-gray-300">2024년 02월 01일 ~ 2024년 03월 31일</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">지원 규모(명)</td>
+                        <td class="p-2 border border-gray-300">최대 15만명</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">비고</td>
+                        <td class="p-2 border border-gray-300">정부지원금 예산소진시까지</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <div class="text-2xl font-bold mb-2">한 눈에 보는 정책 요약</div>
+            <table class="w-full border-collapse border border-gray-300 mb-6">
+                <tbody>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">정책 번호</td>
+                        <td class="p-2 border border-gray-300">R2024020119403</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">정책 분야</td>
+                        <td class="p-2 border border-gray-300">복지.문화분야</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">지원 내용</td>
+                        <td class="p-2 border border-gray-300">
+                            <ul class="list-disc list-inside">
+                                <li>정부와 기업, 근로자가 공동으로 비용 조성 후 휴가 시 국내여행에 사용</li>
+                                <li>부담비율: 정부 10만원, 기업 10만원, 근로자 20만원 / 총 40만원(적립금) 조성</li>
+                                <li>- 24년 기준 누적 참여 5년차 이상 중견기업: 정부 5만원, 기업 15만원, 근로자 20만원</li>
+                                <li>사용방식: 휴가샵 온라인몰에 40만원 포인트 부여 및 국내여행 관련 상품 구입</li>
+                                <li>사용기간: 적립포인트 부여시점 ~ 12.20.(금) 변동가능</li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">사업 운영 기간</td>
+                        <td class="p-2 border border-gray-300">사업 신청 기간</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">사업 신청 기간</td>
+                        <td class="p-2 border border-gray-300">2024년 02월 01일 ~ 2024년 03월 31일</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">지원 규모(명)</td>
+                        <td class="p-2 border border-gray-300">최대 15만명</td>
+                    </tr>
+                    <tr>
+                        <td class="bg-gray-200 p-2 font-semibold border border-gray-300">비고</td>
+                        <td class="p-2 border border-gray-300">정부지원금 예산소진시까지</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</body>

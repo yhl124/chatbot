@@ -56,15 +56,6 @@ public class UserController {
     public String signup() {
         return "signup_form";
     }
-    
-    //추천페이지 이동
-    @GetMapping("/recs")
-    public String recspage(@AuthenticationPrincipal User user, Model model) {
-        if (user != null) {
-            model.addAttribute("user", user);
-        } 
-        return "recommendation";
-    }
 
     //회원가입 버튼
     @PostMapping("/signup")
