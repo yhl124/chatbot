@@ -22,6 +22,11 @@ public class User implements UserDetails {
     private Date birthday;
     private String gender;
     private String email;
+    private String area;
+    private String academicAbility;
+    private String employment;
+    private String interest;
+    
     private Collection<? extends GrantedAuthority> authorities;
 
     @Override

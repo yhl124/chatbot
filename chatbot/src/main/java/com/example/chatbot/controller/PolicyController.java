@@ -45,7 +45,6 @@ public class PolicyController {
     //검색페이지 이동
     @GetMapping("/search")
     public String searchpage(@AuthenticationPrincipal User user, Model model) {
-    	
         if (user != null) {
             model.addAttribute("user", user);
         } 

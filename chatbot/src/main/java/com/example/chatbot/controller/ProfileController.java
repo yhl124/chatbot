@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.example.chatbot.model.Profile;
 import com.example.chatbot.service.IProfileService;
 
-import lombok.extern.slf4j.Slf4j;
-
 
 @Controller
 public class ProfileController {

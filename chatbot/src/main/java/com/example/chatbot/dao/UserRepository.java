@@ -32,6 +32,10 @@ public class UserRepository implements IUserRepository, UserDetailsService {
             user.setBirthday(rs.getDate("birthday"));
             user.setGender(rs.getString("gender"));
             user.setEmail(rs.getString("email"));
+            user.setArea(rs.getString("area"));
+            user.setAcademicAbility(rs.getString("academic_ability"));
+            user.setEmployment(rs.getString("employment"));
+            user.setInterest(rs.getString("interest"));
             return user;
         }
     }
@@ -62,8 +66,8 @@ public class UserRepository implements IUserRepository, UserDetailsService {
 
     @Override
     public void insertUser(User user) {
-        String sql = "INSERT INTO users (user_id, password, user_name, birthday, gender, email) VALUES (?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, user.getUserId(), user.getPassword(), user.getName(), user.getBirthday(), user.getGender(), user.getEmail());
+        String sql = "INSERT INTO users (user_id, password, user_name, birthday, gender, email, area, academic_ability, employment, interest) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, user.getUserId(), user.getPassword(), user.getName(), user.getBirthday(), user.getGender(), user.getEmail() , user.getArea() , user.getAcademicAbility() , user.getEmployment(), user.getInterest());
     }
 
 	@Override

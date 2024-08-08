@@ -40,7 +40,7 @@
                 <div class="flex flex-col justify-start items-start w-full gap-2">
                     <div class="flex flex-col w-full gap-2">
                         <div class="flex justify-between items-center w-full">
-                            <p class="text-base text-left text-[#1e1e1e]">아이디</p>
+                            <p class="text-base text-left text-[#1e1e1e]">* 아이디</p>
                             <div id="userIdCheckResult" class="text-red-500 text-sm"></div>
                         </div>
                         <div class="flex justify-between items-center w-full gap-2">
@@ -51,14 +51,14 @@
                     
                     <div class="flex flex-col w-full gap-2">
                     	<div class="flex justify-between items-center w-full">
-                            <p class="text-base text-left text-[#1e1e1e]">비밀번호</p>
+                            <p class="text-base text-left text-[#1e1e1e]">* 비밀번호</p>
                             <!-- <div id="passwordCheck" class="text-red-500 text-sm"></div> -->
                         </div>
                         <input type="password" oninput="pwCheck()" name="password" id="password" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
                     </div>
                     <div class="flex flex-col w-full gap-2">
                     	<div class="flex justify-between items-center w-full">
-                            <p class="text-base text-left text-[#1e1e1e]">비밀번호 확인</p>
+                            <p class="text-base text-left text-[#1e1e1e]">* 비밀번호 확인</p>
                             <div id="passwordCheck" class="text-red-500 text-sm"></div>
                         </div>
                         <input type="password" oninput="pwCheck()" name="passwordConfirm" id="passwordConfirm" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
@@ -66,14 +66,14 @@
                     
                     <div class="flex flex-col w-full gap-2">
                     	<div class="flex justify-between items-center w-full">
-                        	<p class="text-base text-left text-[#1e1e1e]">이름</p>
+                        	<p class="text-base text-left text-[#1e1e1e]">* 이름</p>
                         	<div id="nameInputCheck" class="text-red-500 text-sm"></div>
                         </div>
                         <input type="text" name="name" id="name" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
                     </div>
                     <div class="flex flex-col w-full gap-2">
                     	<div class="flex justify-between items-center w-full">
-                        	<p class="text-base text-left text-[#1e1e1e]">성별</p>
+                        	<p class="text-base text-left text-[#1e1e1e]">* 성별</p>
                         	<div id="genderInputCheck" class="text-red-500 text-sm"></div>
                         </div>
                         <div class="flex gap-2">
@@ -87,7 +87,7 @@
                     
                     <div class="flex flex-col w-full gap-2">
                     	<div class="flex justify-between items-center w-full">
-                        	<p class="text-base text-left text-[#1e1e1e]">생년월일</p>
+                        	<p class="text-base text-left text-[#1e1e1e]">* 생년월일</p>
                         	<div id="birthInputCheck" class="text-red-500 text-sm"></div>
                         </div>
                         <input type="date" name="birthday" max="" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9]" required />
@@ -99,10 +99,82 @@
                             document.querySelector('input[type="date"]').setAttribute('max', today);
                         });
                     </script>
+					
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">지역</p>
+                        </div>
+                        <select name="area" id="area" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" >
+						    <option value="서울시" selected>서울시</option>
+						    <option value="강남구">강남구</option>
+						    <option value="강동구">강동구</option>
+						    <option value="강북구">강북구</option>
+						    <option value="강서구">강서구</option>
+						    <option value="관악구">관악구</option>
+						    <option value="광진구">광진구</option>
+						    <option value="구로구">구로구</option>
+						    <option value="금천구">금천구</option>
+						    <option value="노원구">노원구</option>
+						    <option value="도봉구">도봉구</option>
+						    <option value="동대문구">동대문구</option>
+						    <option value="동작구">동작구</option>
+						    <option value="마포구">마포구</option>
+						    <option value="서대문구">서대문구</option>
+						    <option value="서초구">서초구</option>
+						    <option value="성동구">성동구</option>
+						    <option value="성북구">성북구</option>
+						    <option value="송파구">송파구</option>
+						    <option value="양천구">양천구</option>
+						    <option value="영등포구">영등포구</option>
+						    <option value="용산구">용산구</option>
+						    <option value="은평구">은평구</option>
+						    <option value="종로구">종로구</option>
+						    <option value="중구">중구</option>
+						    <option value="중랑구">중랑구</option>
+					 	</select>
+                    </div>
                     
                     <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">학력</p>
+                        </div>
+                        <select name="interest" id="interest" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="일자리" seleted>일자리</option>
+						    <option value="주거">주거</option>
+						    <option value="교육">교육</option>
+						    <option value="복지 문화">복지 문화</option>
+						    <option value="참여">참여 권리</option>
+					 	</select>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">학력</p>
+                        </div>
+                        <select name="academicAbility" id="academicAbility" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="고교재학" seleted>고교 재학</option>
+						    <option value="고졸예정">고졸 예정</option>
+						    <option value="대학재학">대학 재학</option>
+						    <option value="대졸예정">대졸 예정</option>
+						    <option value="석박사">석박사</option>
+					 	</select>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">취업 상태</p>
+                        </div>
+                        <select name="employment" id="empolyment" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="미취업자" selected>미취업자</option>
+						    <option value="창업자">(예비)창업자</option>
+						    <option value="구직자">구직자</option>
+						    <option value="재직자">재직자</option>
+					 	</select>
+                    </div>
+
+                    <div class="flex flex-col w-full gap-2">
                         <div class="flex justify-between items-center w-full">
-                            <p class="text-base text-left text-[#1e1e1e]">이메일</p>
+                            <p class="text-base text-left text-[#1e1e1e]">* 이메일</p>
                             <div id="emailCheckResult" class="text-red-500 text-sm"></div>
                         </div>
                         <div class="flex justify-between items-center w-full gap-2">
