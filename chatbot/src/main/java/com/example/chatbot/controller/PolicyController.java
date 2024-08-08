@@ -1,5 +1,6 @@
 package com.example.chatbot.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.chatbot.model.Chat;
-import com.example.chatbot.model.Chatroom;
 import com.example.chatbot.model.Policy;
 import com.example.chatbot.model.User;
 import com.example.chatbot.service.IPolicyService;
-
-import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class PolicyController {
@@ -28,10 +25,14 @@ public class PolicyController {
     //추천페이지 이동
     @GetMapping("/recs")
     public String recspage(@AuthenticationPrincipal User user, Model model) {
+    	
         if (user != null) {
             model.addAttribute("user", user);
             //유저 정보(id, 생년월일)로 맞는 정책 가져오기
             List<Policy> policies = policyService.getPoliciesByUserInfo(user.getUserId(), user.getBirthday());
+            //분야별 정책 count값 가져오기
+            HashMap<String, Integer> statistics = policyService.getPolicyFieldsStatistics();
+            model.addAttribute("policyStatistics", statistics);
             if (policies != null) {
                 model.addAttribute("policies", policies);
             } else {
@@ -39,6 +40,16 @@ public class PolicyController {
             }
         } 
         return "recommendation";
+    }
+    
+    //검색페이지 이동
+    @GetMapping("/search")
+    public String searchpage(@AuthenticationPrincipal User user, Model model) {
+    	
+        if (user != null) {
+            model.addAttribute("user", user);
+        } 
+        return "search";
     }
     
     //상세페이지 이동

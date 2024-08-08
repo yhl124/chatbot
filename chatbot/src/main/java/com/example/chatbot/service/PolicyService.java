@@ -1,6 +1,7 @@
 package com.example.chatbot.service;
 
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.Period;
@@ -33,6 +34,11 @@ public class PolicyService implements IPolicyService {
 	@Override
 	public Policy getPolicyByPolicyId(int policyId) {
 		return policyRepository.getPolicyByPolicyId(policyId);
+	}
+
+	@Override
+	public HashMap<String, Integer> getPolicyFieldsStatistics() {
+		return policyRepository.getPolicyFieldsStatistics();
 	}
 
 }

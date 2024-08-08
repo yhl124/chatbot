@@ -1,13 +1,15 @@
 package com.example.chatbot.dao;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -87,6 +89,28 @@ public class PolicyRepository implements IPolicyRepository {
 			return null;
 		}
 	}
+
+	//코드 분석 필요
+	@Override
+	public HashMap<String, Integer> getPolicyFieldsStatistics() {
+        String sql = "SELECT POLYRLMCD, count(POLYRLMCD) as count FROM policies GROUP BY POLYRLMCD";
+        try {
+            return jdbcTemplate.query(sql, new ResultSetExtractor<HashMap<String, Integer>>() {
+                @Override
+                public HashMap<String, Integer> extractData(ResultSet rs) throws SQLException, DataAccessException {
+                    HashMap<String, Integer> map = new HashMap<>();
+                    while (rs.next()) {
+                        map.put(rs.getString("POLYRLMCD"), rs.getInt("count"));
+                    }
+                    return map;
+                }
+            });
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+	
+	
 
 
 }
