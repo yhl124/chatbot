@@ -150,6 +150,7 @@ public class ChatController {
             // 챗봇에 보낼 JSON 만들기 (내용으로 message, userId 삽입)
             Map<String, String> chatbotRequest = new HashMap<>();
             chatbotRequest.put("message", message);
+            chatbotRequest.put("roomId", roomId);
             chatbotRequest.put("userId", userId);
             // ???
             HttpEntity<Map<String, String>> entity = new HttpEntity<>(chatbotRequest, headers);
