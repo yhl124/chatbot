@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>청년온기</title>
+    <link rel="stylesheet" href="/css/fontstyles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="/notyf/notyf.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="h-full flex flex-col justify-center items-center">
+        <th:block th:replace="~{fragments/header :: header}"></th:block>    
+
+        <div class="flex flex-col items-center absolute w-full top-[50%] transform -translate-y-1/2 px-4 sm:px-0">
+            <div class="flex justify-center items-center w-full max-w-[1270px] h-auto mt-10 py-2.5 gap-2.5">
+                <p class="text-[6vw] sm:text-[40px] font-semibold text-center leading-tight">
+                    <span class="text-[6vw] sm:text-[40px] font-semibold text-center text-[#5856d6]">청년 정보</span>
+                    <span class="text-[6vw] sm:text-[40px] font-semibold text-center text-black">를 연결하고</span>
+                    <span class="text-[6vw] sm:text-[40px] font-semibold text-center text-[#f47878]">온기</span>
+                    <span class="text-[6vw] sm:text-[40px] font-semibold text-center text-black">로 응답합니다.</span><br />
+                    <span class="text-[6vw] sm:text-[40px] font-semibold text-center text-black">청년 복지에 관한 궁금증으로 대화를 시작해 보세요.</span>
+                </p>
+            </div>
+            
+            <button th:onclick="window.location.href='/chat'" sec:authorize="isAuthenticated()" class="hover:bg-[#5856d6] flex justify-center items-center w-[60vw] sm:w-[236px] h-auto py-2.5 mt-6 gap-2.5 px-[19px] rounded-[30px] bg-black">
+                <p class="text-[5vw] sm:text-[32px] text-left text-white">채팅시작</p>
+            </button>
+            
+            <button th:onclick="window.location.href='/recs'" sec:authorize="isAuthenticated()" class="hover:bg-[#5856d6] flex justify-center items-center w-[60vw] sm:w-[236px] h-auto py-2.5 mt-6 gap-2.5 px-[19px] rounded-[30px] bg-black">
+                <p class="text-[5vw] sm:text-[32px] text-left text-white">추천정책</p>
+            </button>
+            
+            <button th:onclick="window.location.href='/login'" sec:authorize="isAnonymous()" class="hover:bg-[#5856d6] flex justify-center items-center w-[60vw] sm:w-[236px] h-auto py-2.5 mt-6 gap-2.5 px-[19px] rounded-[30px] bg-black">
+                <p class="text-[5vw] sm:text-[32px] text-left text-white">시작하기</p>
+            </button>
+        </div>
+    </div>
+    
+    <script src="/notyf/notyf.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notyf = new Notyf({
+            	position: {
+            	    x: 'center',
+            	    y: 'top',
+            	}
+            });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('logout')) {
+                notyf.success('로그아웃되었습니다.');
+
+                // URL에서 파라미터 제거
+                const newUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>청년 정책 추천</title>
+    <link rel="stylesheet" href="/css/fontstyles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
+</head>
+<body>
+    <div class="w-full h-screen relative overflow-y-auto">
+		<th:block th:replace="~{fragments/header :: header}"></th:block>    
+        
+        <div class="text-3xl font-bold text-center text-[#5856d6] mb-8">나를 위한 청년 정책 추천</div>
+
+		<div class="flex flex-row justify-between border-b-2 border-b-gray-400 h-auto mx-2 lg:mx-36 xl:mx-60 2xl:mx-96">
+		    <div class="text-left text-lg mb-4" th:text="${user.name}+'님이 혜택 받을 수 있는 정책'">OOO이 혜택 받을 수 있는 정책</div>
+		    <button onclick="location.href='/search'" class="bg-[#5856d6] text-center text-white mb-2 px-4 rounded hover:bg-indigo-600">
+		        전체 정보검색
+		    </button>
+		</div>
+		
+		<!-- 추천 정책 -->
+        <div class="multiple-items flex justify-center my-4 mx-2 lg:mx-36 xl:mx-60 2xl:mx-96 relative">
+		    <div th:each="policy : ${policies}" class="border-2 border-gray-300 p-4 rounded w-1/5">
+		        <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
+		           th:text="${policy.polyBizSjnm}" 
+		           th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
+		        <div th:text="${policy.polyBizSecd}" class="text-gray-600 truncate mb-1">국토교통부</div>
+		        <div th:if="${policy.bizPrdCn}" th:text="${policy.bizPrdCn}" class="text-red-500 truncate mb-4">D-day 160일</div>
+		        <div th:unless="${policy.bizPrdCn}" class="text-red-500 truncate mb-4">없음</div>
+		        <div class="flex justify-between pt-8 items-center">
+		            <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
+		            <div th:text="${policy.polyRlmCd}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+		        </div>
+		    </div>
+		</div>
+        
+        <!-- 전체 통계 -->
+        <div class="flex flex-row justify-between border-b-2 border-b-gray-400 mt-20 h-auto mx-2 lg:mx-36 xl:mx-60 2xl:mx-96">
+            <div class="text-left text-lg mb-4">전체 통계</div>
+        </div>
+
+        <div class="flex flex-col mt-4 md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 lg:mx-36 xl:mx-60 2xl:mx-96">
+            <div class="bg-white p-4 rounded-lg shadow-lg w-full md:w-1/2">
+                <!-- Graph area for monthly policy count -->
+                <div id="bargraph" class="w-full h-96"></div>
+            </div>
+    
+            <div class="bg-white p-4 rounded-lg shadow-lg w-full md:w-1/2">
+                <!-- Graph area for category-wise monthly policy count -->
+                <div id="linegraph" class="w-full h-96"></div>
+            </div>
+        </div>
+		
+		<script th:inline="javascript" type="text/javascript">		
+			/*<![CDATA[*/
+			var policyStatistics = /*[[${policyStatistics}]]*/ {};
+			/*]]>*/
+    	</script>
+
+        <!-- Include your JavaScript for graphs here -->
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script type="text/javascript" src="/slick/slick.min.js"></script>
+        <script src="/js/linegraph.js"></script>
+        <script src="/js/bargraph.js"></script>
+
+        <script>        
+            $(document).ready(function(){
+                $('.multiple-items').slick({
+                    dots: false,
+                    infinite: true,
+                    speed: 300,
+                    slidesToShow: 4,
+                    slidesToScroll: 1,
+                    responsive: [
+                        {
+                        breakpoint: 1024,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 1,
+                            infinite: true,
+                            dots: true
+                        }
+                        },
+                        {
+                        breakpoint: 600,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 1
+                        }
+                        },
+                        {
+                        breakpoint: 480,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                        }
+                    ]
+                });
+            });
+        </script>
+    </div>
+    </body>
+</html>

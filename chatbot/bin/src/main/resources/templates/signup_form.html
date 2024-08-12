@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>청년온기 회원가입</title>
+    <link rel="stylesheet" href="/css/fontstyles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="w-full h-auto relative overflow-hidden bg-white mx-auto">
+        <p class="absolute left-1/2 transform -translate-x-1/2 top-6 text-2xl md:text-4xl font-bold text-left">
+            <span class="text-[#5856d6]">청년</span><span class="text-black">온기</span><span class="text-[#ff3b30]"> </span>
+        </p>
+        
+        <form th:action="@{/signup}" method="post" id="signupForm" accept-charset="UTF-8" enctype="multipart/form-data">
+        	<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div class="flex flex-col justify-start items-center w-full max-w-sm mx-auto p-6 mt-20 gap-6 rounded-lg bg-white border border-[#d9d9d9]">
+                
+                <div class="flex justify-center items-center w-full relative overflow-hidden gap-2">
+                    <div class="w-16 h-16 relative rounded-full overflow-hidden">
+                        <img id="profileImage" src="/images/defaultprofile.jpg" class="w-16 h-16 absolute object-cover" />
+                    </div>
+                    <input type="file" id="imageUpload" name="file" accept="image/jpeg, image/png, image/jpg" style="display: none;" />
+                    
+                    <button type="button" id="uploadButton" class="w-8 h-8 flex justify-center items-center bg-transparent border-none p-0 m-0">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M28 20V25.3333C28 26.0406 27.719 26.7189 27.219 27.219C26.7189 27.719 26.0406 28 25.3333 28H6.66667C5.95942 28 5.28115 27.719 4.78105 27.219C4.28095 26.7189 4 26.0406 4 25.3333V20M22.6667 10.6667L16 4M16 4L9.33333 10.6667M16 4V20" stroke="#1E1E1E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                    <button type="button" id="deleteButton" class="w-8 h-8 flex justify-center items-center bg-transparent border-none p-0 m-0">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4 7.99996H6.66667M6.66667 7.99996H28M6.66667 7.99996V26.6666C6.66667 27.3739 6.94762 28.0521 7.44772 28.5522C7.94781 29.0523 8.62609 29.3333 9.33333 29.3333H22.6667C23.3739 29.3333 24.0522 29.0523 24.5523 28.5522C25.0524 28.0521 25.3333 27.3739 25.3333 26.6666V7.99996M10.6667 7.99996V5.33329C10.6667 4.62605 10.9476 3.94777 11.4477 3.44767C11.9478 2.94758 12.6261 2.66663 13.3333 2.66663H18.6667C19.3739 2.66663 20.0522 2.94758 20.5523 3.44767C21.0524 3.94777 21.3333 4.62605 21.3333 5.33329V7.99996M13.3333 14.6666V22.6666M18.6667 14.6666V22.6666" stroke="#1E1E1E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="flex flex-col justify-start items-start w-full gap-2">
+                    <div class="flex flex-col w-full gap-2">
+                        <div class="flex justify-between items-center w-full">
+                            <p class="text-base text-left text-[#1e1e1e]">* 아이디</p>
+                            <div id="userIdCheckResult" class="text-red-500 text-sm"></div>
+                        </div>
+                        <div class="flex justify-between items-center w-full gap-2">
+                            <input type="text" name="userId" id="userId" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                            <button type="button" id="userIdCheckBtn" class="disabled:bg-slate-400 hover:bg-[#5856d6] flex justify-center items-center h-10 px-3 whitespace-nowrap rounded-lg bg-[#2c2c2c] text-neutral-100">중복확인</button>
+                        </div>  
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                            <p class="text-base text-left text-[#1e1e1e]">* 비밀번호</p>
+                            <!-- <div id="passwordCheck" class="text-red-500 text-sm"></div> -->
+                        </div>
+                        <input type="password" oninput="pwCheck()" name="password" id="password" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                    </div>
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                            <p class="text-base text-left text-[#1e1e1e]">* 비밀번호 확인</p>
+                            <div id="passwordCheck" class="text-red-500 text-sm"></div>
+                        </div>
+                        <input type="password" oninput="pwCheck()" name="passwordConfirm" id="passwordConfirm" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">* 이름</p>
+                        	<div id="nameInputCheck" class="text-red-500 text-sm"></div>
+                        </div>
+                        <input type="text" name="name" id="name" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                    </div>
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">* 성별</p>
+                        	<div id="genderInputCheck" class="text-red-500 text-sm"></div>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="radio" id="male" name="gender" value="male" class="hidden peer/male">
+                            <label for="male" class="flex-1 h-10 px-4 py-2 rounded-lg bg-white hover:bg-violet-100 border border-[#d9d9d9] text-[#1e1e1e] text-center cursor-pointer peer-checked/male:bg-[#2c2c2c] peer-checked/male:text-white peer-checked/male:border-black">남자</label>
+                            
+                            <input type="radio" id="female" name="gender" value="female" class="hidden peer/female">
+                            <label for="female" class="flex-1 h-10 px-4 py-2 rounded-lg bg-white hover:bg-violet-100 border border-[#d9d9d9] text-[#1e1e1e] text-center cursor-pointer peer-checked/female:bg-[#2c2c2c] peer-checked/female:text-white peer-checked/female:border-black">여자</label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">* 생년월일</p>
+                        	<div id="birthInputCheck" class="text-red-500 text-sm"></div>
+                        </div>
+                        <input type="date" name="birthday" max="" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9]" required />
+                    </div>
+                    
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const today = new Date().toISOString().split('T')[0];
+                            document.querySelector('input[type="date"]').setAttribute('max', today);
+                        });
+                    </script>
+					
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">지역</p>
+                        </div>
+                        <select name="area" id="area" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" >
+						    <option value="서울시" selected>서울시</option>
+						    <option value="강남구">강남구</option>
+						    <option value="강동구">강동구</option>
+						    <option value="강북구">강북구</option>
+						    <option value="강서구">강서구</option>
+						    <option value="관악구">관악구</option>
+						    <option value="광진구">광진구</option>
+						    <option value="구로구">구로구</option>
+						    <option value="금천구">금천구</option>
+						    <option value="노원구">노원구</option>
+						    <option value="도봉구">도봉구</option>
+						    <option value="동대문구">동대문구</option>
+						    <option value="동작구">동작구</option>
+						    <option value="마포구">마포구</option>
+						    <option value="서대문구">서대문구</option>
+						    <option value="서초구">서초구</option>
+						    <option value="성동구">성동구</option>
+						    <option value="성북구">성북구</option>
+						    <option value="송파구">송파구</option>
+						    <option value="양천구">양천구</option>
+						    <option value="영등포구">영등포구</option>
+						    <option value="용산구">용산구</option>
+						    <option value="은평구">은평구</option>
+						    <option value="종로구">종로구</option>
+						    <option value="중구">중구</option>
+						    <option value="중랑구">중랑구</option>
+					 	</select>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">관심 분야</p>
+                        </div>
+                        <select name="interest" id="interest" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="일자리" seleted>일자리</option>
+						    <option value="주거">주거</option>
+						    <option value="교육">교육</option>
+						    <option value="복지 문화">복지 문화</option>
+						    <option value="참여">참여 권리</option>
+					 	</select>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">학력</p>
+                        </div>
+                        <select name="academicAbility" id="academicAbility" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="고교 재학" seleted>고교 재학</option>
+						    <option value="고졸 예정">고졸 예정</option>
+						    <option value="대학 재학">대학 재학</option>
+						    <option value="대졸 예정">대졸 예정</option>
+						    <option value="석박사">석박사</option>
+					 	</select>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">취업 상태</p>
+                        </div>
+                        <select name="employment" id="employment" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="미취업자" selected>미취업자</option>
+						    <option value="창업자">(예비)창업자</option>
+						    <option value="구직자">구직자</option>
+						    <option value="재직자">재직자</option>
+					 	</select>
+                    </div>
+
+                    <div class="flex flex-col w-full gap-2">
+                        <div class="flex justify-between items-center w-full">
+                            <p class="text-base text-left text-[#1e1e1e]">* 이메일</p>
+                            <div id="emailCheckResult" class="text-red-500 text-sm"></div>
+                        </div>
+                        <div class="flex justify-between items-center w-full gap-2">
+                            <input type="email" name="email" id="email" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
+                            <button type="button" id="emailCheckBtn" class="disabled:bg-slate-400 hover:bg-[#5856d6] flex justify-center items-center h-10 px-3 whitespace-nowrap rounded-lg bg-[#2c2c2c] text-neutral-100">중복확인</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center w-full gap-4">
+                    <button type="submit" id="signupBtn" class="hover:bg-[#5856d6] flex justify-center items-center w-full h-12 rounded-lg bg-[#2c2c2c] text-neutral-100 disabled:bg-slate-400" disabled>가입하기</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        function pwCheck(){
+            if($('#password').val() == $('#passwordConfirm').val()){
+                $('#passwordCheck').text('비밀번호 일치').css('color', 'green');
+            }else{
+                $('#passwordCheck').text('비밀번호 불일치').css('color', 'red');
+            }
+            toggleSignupBtn(); // 비밀번호 일치 여부에 따라 가입하기 버튼 활성화 여부 확인
+        }
+        
+        $(document).ready(function() {
+            function toggleCheckBtn() {
+                if ($('#userId').val().trim() === '') {
+                    $('#userIdCheckBtn').attr('disabled', true);
+                } else {
+                    $('#userIdCheckBtn').attr('disabled', false);
+                }
+                
+                if ($('#email').val().trim() === '') {
+                    $('#emailCheckBtn').attr('disabled', true);
+                } else {
+                    $('#emailCheckBtn').attr('disabled', false);
+                }
+            }
+
+            function toggleSignupBtn() {
+                var allFieldsFilled = $('#userId').val().trim() !== '' &&
+                    $('#password').val().trim() !== '' &&
+                    $('#passwordConfirm').val().trim() !== '' &&
+                    $('#name').val().trim() !== '' &&
+                    $('input[name="gender"]:checked').val() !== undefined &&
+                    $('input[name="birthday"]').val().trim() !== '' &&
+                    $('#email').val().trim() !== '' &&
+                    $('#userIdCheckResult').text() === '사용 가능한 아이디입니다.' &&
+                    $('#emailCheckResult').text() === '사용 가능한 메일입니다.' &&
+                    $('#passwordCheck').text() === '비밀번호 일치';
+    
+                if (allFieldsFilled) {
+                    $('#signupBtn').attr('disabled', false);
+                } else {
+                    $('#signupBtn').attr('disabled', true);
+                }
+            }
+
+            // 처음 로드 시 버튼 상태 설정
+            toggleCheckBtn();
+            toggleSignupBtn();
+    
+            // 입력 필드 변경 시 버튼 상태 업데이트
+            $('#userId, #password, #passwordConfirm, #name, input[name="gender"], input[name="birthday"], #email').on('input change', function() {
+                toggleCheckBtn();
+                toggleSignupBtn();
+            });
+            
+            $('#userIdCheckBtn').click(function() {
+                var userId = $('#userId').val();
+                $.ajax({
+                    url: '/api/user/check/id',
+                    type: 'POST',
+                    data: { userId: userId },
+                    success: function(response) {
+                        if (response.result === 'success') {
+                            $('#userIdCheckResult').text('사용 가능한 아이디입니다.').css('color', 'green');
+                        } else {
+                            $('#userIdCheckResult').text('이미 사용 중인 아이디입니다.').css('color', 'red');
+                        }
+                        toggleSignupBtn(); // 중복 확인 결과에 따라 가입하기 버튼 활성화 여부 확인
+                    },
+                    error: function() {
+                        $('#userIdCheckResult').text('아이디 중복 체크 중 오류가 발생했습니다.').css('color', 'red');
+                        toggleSignupBtn(); // 오류 발생 시에도 가입하기 버튼 활성화 여부 확인
+                    }
+                });
+            });
+            
+            $('#emailCheckBtn').click(function() {
+                var email = $('#email').val();
+                $.ajax({
+                    url: '/api/user/check/email', 
+                    type: 'POST',
+                    data: { email: email },
+                    success: function(response) {
+                        if (response.result === 'success') {
+                            $('#emailCheckResult').text('사용 가능한 메일입니다.').css('color', 'green');
+                        } else {
+                            $('#emailCheckResult').text('이미 사용 중인 메일입니다.').css('color', 'red');
+                        }
+                        toggleSignupBtn(); // 중복 확인 결과에 따라 가입하기 버튼 활성화 여부 확인
+                    },
+                    error: function() {
+                        $('#emailCheckResult').text('메일 중복 체크 중 오류가 발생했습니다.').css('color', 'red');
+                        toggleSignupBtn(); // 오류 발생 시에도 가입하기 버튼 활성화 여부 확인
+                    }
+                });
+            });
+
+            // 이미지 업로드
+            $('#uploadButton').click(function() {
+                $('#imageUpload').click();
+            });
+
+            $('#imageUpload').change(function() {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#profileImage').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+            });
+
+            // 이미지 삭제
+            $('#deleteButton').click(function() {
+                $('#profileImage').attr('src', 'images/defaultprofile.jpg');
+                $('#imageUpload').val('');
+            });
+        });
+    </script>
+</body>
+</html>

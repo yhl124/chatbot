@@ -14,7 +14,9 @@
     <div class="container mx-auto p-4">
         <th:block th:replace="~{fragments/header :: header}"></th:block>    
         
-        <div class="text-3xl font-bold text-center text-[#5856d6] mb-8 whitespace-nowrap">청년 정책 검색</div>
+		<a th:href="@{/search}">
+        	<div class="text-3xl font-bold text-center text-[#5856d6] mb-8 whitespace-nowrap">청년 정책 검색</div>
+		</a>
 
         <div class="flex flex-row justify-between border-b-2 border-b-gray-400 h-auto mb-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
             <div class="text-left text-lg mb-2 whitespace-nowrap">맞춤형 청년 정책 검색하기</div>
@@ -118,8 +120,8 @@
                     </div>
                 </div>
                 <div class="flex flex-row justify-center gap-x-2 mt-2">
-                    <input type="hidden" name="selectedPolicies" id="selectedPolicies">
-                    <input type="hidden" name="selectedRegions" id="selectedRegions">
+                   <!-- <input type="hidden" name="selectedPolicies" id="selectedPolicies">
+                    <input type="hidden" name="selectedRegions" id="selectedRegions">-->
                     <button id="resetButton" type="button" class="bg-gray-600 text-center text-white mb-2 px-4 py-2 rounded hover:bg-gray-400 hover:text-black">선택 초기화</button>
                     <button id="resetByMyInfo" type="button" class="bg-white border-2 border-[#5856d6] text-center text-balck mb-2 px-4 py-2 rounded hover:bg-indigo-400 hover:text-white">내 정보로 선택</button>
                     <button type="submit" class="bg-[#5856d6] text-center text-white mb-2 px-4 py-2 rounded hover:bg-indigo-600">검색</button>
@@ -222,11 +224,11 @@
             	
             	policyFieldButtons.forEach(button => {
                     button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
-                    button.classList.add('selected', 'bg-gray-200', 'text-black');
+                    button.classList.add('bg-gray-200', 'text-black');
                 });
             	regionButtons.forEach(button => {
                     button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
-                    button.classList.add('selected', 'bg-gray-200', 'text-black');
+                    button.classList.add('bg-gray-200', 'text-black');
                 });
             	
             	options[0].selected = true;
@@ -238,9 +240,9 @@
             //내 정보로 초기화 버튼
             resetByMyInfo.addEventListener('click', function() {
             	policyAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
-            	policyAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
+            	policyAllButton.classList.add('bg-gray-200', 'text-black');
             	regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
-            	regionAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
+            	regionAllButton.classList.add('bg-gray-200', 'text-black');
                         	
             	policyFieldButtons.forEach(button => {
                     if (button.getAttribute('data-field') === interest) {
@@ -364,33 +366,25 @@
                 	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
                 }
             });
-
-
-            /* document.getElementById('searchForm').addEventListener('submit', function (event) {
-                //전체버튼을 눌렀을때 그 값을 처리하는 부분도 필요함
-                //그리고 검색을 눌렀을때 내가 선택한 값들을 어떻게 보낼지 처리해야됨
-                const selectedPolicies = Array.from(document.querySelectorAll('.policy-group.selected')).map(button => button.dataset.value);
-                const selectedRegions = Array.from(document.querySelectorAll('.region-group.selected')).map(button => button.dataset.value);
-
-                document.getElementById('selectedPolicies').value = selectedPolicies.join(',');
-                document.getElementById('selectedRegions').value = selectedRegions.join(',');
-            }); */
             
             document.getElementById('searchForm').addEventListener('submit', function (event) {
                 event.preventDefault(); // 폼의 기본 제출 동작을 막고 직접 제출 처리
                 
+				
                 // 정책 선택 
                 const selectedPolicies = Array.from(document.querySelectorAll('.policy-field.selected')).map(button => button.dataset.field);
                 // 지역 선택 
                 const selectedRegions = Array.from(document.querySelectorAll('.region-field.selected')).map(button => button.dataset.field);
-
+				console.log(selectedPolicies);
+				
+				
                 const form = document.getElementById('searchForm');
 
                 // 선택된 정책들을 각각의 input 요소로 추가
                 selectedPolicies.forEach(policy => {
                     const input = document.createElement('input');
                     input.type = 'hidden';
-                    input.name = 'policies';
+                    input.name = 'selectedPolicies';
                     input.value = policy;
                     form.appendChild(input);
                 });
@@ -399,7 +393,7 @@
                 selectedRegions.forEach(region => {
                     const input = document.createElement('input');
                     input.type = 'hidden';
-                    input.name = 'regions';
+                    input.name = 'selectedRegions';
                     input.value = region;
                     form.appendChild(input);
                 });

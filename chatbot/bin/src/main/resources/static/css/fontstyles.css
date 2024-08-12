@@ -1,0 +1,11 @@
+@font-face 
+{
+    font-family: 'SCDream4';
+    src: url('/fonts/SCDream4.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'SCDream4', sans-serif;
+}
