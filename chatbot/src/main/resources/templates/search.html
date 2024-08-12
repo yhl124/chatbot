@@ -18,16 +18,16 @@
 
         <div class="flex flex-row justify-between border-b-2 border-b-gray-400 h-auto mb-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
             <div class="text-left text-lg mb-2 whitespace-nowrap">맞춤형 청년 정책 검색하기</div>
-            <div th:text="${user.academicAbility}"></div>
+             <div th:text="${user.birthday}"></div>
         </div>
 
-        <form id="searchForm" action="" method="post">
+        <form th:action="@{/search}" id="searchForm" method="get" accept-charset="UTF-8">
             <div class="flex flex-col border-2 border-gray-200 bg-gray-100 h-auto px-2 py-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
             
                 <div class="flex flex-col md:flex-row items-left mb-4">
                     <div class="flex items-left w-full">
                         <span class="text-lg py-1 font-medium whitespace-nowrap">정책이름 및 내용</span>
-                        <input type="text" placeholder="키워드를 입력하세요" class="w-full ml-4 mr-0 md:mr-4 lg:mr-10 p-1 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600">
+                        <input id="searchInput" type="text" placeholder="키워드를 입력하세요" class="w-full ml-4 mr-0 md:mr-4 lg:mr-10 p-1 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600">
                     </div>
                 </div>
             
@@ -112,7 +112,7 @@
                         </div>
                         <div class="flex items-center w-full mx-2">
                             <span class="text-lg font-medium">만</span>
-                            <input type="number" placeholder="나이 입력" min="1" max="300" class="w-full p-2 mx-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600">
+                            <input id="ageInput" name="age" type="number" placeholder="나이 입력" min="1" max="300" class="w-full p-2 mx-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600">
                             <span class="text-lg font-medium">세</span>
                         </div>
                     </div>
@@ -120,8 +120,8 @@
                 <div class="flex flex-row justify-center gap-x-2 mt-2">
                     <input type="hidden" name="selectedPolicies" id="selectedPolicies">
                     <input type="hidden" name="selectedRegions" id="selectedRegions">
-                    <button type="button" class="bg-gray-600 text-center text-white mb-2 px-4 py-2 rounded hover:bg-gray-400 hover:text-black">선택 초기화</button>
-                    <button type="button" class="bg-white border-2 border-[#5856d6] text-center text-balck mb-2 px-4 py-2 rounded hover:bg-indigo-400 hover:text-white">내 정보로 선택</button>
+                    <button id="resetButton" type="button" class="bg-gray-600 text-center text-white mb-2 px-4 py-2 rounded hover:bg-gray-400 hover:text-black">선택 초기화</button>
+                    <button id="resetByMyInfo" type="button" class="bg-white border-2 border-[#5856d6] text-center text-balck mb-2 px-4 py-2 rounded hover:bg-indigo-400 hover:text-white">내 정보로 선택</button>
                     <button type="submit" class="bg-[#5856d6] text-center text-white mb-2 px-4 py-2 rounded hover:bg-indigo-600">검색</button>
                 </div>
             </div>
@@ -144,7 +144,7 @@
             <div class="border-b-2 border-b-gray-400 my-1 mb-2"></div>
             <!--페이지 구현은 백엔드 할 때 해야할듯?-->
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <!-- 30개의 카드 요소를 반복적으로 추가 -->
+                <!-- 검색결과 요소를 반복적으로 추가 -->
                 <div class="border-2 border-gray-300 p-4 rounded">
                     <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
                     <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
@@ -155,295 +155,6 @@
                     </div>
                 </div>
 
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-                
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -454,6 +165,7 @@
 	    var userArea = /*[[${user.area}]]*/ {};
 	    var userEmployment = /*[[${user.employment}]]*/ {};
 	    var userAcademicAbility = /*[[${user.academicAbility}]]*/ {};
+	    var userBirthday = /*[[${user.birthday}]]*/ {};
 	    /*]]>*/
     
         document.addEventListener('DOMContentLoaded', function () {
@@ -462,12 +174,18 @@
             const regionAllButton = document.querySelector('.region-all');
             const regionButtons = document.querySelectorAll('.region-field');
             
+            var resetButton = document.getElementById('resetButton');//선택 초기화 버튼
+            var resetByMyInfo = document.getElementById('resetByMyInfo');//내 정보로 초기화 버튼
+            
 	        var interest = userInterest; // 사용자 관심사 값
 	        var area = userArea; //사용자 사는 곳
 	        var employmentSelect = document.getElementById('employment');//취업상태
             var options = employmentSelect.options;
             var academicSelect = document.getElementById('academicAbility');//학력
             var aoptions = academicSelect.options;
+            
+            const birthday = new Date(userBirthday);
+            const today = new Date();
 
             for (var i = 0; i < options.length; i++) {
                 if (options[i].value === userEmployment) {
@@ -482,6 +200,85 @@
                     break;
                 }
             }
+            
+            let age = today.getFullYear() - birthday.getFullYear();
+            const monthDiff = today.getMonth() - birthday.getMonth();
+            const dayDiff = today.getDate() - birthday.getDate();
+
+            // 생일이 아직 지나지 않았다면 만나이를 한 살 줄인다
+            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+                age--;
+            }
+
+            // 계산된 나이를 input 필드에 자동으로 입력
+            document.getElementById('ageInput').value = age;
+            
+            //선택 초기화 버튼
+            resetButton.addEventListener('click', function() {
+            	policyAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
+            	policyAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+            	regionAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
+            	regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+            	
+            	policyFieldButtons.forEach(button => {
+                    button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    button.classList.add('selected', 'bg-gray-200', 'text-black');
+                });
+            	regionButtons.forEach(button => {
+                    button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    button.classList.add('selected', 'bg-gray-200', 'text-black');
+                });
+            	
+            	options[0].selected = true;
+            	aoptions[0].selected = true;
+            	document.getElementById('searchInput').value='';
+            	document.getElementById('ageInput').value = '';
+            });
+            
+            //내 정보로 초기화 버튼
+            resetByMyInfo.addEventListener('click', function() {
+            	policyAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+            	policyAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
+            	regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+            	regionAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
+                        	
+            	policyFieldButtons.forEach(button => {
+                    if (button.getAttribute('data-field') === interest) {
+                    	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
+                    	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                    }
+                    else{
+                    	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
+                    	button.classList.add('bg-gray-200', 'text-black');
+                    }
+                });
+            	regionButtons.forEach(button => {
+            		if (button.getAttribute('data-field') === area) {
+                    	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
+                    	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                    }
+            		else{
+            			button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
+            			button.classList.add('bg-gray-200', 'text-black');
+            		}
+                });
+            	
+            	for (var i = 0; i < options.length; i++) {
+                    if (options[i].value === userEmployment) {
+                        options[i].selected = true;
+                        break;
+                    }
+                }
+                
+                for (var i = 0; i < aoptions.length; i++) {
+                    if (aoptions[i].value === userAcademicAbility) {
+                        aoptions[i].selected = true;
+                        break;
+                    }
+                }
+                document.getElementById('searchInput').value='';
+            	document.getElementById('ageInput').value = age;
+            });
 
             policyAllButton.addEventListener('click', function () {
                 policyAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
@@ -501,7 +298,23 @@
                     button.classList.toggle('bg-[#5856d6]');
                     button.classList.toggle('bg-gray-200',);
                     button.classList.toggle('text-black');
+                    
+                    // Check if all policyFieldButtons are selected
+                    const allSelected = Array.from(policyFieldButtons).every(btn => btn.classList.contains('bg-[#5856d6]'));
+                    
+                    if (allSelected) {
+                        policyFieldButtons.forEach(btn => {
+                            btn.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                            btn.classList.add('selected', 'bg-gray-200', 'text-black');
+                        });
+                        policyAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
+                        policyAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                    } else {
+                        policyAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                        policyAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
+                    }
                 });
+                
                 if (button.getAttribute('data-field') === interest) {
                 	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
                 	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
@@ -530,6 +343,21 @@
                     button.classList.toggle('bg-[#5856d6]');
                     button.classList.toggle('bg-gray-200',);
                     button.classList.toggle('text-black');
+                    
+                    // Check if all regionButtons are selected
+                    const allSelected = Array.from(regionButtons).every(btn => btn.classList.contains('bg-[#5856d6]'));
+                    
+                    if (allSelected) {
+                        regionButtons.forEach(btn => {
+                            btn.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                            btn.classList.add('selected', 'bg-gray-200', 'text-black');
+                        });
+                        regionAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
+                        regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                    } else {
+                    	regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    	regionAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
+                    }                    
                 });
                 if (button.getAttribute('data-field') === area) {
                 	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
@@ -538,14 +366,45 @@
             });
 
 
-            document.getElementById('searchForm').addEventListener('submit', function (event) {
+            /* document.getElementById('searchForm').addEventListener('submit', function (event) {
                 //전체버튼을 눌렀을때 그 값을 처리하는 부분도 필요함
                 //그리고 검색을 눌렀을때 내가 선택한 값들을 어떻게 보낼지 처리해야됨
-                const selectedPolicies = Array.from(document.querySelectorAll('.policy-field.selected')).map(button => button.dataset.value);
-                const selectedRegions = Array.from(document.querySelectorAll('.region-field.selected')).map(button => button.dataset.value);
+                const selectedPolicies = Array.from(document.querySelectorAll('.policy-group.selected')).map(button => button.dataset.value);
+                const selectedRegions = Array.from(document.querySelectorAll('.region-group.selected')).map(button => button.dataset.value);
 
                 document.getElementById('selectedPolicies').value = selectedPolicies.join(',');
                 document.getElementById('selectedRegions').value = selectedRegions.join(',');
+            }); */
+            
+            document.getElementById('searchForm').addEventListener('submit', function (event) {
+                event.preventDefault(); // 폼의 기본 제출 동작을 막고 직접 제출 처리
+                
+                // 정책 선택 
+                const selectedPolicies = Array.from(document.querySelectorAll('.policy-field.selected')).map(button => button.dataset.field);
+                // 지역 선택 
+                const selectedRegions = Array.from(document.querySelectorAll('.region-field.selected')).map(button => button.dataset.field);
+
+                const form = document.getElementById('searchForm');
+
+                // 선택된 정책들을 각각의 input 요소로 추가
+                selectedPolicies.forEach(policy => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'policies';
+                    input.value = policy;
+                    form.appendChild(input);
+                });
+
+                // 선택된 지역들을 각각의 input 요소로 추가
+                selectedRegions.forEach(region => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'regions';
+                    input.value = region;
+                    form.appendChild(input);
+                });
+
+                form.submit(); // 폼을 직접 제출
             });
         });
     </script>

@@ -9,13 +9,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.chatbot.model.Policy;
 import com.example.chatbot.model.User;
 import com.example.chatbot.service.IPolicyService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class PolicyController {
 	
 	@Autowired
@@ -50,6 +54,55 @@ public class PolicyController {
         } 
         return "search";
     }
+    
+    //검색 처리 지금 이거 있으면 스프링 에러남
+//    @GetMapping("/search")
+//    public String processSearch(
+//            @RequestParam(name = "employment", required = false) String employment,
+//            @RequestParam(name = "academicAbility", required = false) String academicAbility,
+//            @RequestParam(name = "age", required = false) Integer age,
+//            @RequestParam(name = "policies", required = false) List<String> policies,
+//            @RequestParam(name = "region", required = false) String region,
+//            Model model) {
+//
+//        // 각 파라미터가 null이 아닌 경우 처리
+//        if (employment != null) {
+//            model.addAttribute("employment", employment);
+//            log.info("Employment: " + employment);
+//        }
+//
+//        if (academicAbility != null) {
+//            model.addAttribute("academicAbility", academicAbility);
+//            log.info("Academic Ability: " + academicAbility);
+//        }
+//
+//        if (age != null) {
+//            model.addAttribute("age", age);
+//            log.info("Age: " + age);
+//        }
+//
+//        if (policies != null && !policies.isEmpty()) {
+//            model.addAttribute("policies", policies);
+//            log.info("Selected Policies: " + policies);
+//        }
+//
+//        if (region != null) {
+//            model.addAttribute("region", region);
+//            log.info("Region: " + region);
+//        }
+//
+//        // 검색 결과 처리 로직
+//        // List<Result> searchResults = searchService.search(employment, academicAbility, age, policies, region);
+//        // model.addAttribute("searchResults", searchResults);
+//
+//        // 검색 결과 처리 로직 작성 (예: 데이터베이스 조회 등)
+//        // 예를 들어, 검색 결과를 model에 추가
+//        // List<Result> searchResults = searchService.search(policies, regions);
+//        // model.addAttribute("searchResults", searchResults);
+//        
+//        return "search"; 
+//    }
+   
     
     //상세페이지 이동
 	@GetMapping("/recs/{policyId}")
