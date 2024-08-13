@@ -10,6 +10,7 @@ import lombok.ToString;
 public class Policy {
 	private int policyId;//정책 아이디
 	private String region;//지역
+	private String category;//분야
 	private String pName;//정책명
 	private String explanation;//정책설명
 	private String support;//지원내용
@@ -28,6 +29,7 @@ public class Policy {
 	private String addition;//추가단서사항
 	private String limit;//참여제한대상
 	private String process;//신청절차
+	private String papers;//제출서류
 	private String screening;//심사 및 발표
 	private String url;//신청url
 	private String etct;//기타
