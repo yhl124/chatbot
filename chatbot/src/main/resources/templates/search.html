@@ -29,7 +29,7 @@
                 <div class="flex flex-col md:flex-row items-left mb-4">
                     <div class="flex items-left w-full">
                         <span class="text-lg py-1 font-medium whitespace-nowrap">정책이름 및 내용</span>
-                        <input id="searchInput" type="text" placeholder="키워드를 입력하세요" class="w-full ml-4 mr-0 md:mr-4 lg:mr-10 p-1 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600">
+                        <input id="searchInput" name="searchInput" type="text" placeholder="키워드를 입력하세요" class="w-full ml-4 mr-0 md:mr-4 lg:mr-10 p-1 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-600">
                     </div>
                 </div>
             
@@ -40,7 +40,7 @@
                             <span class="ml-2 text-sm">(중복선택 가능)</span>
                         </div>
                         <div id="policy-group" class="flex flex-wrap gap-2">
-                            <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-all" data-field="분야 전체">분야 전체</button>
+                            <button type="button" class="px-4 py-2 rounded bg-[#5856d6] text-white policy-all selected" data-field="분야 전체">분야 전체</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-field" data-field="일자리">일자리</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-field" data-field="주거">주거</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-field" data-field="교육">교육</button>
@@ -54,7 +54,7 @@
                             <span class="ml-2 text-sm">(중복선택 가능)</span>
                         </div>
                         <div id="region-group" class="flex flex-wrap gap-2">
-                            <button type="button" class="px-4 py-2 bg-gray-200 rounded region-all" data-field="서울시">서울시</button>
+                            <button type="button" class="px-4 py-2 rounded bg-[#5856d6] text-white region-all selected" data-field="서울시">서울시</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded region-field" data-field="강남구">강남구</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded region-field" data-field="강동구">강동구</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded region-field" data-field="강북구">강북구</button>
@@ -90,7 +90,8 @@
                             <span class="text-lg font-medium">취업상태</span>
                         </div>
                         <select name="employment" id="employment" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none">
-                            <option value="미취업자" selected>미취업자</option>
+                            <option value="제한없음" seleted>제한없음</option>
+                            <option value="미취업자">미취업자</option>
 						    <option value="창업자">(예비)창업자</option>
 						    <option value="구직자">구직자</option>
 						    <option value="재직자">재직자</option>
@@ -101,7 +102,8 @@
                             <span class="text-lg font-medium">학력</span>
                         </div>
                         <select name="academicAbility" id="academicAbility" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none">
-                            <option value="고교 재학" seleted>고교 재학</option>
+                            <option value="제한없음" seleted>제한없음</option>
+                            <option value="고교 재학">고교 재학</option>
 						    <option value="고졸 예정">고졸 예정</option>
 						    <option value="대학 재학">대학 재학</option>
 						    <option value="대졸 예정">대졸 예정</option>
@@ -123,7 +125,7 @@
                    <!-- <input type="hidden" name="selectedPolicies" id="selectedPolicies">
                     <input type="hidden" name="selectedRegions" id="selectedRegions">-->
                     <button id="resetButton" type="button" class="bg-gray-600 text-center text-white mb-2 px-4 py-2 rounded hover:bg-gray-400 hover:text-black">선택 초기화</button>
-                    <button id="resetByMyInfo" type="button" class="bg-white border-2 border-[#5856d6] text-center text-balck mb-2 px-4 py-2 rounded hover:bg-indigo-400 hover:text-white">내 정보로 선택</button>
+                    <button id="resetByMyInfo" type="button" class="bg-white border-2 border-[#5856d6] text-center text-balck mb-2 px-4 py-2 rounded hover:bg-indigo-400 hover:text-white">내 정보로 설정</button>
                     <button type="submit" class="bg-[#5856d6] text-center text-white mb-2 px-4 py-2 rounded hover:bg-indigo-600">검색</button>
                 </div>
             </div>
@@ -189,7 +191,7 @@
             const birthday = new Date(userBirthday);
             const today = new Date();
 
-            for (var i = 0; i < options.length; i++) {
+            /* for (var i = 0; i < options.length; i++) {
                 if (options[i].value === userEmployment) {
                     options[i].selected = true;
                     break;
@@ -202,6 +204,7 @@
                     break;
                 }
             }
+            */
             
             let age = today.getFullYear() - birthday.getFullYear();
             const monthDiff = today.getMonth() - birthday.getMonth();
@@ -210,10 +213,12 @@
             // 생일이 아직 지나지 않았다면 만나이를 한 살 줄인다
             if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
                 age--;
-            }
+            } 
 
+            
             // 계산된 나이를 input 필드에 자동으로 입력
-            document.getElementById('ageInput').value = age;
+            // document.getElementById('ageInput').value = age;
+            
             
             //선택 초기화 버튼
             resetButton.addEventListener('click', function() {
@@ -287,14 +292,14 @@
                 policyAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
                 policyFieldButtons.forEach(button => {
                     button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
-                    button.classList.add('selected', 'bg-gray-200', 'text-black');
+                    button.classList.add('bg-gray-200', 'text-black');
                 });
             });
 
             policyFieldButtons.forEach(button => {
                 button.addEventListener('click', function () {
                     policyAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
-                    policyAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
+                    policyAllButton.classList.add('bg-gray-200', 'text-black');                    
                     button.classList.toggle('selected');
                     button.classList.toggle('text-white');
                     button.classList.toggle('bg-[#5856d6]');
@@ -316,11 +321,10 @@
                         policyAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
                     }
                 });
-                
-                if (button.getAttribute('data-field') === interest) {
+                /* if (button.getAttribute('data-field') === interest) {
                 	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
                 	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
-                }
+                } */
             });
 
             regionAllButton.addEventListener('click', function () {
@@ -328,12 +332,12 @@
                 regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
                 regionButtons.forEach(button => {
                     button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
-                    button.classList.add('selected', 'bg-gray-200', 'text-black');
+                    button.classList.add('bg-gray-200', 'text-black');
                 });
-                if (button.getAttribute('data-field') === area) {
+/*                 if (button.getAttribute('data-field') === area) {
                 	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
                 	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
-                }
+                } */
             });
 
             regionButtons.forEach(button => {
@@ -361,26 +365,26 @@
                     	regionAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
                     }                    
                 });
-                if (button.getAttribute('data-field') === area) {
+/*                 if (button.getAttribute('data-field') === area) {
                 	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
                 	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
-                }
+                } */
             });
             
             document.getElementById('searchForm').addEventListener('submit', function (event) {
                 event.preventDefault(); // 폼의 기본 제출 동작을 막고 직접 제출 처리
                 
 				
-                // 정책 선택 
-                const selectedPolicies = Array.from(document.querySelectorAll('.policy-field.selected')).map(button => button.dataset.field);
+                // 분야 선택 
+                const selectedPolicies = Array.from(document.querySelectorAll('.policy-field.selected, .policy-all.selected')).map(button => button.dataset.field);
                 // 지역 선택 
-                const selectedRegions = Array.from(document.querySelectorAll('.region-field.selected')).map(button => button.dataset.field);
+                const selectedRegions = Array.from(document.querySelectorAll('.region-field.selected, .region-all.selected')).map(button => button.dataset.field);
 				console.log(selectedPolicies);
 				
 				
                 const form = document.getElementById('searchForm');
 
-                // 선택된 정책들을 각각의 input 요소로 추가
+                // 선택된 분야들을 각각의 input 요소로 추가
                 selectedPolicies.forEach(policy => {
                     const input = document.createElement('input');
                     input.type = 'hidden';
