@@ -65,31 +65,32 @@ public class PolicyController {
     	//6개 파라미터중 searchInput(검색어), age(만나이)는 null일 수 있고 나머지는 기본값이 있어서
     	//경우에 따른 처리 따로 만들어줌
     	
-    	model.addAttribute("employment", employment);
-    	model.addAttribute("academicAbility", academicAbility);
-    	model.addAttribute("selectedPolicies", selectedPolicies);
-    	model.addAttribute("selectedRegions", selectedRegions);
+    	//model.addAttribute("employment", employment);
+    	//model.addAttribute("academicAbility", academicAbility);
+    	//model.addAttribute("selectedPolicies", selectedPolicies);
+    	//model.addAttribute("selectedRegions", selectedRegions);
     	
     	//log.info(searchInput);
 
     	//둘다 null
         if (searchInput.strip().length() == 0 && age.equals("제한없음")) {
+        	
             //log.info("1");
         }
         //검색어만 null
         else if (searchInput.strip().length() == 0 && !age.equals("제한없음")) {
-        	model.addAttribute("age", age);
+        	//model.addAttribute("age", age);
         	//log.info("2");
         }
         //나이만 null
         else if (searchInput.strip().length() != 0 && age.equals("제한없음")) {
-        	model.addAttribute("searchInput", searchInput);
+        	//model.addAttribute("searchInput", searchInput);
         	//log.info("3");
         }
         //둘 다 null 아님
         else if (searchInput.strip().length() != 0 && !age.equals("제한없음")) {
-        	model.addAttribute("age", age);
-        	model.addAttribute("searchInput", searchInput);
+        	//model.addAttribute("age", age);
+        	//model.addAttribute("searchInput", searchInput);
         	//log.info("4");
         }
 
