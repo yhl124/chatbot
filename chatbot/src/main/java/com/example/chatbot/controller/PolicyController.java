@@ -4,14 +4,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.chatbot.model.Chatroom;
 import com.example.chatbot.model.Policy;
 import com.example.chatbot.model.User;
 import com.example.chatbot.service.IPolicyService;
@@ -33,7 +37,7 @@ public class PolicyController {
         if (user != null) {
             model.addAttribute("user", user);
             //유저 정보(id, 생년월일)로 맞는 정책 가져오기
-            List<Policy> policies = policyService.getPoliciesByUserInfo(user.getUserId(), user.getBirthday());
+            List<Policy> policies = policyService.getPoliciesByUserInfo(user.getUserId(), user.getBirthday(), user.getInterest(), user.getArea(), user.getEmployment(), user.getAcademicAbility());
             //분야별 정책 count값 가져오기
             HashMap<String, Integer> statistics = policyService.getPolicyFieldsStatistics();
             model.addAttribute("policyStatistics", statistics);
@@ -62,47 +66,36 @@ public class PolicyController {
             model.addAttribute("user", user);
         } 
     	
-    	//6개 파라미터중 searchInput(검색어), age(만나이)는 null일 수 있고 나머지는 기본값이 있어서
-    	//경우에 따른 처리 따로 만들어줌
+    	//6개 파라미터중 searchInput(검색어), age(만나이)는 null일 수 있고 나머지는 값이 있다
+    	//각 경우에 따른 처리 따로 만들어줌
     	
-    	//model.addAttribute("employment", employment);
-    	//model.addAttribute("academicAbility", academicAbility);
-    	//model.addAttribute("selectedPolicies", selectedPolicies);
-    	//model.addAttribute("selectedRegions", selectedRegions);
-    	
-    	//log.info(searchInput);
 
     	//둘다 null
         if (searchInput.strip().length() == 0 && age.equals("제한없음")) {
-        	
+        	List<Policy> policies = policyService.searchPolicy1(employment, academicAbility, selectedPolicies, selectedRegions);
+        	model.addAttribute("policies", policies);
             //log.info("1");
         }
         //검색어만 null
         else if (searchInput.strip().length() == 0 && !age.equals("제한없음")) {
-        	//model.addAttribute("age", age);
+        	List<Policy> policies = policyService.searchPolicy2(employment, academicAbility, selectedPolicies, selectedRegions, age);
+        	model.addAttribute("policies", policies);
         	//log.info("2");
         }
         //나이만 null
         else if (searchInput.strip().length() != 0 && age.equals("제한없음")) {
-        	//model.addAttribute("searchInput", searchInput);
+        	List<Policy> policies = policyService.searchPolicy3(employment, academicAbility, selectedPolicies, selectedRegions, searchInput);
+        	model.addAttribute("policies", policies);
         	//log.info("3");
         }
         //둘 다 null 아님
         else if (searchInput.strip().length() != 0 && !age.equals("제한없음")) {
-        	//model.addAttribute("age", age);
-        	//model.addAttribute("searchInput", searchInput);
+        	List<Policy> policies = policyService.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput);
+        	model.addAttribute("policies", policies);
         	//log.info("4");
         }
 
-        // 검색 결과 처리 로직
-        // List<Result> searchResults = searchService.search(employment, academicAbility, age, policies, region);
-        // model.addAttribute("searchResults", searchResults);
-
-        // 검색 결과 처리 로직 작성 (예: 데이터베이스 조회 등)
-        // 예를 들어, 검색 결과를 model에 추가
-        // List<Result> searchResults = searchService.search(policies, regions);
-        // model.addAttribute("searchResults", searchResults);
-        
+        //return ResponseEntity.badRequest().build();
         return "search"; 
     }
     

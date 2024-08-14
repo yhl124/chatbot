@@ -11,7 +11,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.example.chatbot.model.Chatroom;
-import com.example.chatbot.model.User;
 
 import lombok.extern.slf4j.Slf4j;
 

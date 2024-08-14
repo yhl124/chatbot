@@ -3,7 +3,6 @@ package com.example.chatbot.dao;
 import java.util.List;
 
 import com.example.chatbot.model.Chatroom;
-import com.example.chatbot.model.User;
 
 public interface IChatroomRepository {
 

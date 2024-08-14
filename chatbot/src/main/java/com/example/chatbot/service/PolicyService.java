@@ -19,7 +19,7 @@ public class PolicyService implements IPolicyService {
 	IPolicyRepository policyRepository;
 
 	@Override
-	public List<Policy> getPoliciesByUserInfo(String userId, Date birthday) {
+	public List<Policy> getPoliciesByUserInfo(String userId, Date birthday, String interest, String area, String employment, String academic) {
 		//sql.date 타입을 localdate 타입의 생일, 오늘을 사용해서 만나이 계산
 		LocalDate birthLocalDate = birthday.toLocalDate();
         LocalDate currentDate = LocalDate.now();
@@ -28,7 +28,7 @@ public class PolicyService implements IPolicyService {
         int age = period.getYears();
 		
 		
-		return policyRepository.getPoliciesByUserInfo(userId, Integer.toString(age));
+		return policyRepository.getPoliciesByUserInfo(userId, Integer.toString(age), interest, area, employment, academic);
 	}
 
 	@Override
@@ -39,6 +39,30 @@ public class PolicyService implements IPolicyService {
 	@Override
 	public HashMap<String, Integer> getPolicyFieldsStatistics() {
 		return policyRepository.getPolicyFieldsStatistics();
+	}
+
+	@Override
+	public List<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies,
+			List<String> selectedRegions) {
+		return policyRepository.searchPolicy1(employment, academicAbility, selectedPolicies, selectedRegions);
+	}
+
+	@Override
+	public List<Policy> searchPolicy2(String employment, String academicAbility, List<String> selectedPolicies,
+			List<String> selectedRegions, String age) {
+		return policyRepository.searchPolicy2(employment, academicAbility, selectedPolicies, selectedRegions, age);
+	}
+
+	@Override
+	public List<Policy> searchPolicy3(String employment, String academicAbility, List<String> selectedPolicies,
+			List<String> selectedRegions, String searchInput) {
+		return policyRepository.searchPolicy3(employment, academicAbility, selectedPolicies, selectedRegions, searchInput);
+	}
+
+	@Override
+	public List<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
+			List<String> selectedRegions, String age, String searchInput) {
+		return policyRepository.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput);
 	}
 
 }

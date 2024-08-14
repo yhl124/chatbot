@@ -2,6 +2,7 @@ package com.example.chatbot.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,15 +65,20 @@ public class PolicyRepository implements IPolicyRepository {
 
 
 	@Override
-	public List<Policy> getPoliciesByUserInfo(String userId, String age) {
-        String sql = "SELECT * FROM policies " +
-                "WHERE (min_age <= ? AND ? <= max_age) OR (min_age LIKE '제한없음')";
+	public List<Policy> getPoliciesByUserInfo(String userId, String age, String interest, String area, String employment, String academic) {
+        String sql = "SELECT * FROM policies " 
+                + "WHERE ((min_age <= ? AND ? <= max_age) OR (min_age = '제한없음')) and "
+                + "(분야 like ?) and "
+        		+ "((지역 like ?) or (지역 = '서울시')) and "
+        		+ "((고용상태 like ?) or (고용상태 = '제한없음') or (고용상태 = '-')) and "
+        		+ "((학력요구사항 like ?) or (학력요구사항 = '제한없음') or (학력요구사항 = '-')) ";
 		try {
-			return jdbcTemplate.query(sql, new PolicyMapper(), age, age);
+			return jdbcTemplate.query(sql, new PolicyMapper(), age, age, interest, area, "%"+employment+"%", "%"+academic+"%");
 		} catch (EmptyResultDataAccessException e) {
 			return null;
 		}
 	}
+	
 
 	@Override
 	public Policy getPolicyByPolicyId(int policyId) {
@@ -104,6 +110,303 @@ public class PolicyRepository implements IPolicyRepository {
             return null;
         }
     }
+
+
+	@Override
+	public List<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies,
+	                                  List<String> selectedRegions) {
+	    // 기본 SQL 쿼리
+	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
+
+	    // employment 조건 추가
+	    if (employment != null && !employment.isEmpty()) {
+	        sql.append(" AND 고용상태 LIKE ?");
+	    }
+
+	    // academicAbility 조건 추가
+	    if (academicAbility != null && !academicAbility.isEmpty()) {
+	        sql.append(" AND 학력요구사항 LIKE ?");
+	    }
+
+	    // selectedPolicies 리스트에 대한 조건 추가
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
+	        sql.append(" AND 분야 IN (");
+	        for (int i = 0; i < selectedPolicies.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("?");
+	        }
+	        sql.append(")");
+	    }
+
+	    // selectedRegions 리스트에 대한 조건 추가
+	    if (selectedRegions != null && !selectedRegions.isEmpty()) {
+	        sql.append(" AND 지역 IN (");
+	        for (int i = 0; i < selectedRegions.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("?");
+	        }
+	        sql.append(")");
+	    }
+
+	    try {
+	        // PreparedStatement를 위한 매개변수 설정
+	        List<Object> params = new ArrayList<>();
+
+	        if (employment != null && !employment.isEmpty()) {
+	            params.add("%" + employment + "%");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            params.add("%" + academicAbility + "%");
+	        }
+	        if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
+	            params.addAll(selectedPolicies);
+	        }
+	        if (selectedRegions != null && !selectedRegions.isEmpty()) {
+	            params.addAll(selectedRegions);
+	        }
+
+	        return jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
+
+
+	@Override
+	public List<Policy> searchPolicy2(String employment, String academicAbility, List<String> selectedPolicies,
+	                                  List<String> selectedRegions, String age) {
+	    // 기본 SQL 쿼리
+	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
+
+	    // employment 조건 추가
+	    if (employment != null && !employment.isEmpty()) {
+	        sql.append(" AND 고용상태 LIKE ?");
+	    }
+
+	    // academicAbility 조건 추가
+	    if (academicAbility != null && !academicAbility.isEmpty()) {
+	        sql.append(" AND 학력요구사항 LIKE ?");
+	    }
+
+	    // age 조건 추가
+	    if (age != null && !age.isEmpty()) {
+	        sql.append(" AND ((min_age <= ?) AND (? <= max_age))");
+	    }
+
+	    // selectedPolicies 리스트에 대한 조건 추가
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
+	        sql.append(" AND 분야 IN (");
+	        for (int i = 0; i < selectedPolicies.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("?");
+	        }
+	        sql.append(")");
+	    }
+
+	    // selectedRegions 리스트에 대한 조건 추가
+	    if (selectedRegions != null && !selectedRegions.isEmpty()) {
+	        sql.append(" AND 지역 IN (");
+	        for (int i = 0; i < selectedRegions.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("?");
+	        }
+	        sql.append(")");
+	    }
+
+	    try {
+	        // PreparedStatement를 위한 매개변수 설정
+	        List<Object> params = new ArrayList<>();
+
+	        if (employment != null && !employment.isEmpty()) {
+	            params.add("%" + employment + "%");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            params.add("%" + academicAbility + "%");
+	        }
+	        if (age != null && !age.isEmpty()) {
+	            params.add(age);
+	            params.add(age);
+	        }
+	        if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
+	            params.addAll(selectedPolicies);
+	        }
+	        if (selectedRegions != null && !selectedRegions.isEmpty()) {
+	            params.addAll(selectedRegions);
+	        }
+
+	        return jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
+
+
+	@Override
+	public List<Policy> searchPolicy3(String employment, String academicAbility, List<String> selectedPolicies,
+	                                  List<String> selectedRegions, String searchInput) {
+	    // 기본 SQL 쿼리
+	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
+
+	    // employment 조건 추가
+	    if (employment != null && !employment.isEmpty()) {
+	        sql.append(" AND 고용상태 LIKE ?");
+	    }
+
+	    // academicAbility 조건 추가
+	    if (academicAbility != null && !academicAbility.isEmpty()) {
+	        sql.append(" AND 학력요구사항 LIKE ?");
+	    }
+
+	    // selectedPolicies 리스트에 대한 조건 추가
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
+	        sql.append(" AND 분야 IN (");
+	        for (int i = 0; i < selectedPolicies.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("?");
+	        }
+	        sql.append(")");
+	    }
+
+	    // selectedRegions 리스트에 대한 조건 추가
+	    if (selectedRegions != null && !selectedRegions.isEmpty()) {
+	        sql.append(" AND 지역 IN (");
+	        for (int i = 0; i < selectedRegions.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("?");
+	        }
+	        sql.append(")");
+	    }
+
+	    // searchInput 조건 추가 (정책 이름 또는 설명에서 검색)
+	    if (searchInput != null && !searchInput.isEmpty()) {
+	        sql.append(" AND (정책명 LIKE ? OR 정책설명 LIKE ?)");
+	    }
+
+	    try {
+	        // PreparedStatement를 위한 매개변수 설정
+	        List<Object> params = new ArrayList<>();
+
+	        if (employment != null && !employment.isEmpty()) {
+	            params.add("%" + employment + "%");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            params.add("%" + academicAbility + "%");
+	        }
+	        if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
+	            params.addAll(selectedPolicies);
+	        }
+	        if (selectedRegions != null && !selectedRegions.isEmpty()) {
+	            params.addAll(selectedRegions);
+	        }
+	        if (searchInput != null && !searchInput.isEmpty()) {
+	            String searchPattern = "%" + searchInput + "%";
+	            params.add(searchPattern);
+	            params.add(searchPattern);
+	        }
+
+	        return jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
+
+
+
+	@Override
+	public List<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
+	                                  List<String> selectedRegions, String age, String searchInput) {
+	    // 기본 SQL 쿼리
+	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
+
+	    // employment 조건 추가
+	    if (employment != null && !employment.isEmpty()) {
+	        sql.append(" AND 고용상태 LIKE ?");
+	    }
+
+	    // academicAbility 조건 추가
+	    if (academicAbility != null && !academicAbility.isEmpty()) {
+	        sql.append(" AND 학력요구사항 LIKE ?");
+	    }
+
+	    // age 조건 추가
+	    if (age != null && !age.isEmpty()) {
+	        sql.append(" AND ((min_age <= ?) AND (? <= max_age))");
+	    }
+
+	    // selectedPolicies 리스트에 대한 조건 추가
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
+	        sql.append(" AND 분야 IN (");
+	        for (int i = 0; i < selectedPolicies.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("?");
+	        }
+	        sql.append(")");
+	    }
+
+	    // selectedRegions 리스트에 대한 조건 추가
+	    if (selectedRegions != null && !selectedRegions.isEmpty()) {
+	        sql.append(" AND 지역 IN (");
+	        for (int i = 0; i < selectedRegions.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("?");
+	        }
+	        sql.append(")");
+	    }
+
+	    // searchInput 조건 추가 (정책 이름 또는 설명에서 검색)
+	    if (searchInput != null && !searchInput.isEmpty()) {
+	        sql.append(" AND (정책명 LIKE ? OR 정책설명 LIKE ?)");
+	    }
+
+	    try {
+	        // PreparedStatement를 위한 매개변수 설정
+	        List<Object> params = new ArrayList<>();
+
+	        if (employment != null && !employment.isEmpty()) {
+	            params.add("%" + employment + "%");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            params.add("%" + academicAbility + "%");
+	        }
+	        if (age != null && !age.isEmpty()) {
+	            params.add(age);
+	            params.add(age);
+	        }
+	        if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
+	            params.addAll(selectedPolicies);
+	        }
+	        if (selectedRegions != null && !selectedRegions.isEmpty()) {
+	            params.addAll(selectedRegions);
+	        }
+	        if (searchInput != null && !searchInput.isEmpty()) {
+	            String searchPattern = "%" + searchInput + "%";
+	            params.add(searchPattern);
+	            params.add(searchPattern);
+	        }
+
+	        return jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
+
+
 	
 	
 

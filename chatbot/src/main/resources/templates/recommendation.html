@@ -30,7 +30,7 @@
 		        <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
 		           th:text="${policy.pName}" 
 		           th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
-		        <div th:text="${policy.supervision}" class="text-gray-600 truncate mb-1">국토교통부</div>
+		        <div th:text="${policy.region}" class="text-gray-600 truncate mb-1">국토교통부</div>
 		        <div th:if="${policy.eDate}" th:text="${policy.eDate}" class="text-red-500 truncate mb-4">D-day 160일</div>
 		        <div th:unless="${policy.eDate}" class="text-red-500 truncate mb-4">없음</div>
 		        <div class="flex justify-between pt-8 items-center">
@@ -45,7 +45,7 @@
             <div class="text-left text-lg mb-4">전체 통계</div>
         </div>
 
-        <div class="flex flex-col mt-4 md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 lg:mx-36 xl:mx-60 2xl:mx-96">
+        <div class="flex flex-col mt-4 md:flex-row justify-center space-y-4 mb-16 md:space-y-0 md:space-x-4 lg:mx-36 xl:mx-60 2xl:mx-96">
             <div class="bg-white p-4 rounded-lg shadow-lg w-full md:w-1/2">
                 <!-- Graph area for monthly policy count -->
                 <div id="bargraph" class="w-full h-96"></div>

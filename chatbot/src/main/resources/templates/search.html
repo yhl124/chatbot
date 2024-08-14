@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="pagination/tui-pagination.css" />
     <script src="pagination/tui-pagination.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body class="min-w-40">
     <div class="container mx-auto p-4">
@@ -126,7 +127,7 @@
                     <input type="hidden" name="selectedRegions" id="selectedRegions">-->
                     <button id="resetButton" type="button" class="bg-gray-600 text-center text-white mb-2 px-4 py-2 rounded hover:bg-gray-400 hover:text-black">선택 초기화</button>
                     <button id="resetByMyInfo" type="button" class="bg-white border-2 border-[#5856d6] text-center text-balck mb-2 px-4 py-2 rounded hover:bg-indigo-400 hover:text-white">내 정보로 설정</button>
-                    <button type="submit" class="bg-[#5856d6] text-center text-white mb-2 px-4 py-2 rounded hover:bg-indigo-600">검색</button>
+                    <button id="searchButton" type="submit" class="bg-[#5856d6] text-center text-white mb-2 px-4 py-2 rounded hover:bg-indigo-600">검색</button>
                 </div>
             </div>
         </form>
@@ -149,16 +150,18 @@
             <!--페이지 구현은 백엔드 할 때 해야할듯?-->
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <!-- 검색결과 요소를 반복적으로 추가 -->
-                <div class="border-2 border-gray-300 p-4 rounded">
-                    <div class="text-lg font-bold truncate mb-2">청년문화예술패스</div>
-                    <div class="text-gray-600 truncate mb-1">문화체육관광부</div>
-                    <div class="text-red-500 truncate mb-4">D-day 129일</div>
-                    <div class="flex justify-between pt-8 items-center">
-                        <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-                        <div class="bg-gray-200 text-gray-700 p-2 rounded truncate">복지.문화분야</div>
-                    </div>
-                </div>
-
+                <div th:each="policy : ${policies}" class="border-2 border-gray-300 p-4 rounded">
+			        <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
+			           th:text="${policy.pName}" 
+			           th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
+			        <div th:text="${policy.region}" class="text-gray-600 truncate mb-1">국토교통부</div>
+			        <div th:if="${policy.eDate}" th:text="${policy.eDate}" class="text-red-500 truncate mb-4">D-day 160일</div>
+			        <div th:unless="${policy.eDate}" class="text-red-500 truncate mb-4">없음</div>
+			        <div class="flex justify-between pt-8 items-center">
+			            <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
+			            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+			        </div>
+		    	</div>
             </div>
         </div>
     </div>
@@ -370,7 +373,7 @@
                 	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
                 } */
             });
-            
+
             document.getElementById('searchForm').addEventListener('submit', function (event) {
                 event.preventDefault(); // 폼의 기본 제출 동작을 막고 직접 제출 처리
                 
@@ -403,8 +406,9 @@
                 });
 
                 form.submit(); // 폼을 직접 제출
-            });
+            }); 
         });
     </script>
+    
 </body>
 </html>
