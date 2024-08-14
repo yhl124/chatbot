@@ -96,8 +96,16 @@ public class PolicyController {
         	model.addAttribute("policies", policies);
         	log.info("4");
         }
+        
+        model.addAttribute("searchInput", searchInput);
+        model.addAttribute("age", age);
+        model.addAttribute("employment", employment);
+        model.addAttribute("academicAbility", academicAbility);
+        model.addAttribute("selectedPolicies", selectedPolicies);
+        model.addAttribute("selectedRegions", selectedRegions);
 
         //return ResponseEntity.badRequest().build();
+        //log.info("dd2");
         return "search"; 
     }
     
@@ -107,7 +115,20 @@ public class PolicyController {
     public String searchpage(@AuthenticationPrincipal User user, Model model) {
         if (user != null) {
             model.addAttribute("user", user);
+            
+            //검색페이지의 선택 기본값 설정
+            List<String> defaultSelectedPolicies = List.of("분야 전체");
+            List<String> defaultSelectedRegions = List.of("서울시");
+            
+            model.addAttribute("policies", List.of());
+            model.addAttribute("searchInput", null);
+            model.addAttribute("age", null);
+            model.addAttribute("academicAbility", "제한없음");
+            model.addAttribute("employment", "제한없음");
+            model.addAttribute("selectedPolicies", defaultSelectedPolicies);
+            model.addAttribute("selectedRegions", defaultSelectedRegions);
         } 
+        //log.info("dd");
         return "search";
     }
    

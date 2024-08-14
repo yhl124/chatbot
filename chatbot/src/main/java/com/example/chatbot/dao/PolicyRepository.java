@@ -139,7 +139,7 @@ public class PolicyRepository implements IPolicyRepository {
 	        	if (i > 0) {
 	                sql.append(", ");
 	            }
-	        	sql.append(selectedPolicies.get(i));
+	        	sql.append("'"+selectedPolicies.get(i)+"'");
 	        }
 	        sql.append(") )");
 	    }
@@ -151,7 +151,7 @@ public class PolicyRepository implements IPolicyRepository {
 	            if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append(selectedRegions.get(i));
+	            sql.append("'"+selectedRegions.get(i)+"'");
 	        }
 	        sql.append(") )");
 	    }
