@@ -4,18 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.chatbot.model.Chatroom;
 import com.example.chatbot.model.Policy;
 import com.example.chatbot.model.User;
 import com.example.chatbot.service.IPolicyService;
@@ -69,30 +65,36 @@ public class PolicyController {
     	//6개 파라미터중 searchInput(검색어), age(만나이)는 null일 수 있고 나머지는 값이 있다
     	//각 경우에 따른 처리 따로 만들어줌
     	
+    	log.info(employment);
+    	log.info(academicAbility);
+    	log.info(selectedPolicies.toString());
+    	log.info(selectedRegions.toString());
+    	//System.out.println(academicAbility);
 
     	//둘다 null
         if (searchInput.strip().length() == 0 && age.equals("제한없음")) {
         	List<Policy> policies = policyService.searchPolicy1(employment, academicAbility, selectedPolicies, selectedRegions);
+
         	model.addAttribute("policies", policies);
-            //log.info("1");
+            log.info("1");
         }
         //검색어만 null
         else if (searchInput.strip().length() == 0 && !age.equals("제한없음")) {
         	List<Policy> policies = policyService.searchPolicy2(employment, academicAbility, selectedPolicies, selectedRegions, age);
         	model.addAttribute("policies", policies);
-        	//log.info("2");
+        	log.info("2");
         }
         //나이만 null
         else if (searchInput.strip().length() != 0 && age.equals("제한없음")) {
         	List<Policy> policies = policyService.searchPolicy3(employment, academicAbility, selectedPolicies, selectedRegions, searchInput);
         	model.addAttribute("policies", policies);
-        	//log.info("3");
+        	log.info("3");
         }
         //둘 다 null 아님
         else if (searchInput.strip().length() != 0 && !age.equals("제한없음")) {
         	List<Policy> policies = policyService.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput);
         	model.addAttribute("policies", policies);
-        	//log.info("4");
+        	log.info("4");
         }
 
         //return ResponseEntity.badRequest().build();

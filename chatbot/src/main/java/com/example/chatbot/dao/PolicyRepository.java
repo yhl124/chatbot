@@ -14,9 +14,13 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.example.chatbot.controller.PolicyController;
 import com.example.chatbot.model.Policy;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Repository
+@Slf4j
 public class PolicyRepository implements IPolicyRepository {
 	
 	@Autowired
@@ -112,7 +116,7 @@ public class PolicyRepository implements IPolicyRepository {
     }
 
 
-	@Override
+	@Override//나이, 검색어 null
 	public List<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies,
 	                                  List<String> selectedRegions) {
 	    // 기본 SQL 쿼리
@@ -120,36 +124,36 @@ public class PolicyRepository implements IPolicyRepository {
 
 	    // employment 조건 추가
 	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND 고용상태 LIKE ?");
+	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	    }
-
 	    // academicAbility 조건 추가
 	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND 학력요구사항 LIKE ?");
+	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
 	    }
 
 	    // selectedPolicies 리스트에 대한 조건 추가
-	    if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
-	        sql.append(" AND 분야 IN (");
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	        sql.append(" AND ( 분야 IN (");
+	        
 	        for (int i = 0; i < selectedPolicies.size(); i++) {
-	            if (i > 0) {
+	        	if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append("?");
+	        	sql.append(selectedPolicies.get(i));
 	        }
-	        sql.append(")");
+	        sql.append(") )");
 	    }
 
 	    // selectedRegions 리스트에 대한 조건 추가
-	    if (selectedRegions != null && !selectedRegions.isEmpty()) {
-	        sql.append(" AND 지역 IN (");
+	    if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	        sql.append(" AND ( 지역 IN (");
 	        for (int i = 0; i < selectedRegions.size(); i++) {
 	            if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append("?");
+	            sql.append(selectedRegions.get(i));
 	        }
-	        sql.append(")");
+	        sql.append(") )");
 	    }
 
 	    try {
@@ -162,13 +166,9 @@ public class PolicyRepository implements IPolicyRepository {
 	        if (academicAbility != null && !academicAbility.isEmpty()) {
 	            params.add("%" + academicAbility + "%");
 	        }
-	        if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
-	            params.addAll(selectedPolicies);
-	        }
-	        if (selectedRegions != null && !selectedRegions.isEmpty()) {
-	            params.addAll(selectedRegions);
-	        }
 
+
+	        log.info(sql.toString());
 	        return jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
 	    } catch (EmptyResultDataAccessException e) {
 	        return null;
@@ -176,7 +176,7 @@ public class PolicyRepository implements IPolicyRepository {
 	}
 
 
-	@Override
+	@Override//검색어만 null
 	public List<Policy> searchPolicy2(String employment, String academicAbility, List<String> selectedPolicies,
 	                                  List<String> selectedRegions, String age) {
 	    // 기본 SQL 쿼리
@@ -184,41 +184,41 @@ public class PolicyRepository implements IPolicyRepository {
 
 	    // employment 조건 추가
 	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND 고용상태 LIKE ?");
+	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	    }
-
 	    // academicAbility 조건 추가
 	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND 학력요구사항 LIKE ?");
+	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
 	    }
 
 	    // age 조건 추가
 	    if (age != null && !age.isEmpty()) {
-	        sql.append(" AND ((min_age <= ?) AND (? <= max_age))");
+	        sql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
 	    }
 
 	    // selectedPolicies 리스트에 대한 조건 추가
-	    if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
-	        sql.append(" AND 분야 IN (");
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	        sql.append(" AND ( 분야 IN (");
+	        
 	        for (int i = 0; i < selectedPolicies.size(); i++) {
-	            if (i > 0) {
+	        	if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append("?");
+	        	sql.append("'"+selectedPolicies.get(i)+"'");
 	        }
-	        sql.append(")");
+	        sql.append(") )");
 	    }
 
 	    // selectedRegions 리스트에 대한 조건 추가
-	    if (selectedRegions != null && !selectedRegions.isEmpty()) {
-	        sql.append(" AND 지역 IN (");
+	    if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	        sql.append(" AND ( 지역 IN (");
 	        for (int i = 0; i < selectedRegions.size(); i++) {
 	            if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append("?");
+	            sql.append("'"+selectedRegions.get(i)+"'");
 	        }
-	        sql.append(")");
+	        sql.append(") )");
 	    }
 
 	    try {
@@ -235,12 +235,7 @@ public class PolicyRepository implements IPolicyRepository {
 	            params.add(age);
 	            params.add(age);
 	        }
-	        if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
-	            params.addAll(selectedPolicies);
-	        }
-	        if (selectedRegions != null && !selectedRegions.isEmpty()) {
-	            params.addAll(selectedRegions);
-	        }
+
 
 	        return jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
 	    } catch (EmptyResultDataAccessException e) {
@@ -249,7 +244,7 @@ public class PolicyRepository implements IPolicyRepository {
 	}
 
 
-	@Override
+	@Override//나이만 null
 	public List<Policy> searchPolicy3(String employment, String academicAbility, List<String> selectedPolicies,
 	                                  List<String> selectedRegions, String searchInput) {
 	    // 기본 SQL 쿼리
@@ -257,41 +252,41 @@ public class PolicyRepository implements IPolicyRepository {
 
 	    // employment 조건 추가
 	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND 고용상태 LIKE ?");
+	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	    }
-
 	    // academicAbility 조건 추가
 	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND 학력요구사항 LIKE ?");
+	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    }
+
+	    // searchInput 조건 추가
+	    if (searchInput != null && !searchInput.isEmpty()) {
+	        sql.append(" AND (정책명 like ?)");
 	    }
 
 	    // selectedPolicies 리스트에 대한 조건 추가
-	    if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
-	        sql.append(" AND 분야 IN (");
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	        sql.append(" AND ( 분야 IN (");
+	        
 	        for (int i = 0; i < selectedPolicies.size(); i++) {
-	            if (i > 0) {
+	        	if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append("?");
+	        	sql.append("'"+selectedPolicies.get(i)+"'");
 	        }
-	        sql.append(")");
+	        sql.append(") )");
 	    }
 
 	    // selectedRegions 리스트에 대한 조건 추가
-	    if (selectedRegions != null && !selectedRegions.isEmpty()) {
-	        sql.append(" AND 지역 IN (");
+	    if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	        sql.append(" AND ( 지역 IN (");
 	        for (int i = 0; i < selectedRegions.size(); i++) {
 	            if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append("?");
+	            sql.append("'"+selectedRegions.get(i)+"'");
 	        }
-	        sql.append(")");
-	    }
-
-	    // searchInput 조건 추가 (정책 이름 또는 설명에서 검색)
-	    if (searchInput != null && !searchInput.isEmpty()) {
-	        sql.append(" AND (정책명 LIKE ? OR 정책설명 LIKE ?)");
+	        sql.append(") )");
 	    }
 
 	    try {
@@ -304,15 +299,8 @@ public class PolicyRepository implements IPolicyRepository {
 	        if (academicAbility != null && !academicAbility.isEmpty()) {
 	            params.add("%" + academicAbility + "%");
 	        }
-	        if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
-	            params.addAll(selectedPolicies);
-	        }
-	        if (selectedRegions != null && !selectedRegions.isEmpty()) {
-	            params.addAll(selectedRegions);
-	        }
 	        if (searchInput != null && !searchInput.isEmpty()) {
 	            String searchPattern = "%" + searchInput + "%";
-	            params.add(searchPattern);
 	            params.add(searchPattern);
 	        }
 
@@ -324,7 +312,7 @@ public class PolicyRepository implements IPolicyRepository {
 
 
 
-	@Override
+	@Override//나이, 검색어 있음
 	public List<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
 	                                  List<String> selectedRegions, String age, String searchInput) {
 	    // 기본 SQL 쿼리
@@ -332,46 +320,44 @@ public class PolicyRepository implements IPolicyRepository {
 
 	    // employment 조건 추가
 	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND 고용상태 LIKE ?");
+	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	    }
-
 	    // academicAbility 조건 추가
 	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND 학력요구사항 LIKE ?");
+	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
 	    }
-
 	    // age 조건 추가
 	    if (age != null && !age.isEmpty()) {
-	        sql.append(" AND ((min_age <= ?) AND (? <= max_age))");
+	        sql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
+	    }
+	    // searchInput 조건 추가
+	    if (searchInput != null && !searchInput.isEmpty()) {
+	        sql.append(" AND (정책명 like ?)");
 	    }
 
 	    // selectedPolicies 리스트에 대한 조건 추가
-	    if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
-	        sql.append(" AND 분야 IN (");
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	        sql.append(" AND ( 분야 IN (");
+	        
 	        for (int i = 0; i < selectedPolicies.size(); i++) {
-	            if (i > 0) {
+	        	if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append("?");
+	        	sql.append("'"+selectedPolicies.get(i)+"'");
 	        }
-	        sql.append(")");
+	        sql.append(") )");
 	    }
 
 	    // selectedRegions 리스트에 대한 조건 추가
-	    if (selectedRegions != null && !selectedRegions.isEmpty()) {
-	        sql.append(" AND 지역 IN (");
+	    if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	        sql.append(" AND ( 지역 IN (");
 	        for (int i = 0; i < selectedRegions.size(); i++) {
 	            if (i > 0) {
 	                sql.append(", ");
 	            }
-	            sql.append("?");
+	            sql.append("'"+selectedRegions.get(i)+"'");
 	        }
-	        sql.append(")");
-	    }
-
-	    // searchInput 조건 추가 (정책 이름 또는 설명에서 검색)
-	    if (searchInput != null && !searchInput.isEmpty()) {
-	        sql.append(" AND (정책명 LIKE ? OR 정책설명 LIKE ?)");
+	        sql.append(") )");
 	    }
 
 	    try {
@@ -388,15 +374,8 @@ public class PolicyRepository implements IPolicyRepository {
 	            params.add(age);
 	            params.add(age);
 	        }
-	        if (selectedPolicies != null && !selectedPolicies.isEmpty()) {
-	            params.addAll(selectedPolicies);
-	        }
-	        if (selectedRegions != null && !selectedRegions.isEmpty()) {
-	            params.addAll(selectedRegions);
-	        }
 	        if (searchInput != null && !searchInput.isEmpty()) {
 	            String searchPattern = "%" + searchInput + "%";
-	            params.add(searchPattern);
 	            params.add(searchPattern);
 	        }
 
@@ -405,10 +384,4 @@ public class PolicyRepository implements IPolicyRepository {
 	        return null;
 	    }
 	}
-
-
-	
-	
-
-
 }
