@@ -564,8 +564,9 @@ public class PolicyRepository implements IPolicyRepository {
 	        }
 
 	        // LIMIT과 OFFSET 값을 Pageable에서 추출하여 추가
-	        params.add(pageable.getPageSize());
 	        params.add(pageable.getOffset());
+	        params.add(pageable.getPageSize());
+
 
 	        // 실제 쿼리 실행
 	        List<Policy> policies = jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
@@ -605,7 +606,7 @@ public class PolicyRepository implements IPolicyRepository {
 	        }
 
 	        // 총 카운트를 가져오기 위해 쿼리 실행
-	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.toArray());
+	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.get(0), params.get(1), params.get(2), params.get(3));
 
 	        // 결과를 Page 객체로 반환
 	        return new PageImpl<>(policies, pageable, total);
@@ -679,8 +680,9 @@ public class PolicyRepository implements IPolicyRepository {
 	        }
 
 	        // LIMIT과 OFFSET 값을 Pageable에서 추출하여 추가
-	        params.add(pageable.getPageSize());
 	        params.add(pageable.getOffset());
+	        params.add(pageable.getPageSize());
+
 
 	        // 실제 쿼리 실행
 	        List<Policy> policies = jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
@@ -719,7 +721,7 @@ public class PolicyRepository implements IPolicyRepository {
 	        }
 
 	        // 총 카운트를 가져오기 위해 쿼리 실행
-	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.toArray());
+	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.get(0), params.get(1), params.get(2));
 
 	        // 결과를 Page 객체로 반환
 	        return new PageImpl<>(policies, pageable, total);
@@ -803,8 +805,9 @@ public class PolicyRepository implements IPolicyRepository {
 	        }
 
 	        // LIMIT과 OFFSET 값을 Pageable에서 추출하여 추가
-	        params.add(pageable.getPageSize());
 	        params.add(pageable.getOffset());
+	        params.add(pageable.getPageSize());
+
 
 	        // 실제 쿼리 실행
 	        List<Policy> policies = jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
@@ -846,7 +849,7 @@ public class PolicyRepository implements IPolicyRepository {
 	        }
 
 	        // 총 카운트를 가져오기 위해 쿼리 실행
-	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.toArray());
+	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.get(0),params.get(1),params.get(2),params.get(3),params.get(4));
 
 	        // 결과를 Page 객체로 반환
 	        return new PageImpl<>(policies, pageable, total);

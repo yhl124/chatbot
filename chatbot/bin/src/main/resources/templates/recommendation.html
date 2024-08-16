@@ -28,14 +28,14 @@
         <div class="multiple-items flex justify-center my-4 mx-2 lg:mx-36 xl:mx-60 2xl:mx-96 relative">
 		    <div th:each="policy : ${policies}" class="border-2 border-gray-300 p-4 rounded w-1/5">
 		        <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
-		           th:text="${policy.polyBizSjnm}" 
+		           th:text="${policy.pName}" 
 		           th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
-		        <div th:text="${policy.polyBizSecd}" class="text-gray-600 truncate mb-1">국토교통부</div>
-		        <div th:if="${policy.bizPrdCn}" th:text="${policy.bizPrdCn}" class="text-red-500 truncate mb-4">D-day 160일</div>
-		        <div th:unless="${policy.bizPrdCn}" class="text-red-500 truncate mb-4">없음</div>
+		        <div th:text="${policy.region}" class="text-gray-600 truncate mb-1">국토교통부</div>
+		        <div th:if="${policy.eDate}" th:text="${policy.eDate}" class="text-red-500 truncate mb-4">D-day 160일</div>
+		        <div th:unless="${policy.eDate}" class="text-red-500 truncate mb-4">없음</div>
 		        <div class="flex justify-between pt-8 items-center">
 		            <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-		            <div th:text="${policy.polyRlmCd}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+		            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
 		        </div>
 		    </div>
 		</div>
@@ -45,7 +45,7 @@
             <div class="text-left text-lg mb-4">전체 통계</div>
         </div>
 
-        <div class="flex flex-col mt-4 md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4 lg:mx-36 xl:mx-60 2xl:mx-96">
+        <div class="flex flex-col mt-4 md:flex-row justify-center space-y-4 mb-16 md:space-y-0 md:space-x-4 lg:mx-36 xl:mx-60 2xl:mx-96">
             <div class="bg-white p-4 rounded-lg shadow-lg w-full md:w-1/2">
                 <!-- Graph area for monthly policy count -->
                 <div id="bargraph" class="w-full h-96"></div>

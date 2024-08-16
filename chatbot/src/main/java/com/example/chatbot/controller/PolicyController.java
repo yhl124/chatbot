@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -208,7 +209,11 @@ public class PolicyController {
             List<String> defaultSelectedPolicies = List.of("분야 전체");
             List<String> defaultSelectedRegions = List.of("서울시");
             
-            model.addAttribute("policies", List.of());
+            Pageable pageable = PageRequest.of(0, 20); 
+            Page<Policy> emptyPolicies = new PageImpl<>(List.of(), pageable, 0); // 빈 페이지 생성
+            
+            model.addAttribute("policies", emptyPolicies); // 빈 페이지를 모델에 추가
+            //model.addAttribute("policies", List.of());
             model.addAttribute("searchInput", null);
             model.addAttribute("age", null);
             model.addAttribute("academicAbility", "제한없음");
