@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="/css/fontstyles.css">	
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="pagination/tui-pagination.css" />
-    <script src="pagination/tui-pagination.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/paginationjs@2.1.5/dist/pagination.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/paginationjs@2.1.5/dist/pagination.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body class="min-w-40">
@@ -140,37 +140,62 @@
         </form>
         
 
-        <div class="flex flex-col mt-8 h-auto mb-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
-            <div class="flex flex-col md:flex-row justify-between">
-                <div class="whitespace-nowrap">
-                    <span class="text-lg font-medium">청년정책 검색 결과</span>
-                    <span th:text="${#lists.size(policies)}" class="text-3xl font-medium">0</span>
-                    <span class="text-lg font-medium">건</span>
-                </div>  
-                <!-- <div class="flex justify-end items-center space-x-2 whitespace-nowrap">
-                    <input type="radio" name="sort_check" value="ganada" id="ganada"><label for='ganada'>가나다순</label>
-                    <input type="radio" name="sort_check" value="latest" id="latest"><label for='latest'>최신순</label>
-                    <button class="bg-[#5856d6] text-center text-white px-2 py-1 rounded hover:bg-indigo-600">정렬</button>
-                </div> -->
-            </div>
-            <div class="border-b-2 border-b-gray-400 my-1 mb-2"></div>
-            <!--페이지 구현은 백엔드 할 때 해야할듯?-->
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <!-- 검색결과 요소를 반복적으로 추가 -->
-                <div th:each="policy : ${policies}" class="border-2 border-gray-300 p-4 rounded">
-			        <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
-			           th:text="${policy.pName}" 
-			           th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
-			        <div th:text="${policy.region}" class="text-gray-600 truncate mb-1">국토교통부</div>
-			        <div th:if="${policy.eDate}" th:text="${policy.eDate}" class="text-red-500 truncate mb-4">D-day 160일</div>
-			        <div th:unless="${policy.eDate}" class="text-red-500 truncate mb-4">없음</div>
-			        <div class="flex justify-between pt-8 items-center">
-			            <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-			            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
-			        </div>
-		    	</div>
-            </div>
-        </div>
+		<div class="flex flex-col mt-8 h-auto mb-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
+		    <div class="flex flex-col md:flex-row justify-between">
+		        <div class="whitespace-nowrap">
+		            <span class="text-lg font-medium">청년정책 검색 결과</span>
+		            <span th:text="${policies.totalElements}" class="text-3xl font-medium">0</span>
+		            <span class="text-lg font-medium">건</span>
+		        </div>
+		    </div>
+		    <div class="border-b-2 border-b-gray-400 my-1 mb-2"></div>
+		    
+		    <!-- 데이터가 있을 때만 이 부분을 렌더링 -->
+		    <div th:if="${policies != null and #lists.size(policies) > 0}">
+		        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+		            <!-- 검색결과 요소를 반복적으로 추가 -->
+		            <div th:each="policy : ${policies}" class="border-2 border-gray-300 p-4 rounded">
+		                <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
+		                   th:text="${policy.pName}" 
+		                   th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
+		                <div th:text="${policy.region}" class="text-gray-600 truncate mb-1">국토교통부</div>
+		                <div th:if="${policy.eDate}" th:text="${policy.eDate}" class="text-red-500 truncate mb-4">D-day 160일</div>
+		                <div th:unless="${policy.eDate}" class="text-red-500 truncate mb-4">없음</div>
+		                <div class="flex justify-between pt-8 items-center">
+		                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
+		                    <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		    
+		    <!-- 데이터가 없을 때 보여줄 내용 -->
+		    <div th:unless="${policies != null and #lists.size(policies) > 0}">
+		        <p class="text-center text-gray-600">검색 결과가 없습니다. 조건을 변경하여 다시 검색해 주세요.</p>
+		    </div>
+			
+			<!-- 페이징 처리 -->
+			<div th:if="${policies != null and policies.totalPages > 1}" class="mt-4 flex justify-center">
+			    <ul class="flex">
+			        <li th:if="${policies.hasPrevious()}" class="mx-1">
+			            <a th:href="@{/search(page=${policies.number - 1}, searchInput=${searchInput}, employment=${employment}, academicAbility=${academicAbility}, age=${age}, selectedPolicies=${selectedPolicies}, selectedRegions=${selectedRegions})}"
+			               class="px-3 py-2 bg-gray-200 text-black rounded hover:bg-gray-400">이전</a>
+			        </li>
+			        <li th:each="pageNum : ${#numbers.sequence(0, policies.totalPages - 1)}" class="mx-1">
+			            <a th:href="@{/search(page=${pageNum}, searchInput=${searchInput}, employment=${employment}, academicAbility=${academicAbility}, age=${age}, selectedPolicies=${selectedPolicies}, selectedRegions=${selectedRegions})}"
+			               th:text="${pageNum + 1}"
+			               th:classappend="${pageNum == policies.number} ? 'bg-[#5856d6] text-white' : 'bg-gray-200 text-black'"
+			               class="px-3 py-2 rounded hover:bg-gray-400"></a>
+			        </li>
+			        <li th:if="${policies.hasNext()}" class="mx-1">
+			            <a th:href="@{/search(page=${policies.number + 1}, searchInput=${searchInput}, employment=${employment}, academicAbility=${academicAbility}, age=${age}, selectedPolicies=${selectedPolicies}, selectedRegions=${selectedRegions})}"
+			               class="px-3 py-2 bg-gray-200 text-black rounded hover:bg-gray-400">다음</a>
+			        </li>
+			    </ul>
+			</div>
+
+		</div>
+
     </div>
     
     <script th:inline="javascript" type="text/javascript">   
@@ -181,6 +206,7 @@
 	    var userAcademicAbility = /*[[${user.academicAbility}]]*/ {};
 	    var userBirthday = /*[[${user.birthday}]]*/ {};
 	    /*]]>*/
+		
     
         document.addEventListener('DOMContentLoaded', function () {
             const policyAllButton = document.querySelector('.policy-all');

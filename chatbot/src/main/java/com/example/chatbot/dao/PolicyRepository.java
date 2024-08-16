@@ -9,12 +9,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.example.chatbot.controller.PolicyController;
 import com.example.chatbot.model.Policy;
 
 import lombok.extern.slf4j.Slf4j;
@@ -384,4 +386,474 @@ public class PolicyRepository implements IPolicyRepository {
 	        return null;
 	    }
 	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public Page<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies,
+	                                  List<String> selectedRegions, Pageable pageable) {
+
+	    // 기본 SQL 쿼리
+	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
+
+	    // employment 조건 추가
+	    if (employment != null && !employment.isEmpty()) {
+	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
+
+	    // academicAbility 조건 추가
+	    if (academicAbility != null && !academicAbility.isEmpty()) {
+	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    }
+
+	    // selectedPolicies 리스트에 대한 조건 추가
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	        sql.append(" AND ( 분야 IN (");
+
+	        for (int i = 0; i < selectedPolicies.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("'" + selectedPolicies.get(i) + "'");
+	        }
+	        sql.append(") )");
+	    }
+
+	    // selectedRegions 리스트에 대한 조건 추가
+	    if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	        sql.append(" AND ( 지역 IN (");
+	        for (int i = 0; i < selectedRegions.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("'" + selectedRegions.get(i) + "'");
+	        }
+	        sql.append(") ) order by policy_id");
+	    }
+
+	    // 페이지네이션을 위한 OFFSET 및 LIMIT 추가
+	    sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+	    try {
+	        // PreparedStatement를 위한 매개변수 설정
+	        List<Object> params = new ArrayList<>();
+
+	        if (employment != null && !employment.isEmpty()) {
+	            params.add("%" + employment + "%");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            params.add("%" + academicAbility + "%");
+	        }
+
+	        // LIMIT과 OFFSET 값을 Pageable에서 추출하여 추가
+	        params.add(pageable.getOffset());
+	        params.add(pageable.getPageSize());
+	        
+
+	        log.info(sql.toString());
+
+	        // 실제 쿼리 실행
+	        List<Policy> policies = jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
+	        //System.out.println(policies);
+
+	        // 전체 결과 수 계산을 위한 쿼리 (페이지네이션 없이)
+	        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM policies WHERE 1=1");
+
+	        if (employment != null && !employment.isEmpty()) {
+	            countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        }
+	        if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	            countSql.append(" AND ( 분야 IN (");
+
+	            for (int i = 0; i < selectedPolicies.size(); i++) {
+	                if (i > 0) {
+	                    countSql.append(", ");
+	                }
+	                countSql.append("'" + selectedPolicies.get(i) + "'");
+	            }
+	            countSql.append(") )");
+	        }
+	        if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	            countSql.append(" AND ( 지역 IN (");
+	            for (int i = 0; i < selectedRegions.size(); i++) {
+	                if (i > 0) {
+	                    countSql.append(", ");
+	                }
+	                countSql.append("'" + selectedRegions.get(i) + "'");
+	            }
+	            countSql.append(") ) order by policy_id");
+	        }
+
+	        // 총 카운트를 가져오기 위해 쿼리 실행
+	        log.info(countSql.toString());
+	        System.out.println(params);
+	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.get(0), params.get(1));
+
+	        // 결과를 Page 객체로 반환
+	        return new PageImpl<>(policies, pageable, total);
+
+	    } catch (EmptyResultDataAccessException e) {
+	        return new PageImpl<>(new ArrayList<>(), pageable, 0);
+	    }
+	}
+
+	@Override
+	public Page<Policy> searchPolicy2(String employment, String academicAbility, List<String> selectedPolicies,
+	                                  List<String> selectedRegions, String age, Pageable pageable) {
+	    // 기본 SQL 쿼리
+	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
+
+	    // employment 조건 추가
+	    if (employment != null && !employment.isEmpty()) {
+	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
+
+	    // academicAbility 조건 추가
+	    if (academicAbility != null && !academicAbility.isEmpty()) {
+	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    }
+
+	    // age 조건 추가
+	    if (age != null && !age.isEmpty()) {
+	        sql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
+	    }
+
+	    // selectedPolicies 리스트에 대한 조건 추가
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	        sql.append(" AND ( 분야 IN (");
+	        for (int i = 0; i < selectedPolicies.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("'" + selectedPolicies.get(i) + "'");
+	        }
+	        sql.append(") )");
+	    }
+
+	    // selectedRegions 리스트에 대한 조건 추가
+	    if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	        sql.append(" AND ( 지역 IN (");
+	        for (int i = 0; i < selectedRegions.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("'" + selectedRegions.get(i) + "'");
+	        }
+	        sql.append(") ) order by policy_id");
+	    }
+
+	    // 페이지네이션을 위한 LIMIT 및 OFFSET 추가
+	    sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+	    try {
+	        // PreparedStatement를 위한 매개변수 설정
+	        List<Object> params = new ArrayList<>();
+
+	        if (employment != null && !employment.isEmpty()) {
+	            params.add("%" + employment + "%");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            params.add("%" + academicAbility + "%");
+	        }
+	        if (age != null && !age.isEmpty()) {
+	            params.add(age);
+	            params.add(age);
+	        }
+
+	        // LIMIT과 OFFSET 값을 Pageable에서 추출하여 추가
+	        params.add(pageable.getPageSize());
+	        params.add(pageable.getOffset());
+
+	        // 실제 쿼리 실행
+	        List<Policy> policies = jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
+
+	        // 전체 결과 수 계산을 위한 쿼리 (페이지네이션 없이)
+	        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM policies WHERE 1=1");
+
+	        if (employment != null && !employment.isEmpty()) {
+	            countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        }
+	        if (age != null && !age.isEmpty()) {
+	            countSql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
+	        }
+	        if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	            countSql.append(" AND ( 분야 IN (");
+
+	            for (int i = 0; i < selectedPolicies.size(); i++) {
+	                if (i > 0) {
+	                    countSql.append(", ");
+	                }
+	                countSql.append("'" + selectedPolicies.get(i) + "'");
+	            }
+	            countSql.append(") )");
+	        }
+	        if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	            countSql.append(" AND ( 지역 IN (");
+	            for (int i = 0; i < selectedRegions.size(); i++) {
+	                if (i > 0) {
+	                    countSql.append(", ");
+	                }
+	                countSql.append("'" + selectedRegions.get(i) + "'");
+	            }
+	            countSql.append(") ) order by policy_id");
+	        }
+
+	        // 총 카운트를 가져오기 위해 쿼리 실행
+	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.toArray());
+
+	        // 결과를 Page 객체로 반환
+	        return new PageImpl<>(policies, pageable, total);
+
+	    } catch (EmptyResultDataAccessException e) {
+	        return new PageImpl<>(new ArrayList<>(), pageable, 0);
+	    }
+	}
+
+	@Override
+	public Page<Policy> searchPolicy3(String employment, String academicAbility, List<String> selectedPolicies,
+	                                  List<String> selectedRegions, String searchInput, Pageable pageable) {
+	    // 기본 SQL 쿼리
+	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
+
+	    // employment 조건 추가
+	    if (employment != null && !employment.isEmpty()) {
+	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
+
+	    // academicAbility 조건 추가
+	    if (academicAbility != null && !academicAbility.isEmpty()) {
+	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    }
+
+	    // searchInput 조건 추가
+	    if (searchInput != null && !searchInput.isEmpty()) {
+	        sql.append(" AND (정책명 LIKE ?)");
+	    }
+
+	    // selectedPolicies 리스트에 대한 조건 추가
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	        sql.append(" AND ( 분야 IN (");
+	        for (int i = 0; i < selectedPolicies.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("'" + selectedPolicies.get(i) + "'");
+	        }
+	        sql.append(") )");
+	    }
+
+	    // selectedRegions 리스트에 대한 조건 추가
+	    if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	        sql.append(" AND ( 지역 IN (");
+	        for (int i = 0; i < selectedRegions.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("'" + selectedRegions.get(i) + "'");
+	        }
+	        sql.append(") ) order by policy_id");
+	    }
+
+	    // 페이지네이션을 위한 LIMIT 및 OFFSET 추가
+	    sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+	    try {
+	        // PreparedStatement를 위한 매개변수 설정
+	        List<Object> params = new ArrayList<>();
+
+	        if (employment != null && !employment.isEmpty()) {
+	            params.add("%" + employment + "%");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            params.add("%" + academicAbility + "%");
+	        }
+	        if (searchInput != null && !searchInput.isEmpty()) {
+	            String searchPattern = "%" + searchInput + "%";
+	            params.add(searchPattern);
+	        }
+
+	        // LIMIT과 OFFSET 값을 Pageable에서 추출하여 추가
+	        params.add(pageable.getPageSize());
+	        params.add(pageable.getOffset());
+
+	        // 실제 쿼리 실행
+	        List<Policy> policies = jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
+
+	        // 전체 결과 수 계산을 위한 쿼리 (페이지네이션 없이)
+	        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM policies WHERE 1=1");
+
+	        if (employment != null && !employment.isEmpty()) {
+	            countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        }
+	        if (searchInput != null && !searchInput.isEmpty()) {
+	            countSql.append(" AND (정책명 LIKE ?)");
+	        }
+	        if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	            countSql.append(" AND ( 분야 IN (");
+	            for (int i = 0; i < selectedPolicies.size(); i++) {
+	                if (i > 0) {
+	                    countSql.append(", ");
+	                }
+	                countSql.append("'" + selectedPolicies.get(i) + "'");
+	            }
+	            countSql.append(") )");
+	        }
+	        if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	            countSql.append(" AND ( 지역 IN (");
+	            for (int i = 0; i < selectedRegions.size(); i++) {
+	                if (i > 0) {
+	                    countSql.append(", ");
+	                }
+	                countSql.append("'" + selectedRegions.get(i) + "'");
+	            }
+	            countSql.append(") ) order by policy_id");
+	        }
+
+	        // 총 카운트를 가져오기 위해 쿼리 실행
+	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.toArray());
+
+	        // 결과를 Page 객체로 반환
+	        return new PageImpl<>(policies, pageable, total);
+
+	    } catch (EmptyResultDataAccessException e) {
+	        return new PageImpl<>(new ArrayList<>(), pageable, 0);
+	    }
+	}
+
+
+	@Override
+	public Page<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
+	                                  List<String> selectedRegions, String age, String searchInput, Pageable pageable) {
+	    // 기본 SQL 쿼리
+	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
+
+	    // employment 조건 추가
+	    if (employment != null && !employment.isEmpty()) {
+	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
+
+	    // academicAbility 조건 추가
+	    if (academicAbility != null && !academicAbility.isEmpty()) {
+	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    }
+
+	    // age 조건 추가
+	    if (age != null && !age.isEmpty()) {
+	        sql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
+	    }
+
+	    // searchInput 조건 추가
+	    if (searchInput != null && !searchInput.isEmpty()) {
+	        sql.append(" AND (정책명 LIKE ?)");
+	    }
+
+	    // selectedPolicies 리스트에 대한 조건 추가
+	    if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	        sql.append(" AND ( 분야 IN (");
+	        for (int i = 0; i < selectedPolicies.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("'" + selectedPolicies.get(i) + "'");
+	        }
+	        sql.append(") )");
+	    }
+
+	    // selectedRegions 리스트에 대한 조건 추가
+	    if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	        sql.append(" AND ( 지역 IN (");
+	        for (int i = 0; i < selectedRegions.size(); i++) {
+	            if (i > 0) {
+	                sql.append(", ");
+	            }
+	            sql.append("'" + selectedRegions.get(i) + "'");
+	        }
+	        sql.append(") ) order by policy_id");
+	    }
+
+	    // 페이지네이션을 위한 LIMIT 및 OFFSET 추가
+	    sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+	    try {
+	        // PreparedStatement를 위한 매개변수 설정
+	        List<Object> params = new ArrayList<>();
+
+	        if (employment != null && !employment.isEmpty()) {
+	            params.add("%" + employment + "%");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            params.add("%" + academicAbility + "%");
+	        }
+	        if (age != null && !age.isEmpty()) {
+	            params.add(age);
+	            params.add(age);
+	        }
+	        if (searchInput != null && !searchInput.isEmpty()) {
+	            String searchPattern = "%" + searchInput + "%";
+	            params.add(searchPattern);
+	        }
+
+	        // LIMIT과 OFFSET 값을 Pageable에서 추출하여 추가
+	        params.add(pageable.getPageSize());
+	        params.add(pageable.getOffset());
+
+	        // 실제 쿼리 실행
+	        List<Policy> policies = jdbcTemplate.query(sql.toString(), new PolicyMapper(), params.toArray());
+
+	        // 전체 결과 수 계산을 위한 쿼리 (페이지네이션 없이)
+	        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM policies WHERE 1=1");
+
+	        if (employment != null && !employment.isEmpty()) {
+	            countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        }
+	        if (academicAbility != null && !academicAbility.isEmpty()) {
+	            countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        }
+	        if (age != null && !age.isEmpty()) {
+	            countSql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
+	        }
+	        if (searchInput != null && !searchInput.isEmpty()) {
+	            countSql.append(" AND (정책명 LIKE ?)");
+	        }
+	        if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
+	            countSql.append(" AND ( 분야 IN (");
+	            for (int i = 0; i < selectedPolicies.size(); i++) {
+	                if (i > 0) {
+	                    countSql.append(", ");
+	                }
+	                countSql.append("'" + selectedPolicies.get(i) + "'");
+	            }
+	            countSql.append(") )");
+	        }
+	        if (selectedRegions != null && !selectedRegions.isEmpty() && !selectedRegions.get(0).equals("서울시")) {
+	            countSql.append(" AND ( 지역 IN (");
+	            for (int i = 0; i < selectedRegions.size(); i++) {
+	                if (i > 0) {
+	                    countSql.append(", ");
+	                }
+	                countSql.append("'" + selectedRegions.get(i) + "'");
+	            }
+	            countSql.append(") ) order by policy_id");
+	        }
+
+	        // 총 카운트를 가져오기 위해 쿼리 실행
+	        int total = jdbcTemplate.queryForObject(countSql.toString(), Integer.class, params.toArray());
+
+	        // 결과를 Page 객체로 반환
+	        return new PageImpl<>(policies, pageable, total);
+
+	    } catch (EmptyResultDataAccessException e) {
+	        return new PageImpl<>(new ArrayList<>(), pageable, 0);
+	    }
+	}
+
 }

@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.Period;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.chatbot.dao.IPolicyRepository;
@@ -63,6 +65,30 @@ public class PolicyService implements IPolicyService {
 	public List<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
 			List<String> selectedRegions, String age, String searchInput) {
 		return policyRepository.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput);
+	}
+	//////////////////////////////////////
+	@Override
+	public Page<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies,
+			List<String> selectedRegions, Pageable pageable) {
+		return policyRepository.searchPolicy1(employment, academicAbility, selectedPolicies, selectedRegions, pageable);
+	}
+
+	@Override
+	public Page<Policy> searchPolicy2(String employment, String academicAbility, List<String> selectedPolicies,
+			List<String> selectedRegions, String age, Pageable pageable) {
+		return policyRepository.searchPolicy2(employment, academicAbility, selectedPolicies, selectedRegions, age, pageable);
+	}
+
+	@Override
+	public Page<Policy> searchPolicy3(String employment, String academicAbility, List<String> selectedPolicies,
+			List<String> selectedRegions, String searchInput, Pageable pageable) {
+		return policyRepository.searchPolicy3(employment, academicAbility, selectedPolicies, selectedRegions, searchInput, pageable);
+	}
+
+	@Override
+	public Page<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
+			List<String> selectedRegions, String age, String searchInput, Pageable pageable) {
+		return policyRepository.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput, pageable);
 	}
 
 }

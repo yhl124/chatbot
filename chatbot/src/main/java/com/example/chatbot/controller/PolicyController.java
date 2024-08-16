@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,70 +49,155 @@ public class PolicyController {
         return "recommendation";
     }
     
-    //검색 처리 미완성
+//    //검색 처리 미완성
+//    @GetMapping(value = "/search", params={"searchInput", "employment", "academicAbility", "age", "selectedPolicies", "selectedRegions"})
+//    public String processSearch(
+//    		@RequestParam(name = "searchInput", required = false) String searchInput,
+//            @RequestParam(name = "employment", required = false) String employment,
+//            @RequestParam(name = "academicAbility", required = false) String academicAbility,
+//            @RequestParam(name = "age",  defaultValue = "제한없음", required = false) String age,
+//            @RequestParam(name = "selectedPolicies", required = false) List<String> selectedPolicies,
+//            @RequestParam(name = "selectedRegions", required = false) List<String> selectedRegions,
+//            @AuthenticationPrincipal User user,
+//            Model model) {
+//    	
+//    	if (user != null) {
+//            model.addAttribute("user", user);
+//        } 
+//    	
+//    	//6개 파라미터중 searchInput(검색어), age(만나이)는 null일 수 있고 나머지는 값이 있다
+//    	//각 경우에 따른 처리 따로 만들어줌
+//    	
+//    	log.info(employment);
+//    	log.info(academicAbility);
+//    	log.info(selectedPolicies.toString());
+//    	log.info(selectedRegions.toString());
+//    	//System.out.println(academicAbility);
+//
+//    	//둘다 null
+//        if (searchInput.strip().length() == 0 && age.equals("제한없음")) {
+//        	List<Policy> policies = policyService.searchPolicy1(employment, academicAbility, selectedPolicies, selectedRegions);
+//
+//        	model.addAttribute("policies", policies);
+//            log.info("1");
+//        }
+//        //검색어만 null
+//        else if (searchInput.strip().length() == 0 && !age.equals("제한없음")) {
+//        	List<Policy> policies = policyService.searchPolicy2(employment, academicAbility, selectedPolicies, selectedRegions, age);
+//        	model.addAttribute("policies", policies);
+//        	log.info("2");
+//        }
+//        //나이만 null
+//        else if (searchInput.strip().length() != 0 && age.equals("제한없음")) {
+//        	List<Policy> policies = policyService.searchPolicy3(employment, academicAbility, selectedPolicies, selectedRegions, searchInput);
+//        	model.addAttribute("policies", policies);
+//        	log.info("3");
+//        }
+//        //둘 다 null 아님
+//        else if (searchInput.strip().length() != 0 && !age.equals("제한없음")) {
+//        	List<Policy> policies = policyService.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput);
+//        	model.addAttribute("policies", policies);
+//        	log.info("4");
+//        }
+//        
+//        model.addAttribute("searchInput", searchInput);
+//        model.addAttribute("age", age);
+//        model.addAttribute("employment", employment);
+//        model.addAttribute("academicAbility", academicAbility);
+//        model.addAttribute("selectedPolicies", selectedPolicies);
+//        model.addAttribute("selectedRegions", selectedRegions);
+//
+//        //return ResponseEntity.badRequest().build();
+//        //log.info("dd2");
+//        return "search"; 
+//    }
+
+
     @GetMapping(value = "/search", params={"searchInput", "employment", "academicAbility", "age", "selectedPolicies", "selectedRegions"})
     public String processSearch(
-    		@RequestParam(name = "searchInput", required = false) String searchInput,
-            @RequestParam(name = "employment", required = false) String employment,
-            @RequestParam(name = "academicAbility", required = false) String academicAbility,
-            @RequestParam(name = "age",  defaultValue = "제한없음", required = false) String age,
-            @RequestParam(name = "selectedPolicies", required = false) List<String> selectedPolicies,
-            @RequestParam(name = "selectedRegions", required = false) List<String> selectedRegions,
-            @AuthenticationPrincipal User user,
-            Model model) {
-    	
-    	if (user != null) {
-            model.addAttribute("user", user);
-        } 
-    	
-    	//6개 파라미터중 searchInput(검색어), age(만나이)는 null일 수 있고 나머지는 값이 있다
-    	//각 경우에 따른 처리 따로 만들어줌
-    	
-    	log.info(employment);
-    	log.info(academicAbility);
-    	log.info(selectedPolicies.toString());
-    	log.info(selectedRegions.toString());
-    	//System.out.println(academicAbility);
+        @RequestParam(name = "searchInput", required = false) String searchInput,
+        @RequestParam(name = "employment", required = false) String employment,
+        @RequestParam(name = "academicAbility", required = false) String academicAbility,
+        @RequestParam(name = "age", defaultValue = "제한없음", required = false) String age,
+        @RequestParam(name = "selectedPolicies", required = false) List<String> selectedPolicies,
+        @RequestParam(name = "selectedRegions", required = false) List<String> selectedRegions,
+        @RequestParam(name = "page", defaultValue = "0") int page, // 페이지 번호 추가
+        @RequestParam(name = "size", defaultValue = "20") int size, // 페이지 크기 추가
+        @AuthenticationPrincipal User user,
+        Model model) {
 
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Policy> policies = Page.empty(); // 초기에는 빈 페이지로 설정
+
+//        if (searchInput != null && !searchInput.strip().isEmpty() || !age.equals("제한없음")) {
+//            if (searchInput.strip().isEmpty() && age.equals("제한없음")) {
+//                policies = policyService.searchPolicy1(employment, academicAbility, selectedPolicies, selectedRegions, pageable);
+//                log.info("11");
+//            } else if (searchInput.strip().isEmpty()) {
+//                policies = policyService.searchPolicy2(employment, academicAbility, selectedPolicies, selectedRegions, age, pageable);
+//                log.info("22");
+//            } else if (age.equals("제한없음")) {
+//                policies = policyService.searchPolicy3(employment, academicAbility, selectedPolicies, selectedRegions, searchInput, pageable);
+//                log.info("33");
+//            } else {
+//                policies = policyService.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput, pageable);
+//                log.info("44");
+//            }
+//        }
+        
     	//둘다 null
         if (searchInput.strip().length() == 0 && age.equals("제한없음")) {
-        	List<Policy> policies = policyService.searchPolicy1(employment, academicAbility, selectedPolicies, selectedRegions);
-
-        	model.addAttribute("policies", policies);
-            log.info("1");
+        	policies = policyService.searchPolicy1(employment, academicAbility, selectedPolicies, selectedRegions, pageable);
+        	log.info("11");
         }
-        //검색어만 null
+		  //검색어만 null
         else if (searchInput.strip().length() == 0 && !age.equals("제한없음")) {
-        	List<Policy> policies = policyService.searchPolicy2(employment, academicAbility, selectedPolicies, selectedRegions, age);
-        	model.addAttribute("policies", policies);
-        	log.info("2");
+        	policies = policyService.searchPolicy2(employment, academicAbility, selectedPolicies, selectedRegions, age, pageable);
+        	log.info("22");
         }
-        //나이만 null
+		  //나이만 null
         else if (searchInput.strip().length() != 0 && age.equals("제한없음")) {
-        	List<Policy> policies = policyService.searchPolicy3(employment, academicAbility, selectedPolicies, selectedRegions, searchInput);
-        	model.addAttribute("policies", policies);
-        	log.info("3");
+        	policies = policyService.searchPolicy3(employment, academicAbility, selectedPolicies, selectedRegions, searchInput, pageable);
+			log.info("33");
         }
-        //둘 다 null 아님
+		  //둘 다 null 아님
         else if (searchInput.strip().length() != 0 && !age.equals("제한없음")) {
-        	List<Policy> policies = policyService.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput);
-        	model.addAttribute("policies", policies);
-        	log.info("4");
+        	policies = policyService.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput, pageable);
+        	log.info("44");
         }
         
+        System.out.println("t "+pageable);
+        System.out.println("p "+policies.getTotalPages());
+//        if (policies.hasContent()) {
+//            List<Policy> policyList = policies.getContent(); // 리스트 가져오기
+//            for (Policy policy : policyList) {
+//                System.out.println("Policy Name: " + policy.getPName());
+//                System.out.println("Policy Region: " + policy.getRegion());
+//                System.out.println("Policy End Date: " + policy.getEDate());
+//                // 다른 필요한 멤버 변수들도 출력할 수 있습니다.
+//            }
+//        } else {
+//            System.out.println("No policies found.");
+//        }
+
+        model.addAttribute("policies", policies);
         model.addAttribute("searchInput", searchInput);
         model.addAttribute("age", age);
         model.addAttribute("employment", employment);
         model.addAttribute("academicAbility", academicAbility);
         model.addAttribute("selectedPolicies", selectedPolicies);
         model.addAttribute("selectedRegions", selectedRegions);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", policies.getTotalPages());
 
-        //return ResponseEntity.badRequest().build();
-        //log.info("dd2");
-        return "search"; 
+        return "search";
     }
-    
-    
+
+ 
     //검색페이지 이동
     @GetMapping("/search")
     public String searchpage(@AuthenticationPrincipal User user, Model model) {
