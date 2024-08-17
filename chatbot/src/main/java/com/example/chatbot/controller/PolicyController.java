@@ -2,6 +2,7 @@ package com.example.chatbot.controller;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,9 @@ public class PolicyController {
             //분야별 정책 count값 가져오기
             HashMap<String, Integer> statistics = policyService.getPolicyFieldsStatistics();
             model.addAttribute("policyStatistics", statistics);
+            //월별 분야별 정책 count값 가져오기
+            List<Map<String, Object>> monthly = policyService.getPolicyMonthlyStatistics();
+            model.addAttribute("monthly", monthly);
             if (policies != null) {
                 model.addAttribute("policies", policies);
             } else {

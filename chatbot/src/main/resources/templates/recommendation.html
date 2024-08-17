@@ -60,7 +60,55 @@
 		<script th:inline="javascript" type="text/javascript">		
 			/*<![CDATA[*/
 			var policyStatistics = /*[[${policyStatistics}]]*/ {};
+			var monthly = /*[[${monthly}]]*/ {};
 			/*]]>*/
+			
+			// 'monthly' 데이터를 사용하여 차트에 필요한 데이터 생성
+			var categories = []; // xAxis에 들어갈 월별 카테고리
+			var seriesData = {}; // 각 분야별로 데이터를 모아둠
+
+			// 각 분야별 색상 설정
+			var colors = {
+			    '교육': '#90CAF9',
+			    '일자리': '#9575CD',
+			    '주거': '#BBDEFB',
+			    '복지 문화': '#D1C4E9',
+			    '참여 권리': '#673AB7'
+			};
+
+			// 데이터 가공
+			monthly.forEach(function(item) {
+			    var month = item['정책시작월'];
+			    var category = item['분야'];
+			    var count = item['count'];
+
+			    if (!categories.includes(month)) {
+			        categories.push(month);
+			    }
+
+			    if (!seriesData[category]) {
+			        seriesData[category] = [];
+			    }
+
+			    // 특정 월에 데이터가 없으면 기본값으로 0을 채워줍니다.
+			    categories.forEach(function(cat) {
+			        if (seriesData[category][categories.indexOf(cat)] === undefined) {
+			            seriesData[category][categories.indexOf(cat)] = 0;
+			        }
+			    });
+
+			    seriesData[category][categories.indexOf(month)] = count;
+			});
+
+			// Highcharts의 series에 맞는 형식으로 데이터 변환
+			var series = Object.keys(seriesData).map(function(category) {
+			    return {
+			        name: category,
+			        data: seriesData[category],
+			        color: colors[category] // 각 분야에 해당하는 색상 적용
+			    };
+			});
+
     	</script>
 
         <!-- Include your JavaScript for graphs here -->

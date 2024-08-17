@@ -3,6 +3,7 @@ package com.example.chatbot.service;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -89,6 +90,11 @@ public class PolicyService implements IPolicyService {
 	public Page<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
 			List<String> selectedRegions, String age, String searchInput, Pageable pageable) {
 		return policyRepository.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput, pageable);
+	}
+
+	@Override
+	public List<Map<String, Object>> getPolicyMonthlyStatistics() {
+		return policyRepository.getPolicyMonthlyStatistics();
 	}
 
 }

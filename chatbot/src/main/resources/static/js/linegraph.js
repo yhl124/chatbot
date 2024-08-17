@@ -1,3 +1,4 @@
+// Highcharts 차트 생성
 Highcharts.chart('linegraph', {
     chart: {
         type: 'spline', // 선그래프 형식으로 변경
@@ -25,7 +26,7 @@ Highcharts.chart('linegraph', {
         }
     },
     xAxis: {
-        categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        categories: categories, // 동적으로 생성된 월별 카테고리 적용
         accessibility: {
             description: 'Months of the year'
         }
@@ -48,27 +49,7 @@ Highcharts.chart('linegraph', {
             }
         }
     },
-    series: [{
-        name: '교육',
-        data: [10, 12, 14, 18, 21, 25, 27, 26, 24, 22, 19, 15],
-        color: '#90CAF9' //'#7cb5ec'
-    }, {
-        name: '일자리',
-        data: [5, 7, 6, 9, 15, 22, 21, 20, 19, 14, 9, 6],
-        color: '#9575CD' //'#f08080'
-    }, {
-        name: '주거',
-        data: [20, 22, 25, 28, 33, 38, 37, 35, 32, 28, 25, 22],
-        color: '#BBDEFB' //'#cda2d5'
-    }, {
-        name: '복지 문화',
-        data: [8, 10, 12, 15, 17, 20, 18, 17, 15, 13, 11, 9],
-        color: '#D1C4E9' //'#f7a35c'
-    }, {
-        name: '참여 권리',
-        data: [0, 0, 0, 20, 23, 25, 27, 25, 23, 20, 18, 16],
-        color: '#673AB7' //'#8085e9'
-    }],
+    series: series, // 동적으로 생성된 series 데이터 적용
     responsive: {
         rules: [{
             condition: {

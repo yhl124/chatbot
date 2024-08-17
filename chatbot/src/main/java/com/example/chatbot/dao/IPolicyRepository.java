@@ -2,6 +2,7 @@ package com.example.chatbot.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,4 +32,6 @@ public interface IPolicyRepository {
 
 	Page<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
 			List<String> selectedRegions, String age, String searchInput, Pageable pageable);
+
+	List<Map<String, Object>> getPolicyMonthlyStatistics();
 }

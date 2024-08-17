@@ -3,8 +3,10 @@ package com.example.chatbot.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -116,6 +118,27 @@ public class PolicyRepository implements IPolicyRepository {
             return null;
         }
     }
+	
+	//코드분석필요2
+	@Override
+	public List<Map<String, Object>> getPolicyMonthlyStatistics() {
+	    String sql = "SELECT 정책시작월, 분야, count(*) as count FROM policies GROUP BY 정책시작월, 분야 order by 정책시작월";
+	    try {
+	        return jdbcTemplate.query(sql, new RowMapper<Map<String, Object>>() {
+	            @Override
+	            public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {
+	                Map<String, Object> map = new HashMap<>();
+	                map.put("정책시작월", rs.getString("정책시작월"));
+	                map.put("분야", rs.getString("분야"));
+	                map.put("count", rs.getInt("count"));
+	                return map;
+	            }
+	        });
+	    } catch (EmptyResultDataAccessException e) {
+	        return Collections.emptyList();
+	    }
+	}
+
 
 
 	@Override//나이, 검색어 null
