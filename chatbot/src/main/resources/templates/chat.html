@@ -159,7 +159,8 @@
     </style>
 </head>
 
-<body class="bg-gray-100 h-screen flex">    
+<body class="bg-gray-100 h-screen flex">
+	<div id="error-message" th:if="${errorMessage}" th:text="${errorMessage}" class="hidden"></div>
     <!-- Sidebar -->
     <div id="sidebar" class="w-64 bg-white h-full shadow-md flex flex-col justify-between transition-all duration-300">
         <div>
@@ -786,7 +787,7 @@
             
             silverBox({
                 alertIcon: "warning",
-                text: "정말 삭제하시겠습니까?",
+                text: "복구할 수 없습니다. 정말 삭제하시겠습니까?",
                 centerContent: true,
                 confirmButton: {
                 	bgColor: "#e62e05",

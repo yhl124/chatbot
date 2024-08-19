@@ -141,8 +141,8 @@
         
 
 		<div class="flex flex-col mt-8 h-auto mb-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
-		    <div class="flex flex-col md:flex-row justify-between">
-		        <div class="whitespace-nowrap">
+		    <div class="flex flex-col md:flex-row justify-between border-b-2 border-b-gray-400 my-1 mb-2">
+		        <div class="whitespace-nowrap ">
 		            <span class="text-lg font-medium">청년정책 검색 결과</span>
 					<span th:if="${policies.totalElements}">
 		            	<span th:text="${policies.totalElements}" class="text-3xl font-medium">0</span>
@@ -151,9 +151,7 @@
 						<span class="text-3xl font-medium">0</span>
 					</span>
 		            <span class="text-lg font-medium">건</span>
-		        
 		    	</div>
-		    	<div class="border-b-2 border-b-gray-400 my-1 mb-2"></div>
 			</div>
 		    
 		    <!-- 데이터가 있을 때만 이 부분을 렌더링 -->
@@ -174,14 +172,9 @@
 		            </div>
 		        </div>
 		    </div>
-		    
-		    <!-- 데이터가 없을 때 보여줄 내용 -->
-		    <div th:unless="${policies != null and #lists.size(policies) > 0}">
-		        <p class="text-center text-gray-600">검색 결과가 없습니다. 조건을 변경하여 다시 검색해 주세요.</p>
-		    </div>
 			
 			<!-- 페이징 처리 -->
-			<div th:if="${policies != null and policies.totalPages > 1}" class="mt-4 flex justify-center">
+			<div th:if="${policies != null and policies.totalPages > 1}" class="my-12 flex justify-center pb-8">
 			    <ul class="flex">
 			        <li th:if="${policies.hasPrevious()}" class="mx-1">
 			            <a th:href="@{/search(page=${policies.number - 1}, searchInput=${searchInput}, employment=${employment}, academicAbility=${academicAbility}, age=${age}, selectedPolicies=${selectedPolicies}, selectedRegions=${selectedRegions})}"

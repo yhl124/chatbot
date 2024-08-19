@@ -18,6 +18,11 @@
         <form th:action="@{/mypage}" method="post" id="mypageForm" accept-charset="UTF-8" enctype="multipart/form-data">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             
+            <input type="hidden" id="userAcademicAbility" th:value="${user.academicAbility}" />
+            <input type="hidden" id="userEmployment" th:value="${user.employment}" />
+            <input type="hidden" id="userArea" th:value="${user.area}" />
+            <input type="hidden" id="userInterest" th:value="${user.interest}" />
+            
             <div class="flex flex-col justify-start items-center w-full max-w-sm mx-auto p-6 mt-20 gap-6 rounded-lg bg-white border border-[#d9d9d9]">
             
                 <div class="flex justify-center items-center w-full relative overflow-hidden gap-2">
@@ -65,6 +70,78 @@
                     <p class="self-stretch text-base text-left text-[#1e1e1e]">생년월일</p>
                     <input type="text" id="birthday" name="birthday" th:value="${user.birthday}" class="w-full h-10 px-4 py-3 rounded-lg bg-gray-200 border border-[#d9d9d9] pointer-events-none" readonly />
                 </div>
+                
+                <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">지역</p>
+                        </div>
+                        <select name="area" id="area" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" >
+						    <option value="서울시" selected>서울시</option>
+						    <option value="강남구">강남구</option>
+						    <option value="강동구">강동구</option>
+						    <option value="강북구">강북구</option>
+						    <option value="강서구">강서구</option>
+						    <option value="관악구">관악구</option>
+						    <option value="광진구">광진구</option>
+						    <option value="구로구">구로구</option>
+						    <option value="금천구">금천구</option>
+						    <option value="노원구">노원구</option>
+						    <option value="도봉구">도봉구</option>
+						    <option value="동대문구">동대문구</option>
+						    <option value="동작구">동작구</option>
+						    <option value="마포구">마포구</option>
+						    <option value="서대문구">서대문구</option>
+						    <option value="서초구">서초구</option>
+						    <option value="성동구">성동구</option>
+						    <option value="성북구">성북구</option>
+						    <option value="송파구">송파구</option>
+						    <option value="양천구">양천구</option>
+						    <option value="영등포구">영등포구</option>
+						    <option value="용산구">용산구</option>
+						    <option value="은평구">은평구</option>
+						    <option value="종로구">종로구</option>
+						    <option value="중구">중구</option>
+						    <option value="중랑구">중랑구</option>
+					 	</select>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">관심 분야</p>
+                        </div>
+                        <select name="interest" id="interest" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="일자리" seleted>일자리</option>
+						    <option value="주거">주거</option>
+						    <option value="교육">교육</option>
+						    <option value="복지 문화">복지 문화</option>
+						    <option value="참여">참여 권리</option>
+					 	</select>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">학력</p>
+                        </div>
+                        <select name="academicAbility" id="academicAbility" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="고교 재학" seleted>고교 재학</option>
+						    <option value="고졸 예정">고졸 예정</option>
+						    <option value="대학 재학">대학 재학</option>
+						    <option value="대졸 예정">대졸 예정</option>
+						    <option value="석박사">석박사</option>
+					 	</select>
+                    </div>
+                    
+                    <div class="flex flex-col w-full gap-2">
+                    	<div class="flex justify-between items-center w-full">
+                        	<p class="text-base text-left text-[#1e1e1e]">취업 상태</p>
+                        </div>
+                        <select name="employment" id="employment" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+						    <option value="미취업자" selected>미취업자</option>
+						    <option value="창업자">(예비)창업자</option>
+						    <option value="구직자">구직자</option>
+						    <option value="재직자">재직자</option>
+					 	</select>
+                    </div>
         
                 <div class="flex flex-col w-full gap-2">
                     <div class="flex justify-between items-center w-full">
@@ -85,6 +162,60 @@
             </div>
         </form>
     </div>
+    <script>
+ 	// 모든 input과 textarea 요소에 대해 이벤트 리스너 추가
+    document.querySelectorAll('input, textarea').forEach(element => {
+        element.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();  // Enter 키로 인한 기본 동작(폼 제출) 방지
+            }
+        });
+    });
+ 
+    document.addEventListener('DOMContentLoaded', function () {
+    	const userAcademicAbility = document.getElementById('userAcademicAbility').value;
+    	const userEmployment = document.getElementById('userEmployment').value;
+    	const userArea = document.getElementById('userArea').value;
+    	const userInterest = document.getElementById('userInterest').value;
+    	
+    	var academicSelect = document.getElementById('academicAbility');//학력
+        var aoptions = academicSelect.options;
+    	
+    	var employmentSelect = document.getElementById('employment');//취업상태
+        var eoptions = employmentSelect.options;
+    	
+    	var areaSelect = document.getElementById('area');//지역
+        var aroptions = areaSelect.options;
+    	
+        var interestSelect = document.getElementById('interest');//관심분야
+        var ioptions = interestSelect.options;
+
+	    for (var i = 0; i < aoptions.length; i++) {
+	        if (aoptions[i].value === userAcademicAbility) {
+	            aoptions[i].selected = true;
+	            break;
+	        }
+	    }
+	    for (var i = 0; i < eoptions.length; i++) {
+	        if (eoptions[i].value === userEmployment) {
+	            eoptions[i].selected = true;
+	            break;
+	        }
+	    }
+	    for (var i = 0; i < aroptions.length; i++) {
+	        if (aroptions[i].value === userArea) {
+	            aroptions[i].selected = true;
+	            break;
+	        }
+	    }
+	    for (var i = 0; i < ioptions.length; i++) {
+	        if (ioptions[i].value === userInterest) {
+	            ioptions[i].selected = true;
+	            break;
+	        }
+	    }
+    });
+    </script>
     <script>
         $(document).ready(function() {
             // 사용자의 초기 정보 가져오기

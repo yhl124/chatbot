@@ -160,10 +160,10 @@ public class UserController {
             Authentication newAuth = new UsernamePasswordAuthenticationToken(user, authentication.getCredentials(), authentication.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(newAuth);
 
-            model.addFlashAttribute("message", "회원정보 수정에 성공하였습니다.");
+            model.addFlashAttribute("message", "회원정보 수정에 <p>성공하였습니다.");
         } catch (Exception e) {
             log.error("Error during profile update: " + e.getMessage(), e);
-            model.addFlashAttribute("message", "회원정보 수정에 실패하였습니다: " + e.getMessage());
+            model.addFlashAttribute("error-message", "회원정보 수정에 <p>실패하였습니다: " + e.getMessage());
         }
         return "redirect:/main";
     }

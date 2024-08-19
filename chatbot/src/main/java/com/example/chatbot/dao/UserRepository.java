@@ -102,7 +102,7 @@ public class UserRepository implements IUserRepository, UserDetailsService {
 
 	@Override
 	public void updateUser(User user) {		
-		String sql = "update users set user_name = ?, gender = ?, email = ? where user_id = ?";
-        jdbcTemplate.update(sql, user.getName(), user.getGender(), user.getEmail(), user.getUserId());
+		String sql = "update users set user_name = ?, gender = ?, email = ?, academic_ability = ?, employment = ?, area = ?, interest = ? where user_id = ?";
+        jdbcTemplate.update(sql, user.getName(), user.getGender(), user.getEmail(), user.getAcademicAbility(), user.getEmployment(), user.getArea(), user.getInterest(), user.getUserId());
 	}
 }

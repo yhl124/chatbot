@@ -13,6 +13,9 @@
 <body>
     <div class="h-full flex flex-col justify-center items-center">
         <th:block th:replace="~{fragments/header :: header}"></th:block>    
+        
+        <div id="message" th:if="${message}" th:text="${message}" class="hidden"></div>
+        <div id="error-message" th:if="${errorMessage}" th:text="${errorMessage}" class="hidden"></div>
 
         <div class="flex flex-col items-center absolute w-full top-[50%] transform -translate-y-1/2 px-4 sm:px-0">
             <div class="flex justify-center items-center w-full max-w-[1270px] h-auto mt-10 py-2.5 gap-2.5">
@@ -56,6 +59,30 @@
                 // URL에서 파라미터 제거
                 const newUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, newUrl);
+            }
+            
+            const message = document.getElementById('message').textContent.trim();
+            if (message) {
+            	const notyf = new Notyf({
+                	position: {
+                	    x: 'center',
+                	    y: 'top',
+                	}
+                });
+                notyf.success(message);
+                history.replaceState(null, '', window.location.pathname); // URL에서 파라미터 제거
+            }
+            
+            const errorMessage = document.getElementById('error-message').textContent.trim();
+            if (errorMessage) {
+            	const notyf = new Notyf({
+                	position: {
+                	    x: 'center',
+                	    y: 'top',
+                	}
+                });
+                notyf.error(errorMessage);
+                history.replaceState(null, '', window.location.pathname); // URL에서 파라미터 제거
             }
         });
     </script>
