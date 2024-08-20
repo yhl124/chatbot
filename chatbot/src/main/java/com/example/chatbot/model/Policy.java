@@ -40,4 +40,5 @@ public class Policy {
 	private String sDate;//시작일
 	private String eDate;//종료일
 	private int sMonth;//정책시작월
+	private String status;//현재진행여부
 }

@@ -21,7 +21,7 @@
 
         <div class="flex flex-row justify-between border-b-2 border-b-gray-400 h-auto mb-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
             <div class="text-left text-lg mb-2 whitespace-nowrap">맞춤형 청년 정책 검색하기</div>
-             <div th:text="${selectedPolicies}"></div>
+            <!-- <div th:text="${selectedPolicies}"></div> -->
         </div>
 
         <form th:action="@{/search}" id="searchForm" method="get" accept-charset="UTF-8">
@@ -158,20 +158,44 @@
 		    <div th:if="${policies != null and #lists.size(policies) > 0}">
 		        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 		            <!-- 검색결과 요소를 반복적으로 추가 -->
-		            <div th:each="policy : ${policies}" class="border-2 border-gray-300 p-4 rounded">
-		                <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
-		                   th:text="${policy.pName}" 
-		                   th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
-		                <div th:text="${policy.region}" class="text-gray-600 truncate mb-1">국토교통부</div>
-		                <div th:if="${policy.eDate}" th:text="${policy.eDate}" class="text-red-500 truncate mb-4">D-day 160일</div>
-		                <div th:unless="${policy.eDate}" class="text-red-500 truncate mb-4">없음</div>
-		                <div class="flex justify-between pt-8 items-center">
-		                    <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-		                    <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
+				    <div th:each="policy : ${policies}" class="border-2 border-gray-300 p-4 rounded ">
+				        <a class="block text-lg font-bold truncate mb-2 overflow-hidden whitespace-nowrap text-ellipsis" 
+				           th:text="${policy.pName}" 
+				           th:href="'/recs/' + ${policy.policyId}" target="_blank">청년 주택드림 청약통장</a>
+				        <div th:text="${policy.region}" class="text-gray-600 truncate mb-1">국토교통부</div>
+		
+				        
+				        <div th:if="${#strings.equals(policy.status, '진행중')}" >
+				        	<span th:text=${policy.eDate} class="text-red-500 truncate mb-4">2024.01.01</span>
+					        <div class="flex justify-between pt-8 items-center">
+					            <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
+					            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+					        </div>
+				        </div>
+		  		        <div th:if="${#strings.equals(policy.status, '마감')}" >
+				        	<span th:text=${policy.eDate} class="text-red-500 truncate mb-4">2024.01.01</span>
+					        <div class="flex justify-between pt-8 items-center">
+					            <div class="bg-red-100 text-red-700 p-2 rounded truncate">마감</div>
+					            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+					        </div>
+				        </div>
+				        <div th:if="${#strings.equals(policy.status, '상시모집')}" >
+		        			<span th:text=${policy.eDate} class="text-red-500 truncate mb-4">2024.01.01</span>
+					        <div class="flex justify-between pt-8 items-center">
+					            <div class="bg-violet-100 text-gray-700 p-2 rounded truncate">상시</div>
+					            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+					        </div>
+				        </div>
+		   		        <div th:if="${#strings.equals(policy.status, '정책 참조')}" >
+				        	<span th:text=${policy.eDate} class="text-red-500 truncate mb-4">2024.01.01</span>
+					        <div class="flex justify-between pt-8 items-center">
+					            <div class="bg-gray-100 text-gray-700 p-2 rounded truncate">정책 참조</div>
+					            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+					        </div>
+				        </div>
+				    </div>
+				</div>
+
 			
 			<!-- 페이징 처리 -->
 			<div th:if="${policies != null and policies.totalPages > 1}" class="my-12 flex justify-center pb-8">

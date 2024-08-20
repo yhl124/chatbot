@@ -34,15 +34,37 @@
 		        <div th:text="${policy.region}" class="text-gray-600 truncate mb-1">국토교통부</div>
 
 		        
-		        <div th:if="${policy.eDate}" th:text="${policy.eDate}" class="text-red-500 truncate mb-4">D-day 160일</div>
-		        <div th:unless="${policy.eDate}" class="text-red-500 truncate mb-4">없음</div>
-
-		        <div class="flex justify-between pt-8 items-center">
-		            <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
-		            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+		        <div th:if="${#strings.equals(policy.status, '진행중')}" >
+		        	<span th:text=${policy.eDate} class="text-red-500 truncate mb-4">2024.01.01</span>
+			        <div class="flex justify-between pt-8 items-center">
+			            <div class="bg-green-100 text-green-700 p-2 rounded truncate">진행중</div>
+			            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+			        </div>
+		        </div>
+  		        <div th:if="${#strings.equals(policy.status, '마감')}" >
+		        	<span th:text=${policy.eDate} class="text-red-500 truncate mb-4">2024.01.01</span>
+			        <div class="flex justify-between pt-8 items-center">
+			            <div class="bg-red-100 text-red-700 p-2 rounded truncate">마감</div>
+			            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+			        </div>
+		        </div>
+		        <div th:if="${#strings.equals(policy.status, '상시모집')}" >
+		        	<span th:text=${policy.eDate} class="text-red-500 truncate mb-4">2024.01.01</span>
+			        <div class="flex justify-between pt-8 items-center">
+			            <div class="bg-violet-100 text-gray-700 p-2 rounded truncate">상시</div>
+			            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+			        </div>
+		        </div>
+   		        <div th:if="${#strings.equals(policy.status, '정책 참조')}" >
+		        	<span th:text=${policy.eDate} class="text-red-500 truncate mb-4">2024.01.01</span>
+			        <div class="flex justify-between pt-8 items-center">
+			            <div class="bg-gray-100 text-gray-700 p-2 rounded truncate">정책 참조</div>
+			            <div th:text="${policy.category}" class="bg-gray-200 text-gray-700 p-2 rounded truncate">주거분야</div>
+			        </div>
 		        </div>
 		    </div>
 		</div>
+
         
         <!-- 전체 통계 -->
         <div class="flex flex-row justify-between border-b-2 border-b-gray-400 mt-20 h-auto mx-2 lg:mx-36 xl:mx-60 2xl:mx-96">

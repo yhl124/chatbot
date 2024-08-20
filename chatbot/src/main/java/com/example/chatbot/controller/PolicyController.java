@@ -1,5 +1,7 @@
 package com.example.chatbot.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,27 +34,48 @@ public class PolicyController {
 	
 	
     //추천페이지 이동
-    @GetMapping("/recs")
-    public String recspage(@AuthenticationPrincipal User user, Model model) {
-    	
-        if (user != null) {
-            model.addAttribute("user", user);
-            //유저 정보(id, 생년월일)로 맞는 정책 가져오기
-            List<Policy> policies = policyService.getPoliciesByUserInfo(user.getUserId(), user.getBirthday(), user.getInterest(), user.getArea(), user.getEmployment(), user.getAcademicAbility());
-            //분야별 정책 count값 가져오기
-            HashMap<String, Integer> statistics = policyService.getPolicyFieldsStatistics();
-            model.addAttribute("policyStatistics", statistics);
-            //월별 분야별 정책 count값 가져오기
-            List<Map<String, Object>> monthly = policyService.getPolicyMonthlyStatistics();
-            model.addAttribute("monthly", monthly);
-            if (policies != null) {
-                model.addAttribute("policies", policies);
-            } else {
-                model.addAttribute("policies", List.of()); // 빈 리스트 추가
-            }
-        } 
-        return "recommendation";
-    }
+	@GetMapping("/recs")
+	public String recspage(@AuthenticationPrincipal User user, Model model) {
+	    if (user != null) {
+	        model.addAttribute("user", user);
+	        // 유저 정보(id, 생년월일)로 맞는 정책 가져오기
+	        List<Policy> policies = policyService.getPoliciesByUserInfo(user.getUserId(), user.getBirthday(), user.getInterest(), user.getArea(), user.getEmployment(), user.getAcademicAbility());
+
+	        if (policies != null) {
+	            LocalDate today = LocalDate.now();
+	            for (Policy policy : policies) {
+	                String eDate = policy.getEDate();
+	                if (eDate.matches("\\d{4}\\.\\d{2}\\.\\d{2}")) { // "숫자4개.숫자2개.숫자2개" 형식
+	                    LocalDate endDate = LocalDate.parse(eDate, DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+	                    if (endDate.isBefore(today)) {
+	                        policy.setStatus("마감");
+	                    } else {
+	                        policy.setStatus("진행중");
+	                    }
+	                }
+                    else if (eDate.equals("상시모집")) {
+                        policy.setStatus("상시모집");
+                    }
+	                else {
+	                    policy.setStatus("정책 참조");
+	                }
+	            }
+	            model.addAttribute("policies", policies);
+	        } else {
+	            model.addAttribute("policies", List.of()); // 빈 리스트 추가
+	        }
+
+	        // 분야별 정책 count값 가져오기
+	        HashMap<String, Integer> statistics = policyService.getPolicyFieldsStatistics();
+	        model.addAttribute("policyStatistics", statistics);
+	        
+	        // 월별 분야별 정책 count값 가져오기
+	        List<Map<String, Object>> monthly = policyService.getPolicyMonthlyStatistics();
+	        model.addAttribute("monthly", monthly);
+	    } 
+	    return "recommendation";
+	}
+
     
 //    //검색 처리 미완성
 //    @GetMapping(value = "/search", params={"searchInput", "employment", "academicAbility", "age", "selectedPolicies", "selectedRegions"})
@@ -175,8 +198,32 @@ public class PolicyController {
         	log.info("44");
         }
         
-        System.out.println("t "+pageable);
-        System.out.println("p "+policies.getTotalPages());
+        if (policies != null) {
+            LocalDate today = LocalDate.now();
+            for (Policy policy : policies) {
+                String eDate = policy.getEDate();
+                if (eDate.matches("\\d{4}\\.\\d{2}\\.\\d{2}")) { // "숫자4개.숫자2개.숫자2개" 형식
+                    LocalDate endDate = LocalDate.parse(eDate, DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+                    if (endDate.isBefore(today)) {
+                        policy.setStatus("마감");
+                    } else {
+                        policy.setStatus("진행중");
+                    }
+                } 
+                else if (eDate.equals("상시모집")) {
+                    policy.setStatus("상시모집");
+                }
+                else {
+                	policy.setStatus("정책 참조");
+                }
+            }
+            model.addAttribute("policies", policies);
+        } else {
+            model.addAttribute("policies", List.of()); // 빈 리스트 추가
+        }
+        
+        log.info("t "+pageable);
+        log.info("p "+policies.getTotalPages());
 //        if (policies.hasContent()) {
 //            List<Policy> policyList = policies.getContent(); // 리스트 가져오기
 //            for (Policy policy : policyList) {
@@ -189,7 +236,7 @@ public class PolicyController {
 //            System.out.println("No policies found.");
 //        }
 
-        model.addAttribute("policies", policies);
+        //model.addAttribute("policies", policies);
         model.addAttribute("searchInput", searchInput);
         model.addAttribute("age", age);
         model.addAttribute("employment", employment);
