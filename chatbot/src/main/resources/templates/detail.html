@@ -14,43 +14,43 @@
 		
         <div class="mx-2 lg:mx-36 xl:mx-72 2xl:mx-96 pb-8 mb-8 whitespace-nowrap">
 			<div class="text-4xl font-bold mb-6 pb-6 text-center text-[#5856d6]">정책 정보</div>
-			<div th:text="${policy.pName}" class="border-t-2 border-t-gray-400 text-3xl font-bold mb-2 py-8">사업 제목</div>
+			<div th:text="${policy.pName}" class="whitespace-normal break-all border-t-2 border-t-gray-400 text-3xl font-bold mb-2 py-8">사업 제목</div>
 		
 	        <div class="bg-white p-6 shadow-md rounded-md flex flex-col h-auto px-2 py-2">
 	            <div class="text-2xl font-bold mb-2">사업 개요</div>	
 			    <table class="w-full border-collapse border border-gray-300 mb-6 table-auto">
 	                <tbody>
 	                    <tr>
-	                        <td class="whitespace-nowrap bg-gray-200 p-2 font-semibold border border-gray-300">정책 유형</td>
-	                        <td class="p-2 border-r border-gray-300 break-all" th:text="${policy.category}">정책 유형 내용</td>
+	                        <td class="whitespace-nowrap w-auto  bg-gray-200 p-2 font-semibold border border-gray-300">정책 유형</td>
+	                        <td class="p-2 border-r w-full border-gray-300 break-all" th:text="${policy.category}">정책 유형 내용</td>
 	                    </tr>
 	                    <tr>
-	                        <td class="whitespace-nowrap bg-gray-200 p-2 font-semibold border border-gray-300">주관 기관</td>
-	                        <td class="p-2 border border-gray-300 break-all" th:text="${policy.supervision}">주관 기관 내용</td>
+	                        <td class="whitespace-nowrap w-auto  bg-gray-200 p-2 font-semibold border border-gray-300">주관 기관</td>
+	                        <td class="p-2 border border-gray-300 w-full break-all" th:text="${policy.supervision}">주관 기관 내용</td>
 	                    </tr>
 	                    <tr>
-	                        <td class="whitespace-nowrap bg-gray-200 p-2 font-semibold border border-gray-300">정책 설명</td>
-	                        <td class="p-2 border border-gray-300 break-all" th:text="${policy.explanation}">정책 설명 내용</td>
+	                        <td class="whitespace-nowrap w-auto  bg-gray-200 p-2 font-semibold border border-gray-300">정책 설명</td>
+	                        <td class="p-2 border border-gray-300 w-full break-all" th:text="${policy.explanation}">정책 설명 내용</td>
 	                    </tr>
 	                    <tr>
-	                        <td class="whitespace-nowrap bg-gray-200 p-2 font-semibold border border-gray-300">지원 내용</td>
-	                        <td class="p-2 border border-gray-300 break-all" th:text="${policy.support}">지원 내용 내용</td>
+	                        <td class="whitespace-nowrap w-auto  bg-gray-200 p-2 font-semibold border border-gray-300">지원 내용</td>
+	                        <td class="p-2 border border-gray-300 w-full break-all" th:text="${policy.support}">지원 내용 내용</td>
 	                    </tr>
 	                    <tr>
-	                        <td class="whitespace-nowrap bg-gray-200 p-2 font-semibold border border-gray-300">사업 운영 기간</td>
-	                        <td th:text="${policy.managePeriod}" class="p-2 border border-gray-300 break-all">사업 운영 기간 내용</td>
+	                        <td class="whitespace-nowrap w-auto  bg-gray-200 p-2 font-semibold border border-gray-300">사업 운영 기간</td>
+	                        <td th:text="${policy.managePeriod}" class="p-2 border border-gray-300 w-full break-all">사업 운영 기간 내용</td>
 	                    </tr>
 	                    <tr>
-	                        <td class="whitespace-nowrap bg-gray-200 p-2 font-semibold border border-gray-300">사업 신청 기간</td>
-	                        <td th:text="${policy.supportPeriod}" class="p-2 border border-gray-300 break-all">사업 신청 기간 내용</td>
+	                        <td class="whitespace-nowrap w-auto  bg-gray-200 p-2 font-semibold border border-gray-300">사업 신청 기간</td>
+	                        <td th:text="${policy.supportPeriod}" class="p-2 border border-gray-300 w-full break-all">사업 신청 기간 내용</td>
 	                    </tr>
 	                    <tr>
-	                        <td class="whitespace-nowrap bg-gray-200 p-2 font-semibold border border-gray-300">지원 규모(명)</td>
-	                        <td th:text="${policy.people}" class="p-2 border border-gray-300 break-all">지원 규모 내용</td>
+	                        <td class="whitespace-nowrap w-auto  bg-gray-200 p-2 font-semibold border border-gray-300">지원 규모(명)</td>
+	                        <td th:text="${policy.people}" class="p-2 border border-gray-300 w-full break-all">지원 규모 내용</td>
 	                    </tr>
 	                    <tr>
-	                        <td class="whitespace-nowrap bg-gray-200 p-2 font-semibold border border-gray-300">관련 사이트</td>
-	                        <td th:text="${policy.url1}" class="p-2 border border-gray-300 break-words break-all">관련 사이트 내용</td>
+	                        <td class="whitespace-nowrap w-auto  bg-gray-200 p-2 font-semibold border border-gray-300">관련 사이트</td>
+	                        <td th:text="${policy.url1}" class="p-2 border border-gray-300 break-words w-full break-all">관련 사이트 내용</td>
 	                    </tr>
 	                </tbody>
 	            </table>
