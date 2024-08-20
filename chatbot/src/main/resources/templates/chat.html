@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>청년온기</title>
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="/css/tailwind.config.css"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" >
     <link href="/notyf/notyf.min.css" rel="stylesheet">
@@ -174,7 +175,7 @@
                 </button>
                 
                 <p th:onclick="window.location.href='/'" class="cursor-pointer sm:text-[32px] font-bold text-xl sidebar-text">
-					<span class="text-[4vw] sm:text-[32px] font-bold text-left text-blue-700">청년</span>
+					<span class="text-[4vw] sm:text-[32px] font-bold text-left" style="color: #7167D3;">청년</span>
 	                <span class="text-[4vw] sm:text-[32px] font-bold text-left text-black">온기</span>
 	                <span class="text-[4vw] sm:text-[32px] font-bold text-left text-[#ff3b30]"> </span>
             	</p>
@@ -245,7 +246,7 @@
     <div class="flex-1 flex flex-col">
         <div class="p-4 border-b bg-white flex justify-between items-center header h-16">
             <a th:href="@{/chat}"  class="text-xl font-bold text-gray-800">채팅</a>
-            <a th:href="@{/recs}"  class="text-xl font-bold text-gray-800 hover:text-blue-700">나를 위한 정책 추천</a>
+            <a th:href="@{/recs}"  class="text-xl font-bold text-gray-800 hover:text-indigo-500">나를 위한 정책 추천</a>
         </div>
         <div class="p-4 overflow-y-auto flex-1 bg-gray-50" id="chat-window">
             <!-- Initial question cards -->

@@ -14,7 +14,7 @@
         <th:block th:replace="~{fragments/header :: header}"></th:block>    
         
 		<a th:href="@{/search}">
-        	<div class="text-4xl font-extrabold text-center text-[#5856d6] mb-8 whitespace-nowrap">청년 정책 검색</div>
+        	<div class="text-4xl font-extrabold text-center text-[#7167D3] mb-8 whitespace-nowrap">청년 정책 검색</div>
 		</a>
 
         <div class="flex flex-row justify-between border-b-2 border-b-gray-400 h-auto mb-2 mx-2 lg:mx-12 xl:mx-20 2xl:mx-36">
@@ -39,18 +39,18 @@
                             <span class="ml-2 text-sm">(중복선택 가능)</span>
                         </div>
                         <div id="policy-group" class="flex flex-wrap gap-2">
-                            <!-- <button type="button" class="px-4 py-2 rounded bg-[#5856d6] text-white policy-all" data-field="분야 전체" th:classappend="${#lists.contains(selectedPolicies, '분야 전체')} ? 'selected' : ''">분야 전체</button>
+                            <!-- <button type="button" class="px-4 py-2 rounded bg-[#7167D3] text-white policy-all" data-field="분야 전체" th:classappend="${#lists.contains(selectedPolicies, '분야 전체')} ? 'selected' : ''">분야 전체</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-field" data-field="일자리" th:classappend="${#lists.contains(selectedPolicies, '일자리')} ? 'selected' : ''">일자리</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-field" data-field="주거" th:classappend="${#lists.contains(selectedPolicies, '주거')} ? 'selected' : ''">주거</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-field" data-field="교육" th:classappend="${#lists.contains(selectedPolicies, '교육')} ? 'selected' : ''">교육</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-field" data-field="복지 문화" th:classappend="${#lists.contains(selectedPolicies, '복지 문화')} ? 'selected' : ''">복지 문화</button>
                             <button type="button" class="px-4 py-2 bg-gray-200 rounded policy-field" data-field="참여 권리" th:classappend="${#lists.contains(selectedPolicies, '참여 권리')} ? 'selected' : ''">참여 권리</button> -->
-                            <button type="button" class="px-4 py-2 rounded policy-all" data-field="분야 전체" th:classappend="${#lists.contains(selectedPolicies, '분야 전체')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">분야 전체</button>
-                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="일자리" th:classappend="${#lists.contains(selectedPolicies, '일자리')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">일자리</button>
-                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="주거" th:classappend="${#lists.contains(selectedPolicies, '주거')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">주거</button>
-                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="교육" th:classappend="${#lists.contains(selectedPolicies, '교육')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">교육</button>
-                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="복지 문화" th:classappend="${#lists.contains(selectedPolicies, '복지 문화')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">복지 문화</button>
-                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="참여 권리" th:classappend="${#lists.contains(selectedPolicies, '참여 권리')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">참여 권리</button>
+                            <button type="button" class="px-4 py-2 rounded policy-all" data-field="분야 전체" th:classappend="${#lists.contains(selectedPolicies, '분야 전체')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">분야 전체</button>
+                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="일자리" th:classappend="${#lists.contains(selectedPolicies, '일자리')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">일자리</button>
+                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="주거" th:classappend="${#lists.contains(selectedPolicies, '주거')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">주거</button>
+                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="교육" th:classappend="${#lists.contains(selectedPolicies, '교육')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">교육</button>
+                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="복지 문화" th:classappend="${#lists.contains(selectedPolicies, '복지 문화')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">복지 문화</button>
+                            <button type="button" class="px-4 py-2 rounded policy-field" data-field="참여 권리" th:classappend="${#lists.contains(selectedPolicies, '참여 권리')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">참여 권리</button>
                             
                         </div>
                     </div>
@@ -60,32 +60,32 @@
                             <span class="ml-2 text-sm">(중복선택 가능)</span>
                         </div>
                         <div id="region-group" class="flex flex-wrap gap-2">
-                        	<button type="button" class="px-4 py-2 rounded region-all" data-field="서울시" th:classappend="${#lists.contains(selectedRegions, '서울시')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">서울시</button>
-                        	<button type="button" class="px-4 py-2 rounded region-field" data-field="강남구" th:classappend="${#lists.contains(selectedRegions, '강남구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">강남구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="강동구" th:classappend="${#lists.contains(selectedRegions, '강동구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">강동구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="강북구" th:classappend="${#lists.contains(selectedRegions, '강북구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">강북구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="강서구" th:classappend="${#lists.contains(selectedRegions, '강서구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">강서구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="관악구" th:classappend="${#lists.contains(selectedRegions, '관악구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">관악구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="광진구" th:classappend="${#lists.contains(selectedRegions, '광진구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">광진구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="구로구" th:classappend="${#lists.contains(selectedRegions, '구로구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">구로구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="금천구" th:classappend="${#lists.contains(selectedRegions, '금천구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">금천구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="노원구" th:classappend="${#lists.contains(selectedRegions, '노원구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">노원구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="도봉구" th:classappend="${#lists.contains(selectedRegions, '도봉구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">도봉구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="동대문구" th:classappend="${#lists.contains(selectedRegions, '동대문구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">동대문구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="동작구" th:classappend="${#lists.contains(selectedRegions, '동작구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">동작구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="마포구" th:classappend="${#lists.contains(selectedRegions, '마포구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">마포구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="서대문구" th:classappend="${#lists.contains(selectedRegions, '서대문구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">서대문구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="서초구" th:classappend="${#lists.contains(selectedRegions, '서초구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">서초구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="성동구" th:classappend="${#lists.contains(selectedRegions, '성동구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">성동구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="성북구" th:classappend="${#lists.contains(selectedRegions, '성북구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">성북구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="송파구" th:classappend="${#lists.contains(selectedRegions, '송파구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">송파구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="양천구" th:classappend="${#lists.contains(selectedRegions, '양천구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">양천구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="영등포구" th:classappend="${#lists.contains(selectedRegions, '영등포구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">영등포구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="용산구" th:classappend="${#lists.contains(selectedRegions, '용산구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">용산구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="은평구" th:classappend="${#lists.contains(selectedRegions, '은평구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">은평구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="종로구" th:classappend="${#lists.contains(selectedRegions, '종로구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">종로구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="중구" th:classappend="${#lists.contains(selectedRegions, '중구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">중구</button>
-							<button type="button" class="px-4 py-2 rounded region-field" data-field="중랑구" th:classappend="${#lists.contains(selectedRegions, '중랑구')} ? 'bg-[#5856d6] text-white selected' : 'bg-gray-200 text-black'">중랑구</button>
+                        	<button type="button" class="px-4 py-2 rounded region-all" data-field="서울시" th:classappend="${#lists.contains(selectedRegions, '서울시')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">서울시</button>
+                        	<button type="button" class="px-4 py-2 rounded region-field" data-field="강남구" th:classappend="${#lists.contains(selectedRegions, '강남구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">강남구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="강동구" th:classappend="${#lists.contains(selectedRegions, '강동구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">강동구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="강북구" th:classappend="${#lists.contains(selectedRegions, '강북구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">강북구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="강서구" th:classappend="${#lists.contains(selectedRegions, '강서구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">강서구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="관악구" th:classappend="${#lists.contains(selectedRegions, '관악구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">관악구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="광진구" th:classappend="${#lists.contains(selectedRegions, '광진구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">광진구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="구로구" th:classappend="${#lists.contains(selectedRegions, '구로구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">구로구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="금천구" th:classappend="${#lists.contains(selectedRegions, '금천구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">금천구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="노원구" th:classappend="${#lists.contains(selectedRegions, '노원구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">노원구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="도봉구" th:classappend="${#lists.contains(selectedRegions, '도봉구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">도봉구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="동대문구" th:classappend="${#lists.contains(selectedRegions, '동대문구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">동대문구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="동작구" th:classappend="${#lists.contains(selectedRegions, '동작구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">동작구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="마포구" th:classappend="${#lists.contains(selectedRegions, '마포구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">마포구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="서대문구" th:classappend="${#lists.contains(selectedRegions, '서대문구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">서대문구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="서초구" th:classappend="${#lists.contains(selectedRegions, '서초구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">서초구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="성동구" th:classappend="${#lists.contains(selectedRegions, '성동구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">성동구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="성북구" th:classappend="${#lists.contains(selectedRegions, '성북구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">성북구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="송파구" th:classappend="${#lists.contains(selectedRegions, '송파구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">송파구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="양천구" th:classappend="${#lists.contains(selectedRegions, '양천구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">양천구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="영등포구" th:classappend="${#lists.contains(selectedRegions, '영등포구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">영등포구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="용산구" th:classappend="${#lists.contains(selectedRegions, '용산구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">용산구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="은평구" th:classappend="${#lists.contains(selectedRegions, '은평구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">은평구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="종로구" th:classappend="${#lists.contains(selectedRegions, '종로구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">종로구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="중구" th:classappend="${#lists.contains(selectedRegions, '중구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">중구</button>
+							<button type="button" class="px-4 py-2 rounded region-field" data-field="중랑구" th:classappend="${#lists.contains(selectedRegions, '중랑구')} ? 'bg-[#7167D3] text-white selected' : 'bg-gray-200 text-black'">중랑구</button>
                         </div>
                     </div>
                 </div>
@@ -131,8 +131,8 @@
                    <!-- <input type="hidden" name="selectedPolicies" id="selectedPolicies">
                     <input type="hidden" name="selectedRegions" id="selectedRegions">-->
                     <button id="resetButton" type="button" class="bg-gray-600 text-center text-white mb-2 px-4 py-2 rounded hover:bg-gray-400 hover:text-black">선택 초기화</button>
-                    <button id="resetByMyInfo" type="button" class="bg-white border-2 border-[#5856d6] text-center text-balck mb-2 px-4 py-2 rounded hover:bg-indigo-400 hover:text-white">내 정보로 설정</button>
-                    <button id="searchButton" type="submit" class="bg-[#5856d6] text-center text-white mb-2 px-4 py-2 rounded hover:bg-indigo-600">검색</button>
+                    <button id="resetByMyInfo" type="button" class="bg-white border-2 border-[#7167D3] text-center text-balck mb-2 px-4 py-2 rounded hover:bg-indigo-400 hover:text-white">내 정보로 설정</button>
+                    <button id="searchButton" type="submit" class="bg-[#7167D3] text-center text-white mb-2 px-4 py-2 rounded hover:bg-indigo-600">검색</button>
                 </div>
             </div>
         </form>
@@ -205,7 +205,7 @@
 			        <li th:each="pageNum : ${#numbers.sequence(0, policies.totalPages - 1)}" class="mx-1">
 			            <a th:href="@{/search(page=${pageNum}, searchInput=${searchInput}, employment=${employment}, academicAbility=${academicAbility}, age=${age}, selectedPolicies=${selectedPolicies}, selectedRegions=${selectedRegions})}"
 			               th:text="${pageNum + 1}"
-			               th:classappend="${pageNum == policies.number} ? 'bg-[#5856d6] text-white' : 'bg-gray-200 text-black'"
+			               th:classappend="${pageNum == policies.number} ? 'bg-[#7167D3] text-white' : 'bg-gray-200 text-black'"
 			               class="px-3 py-2 rounded hover:bg-gray-400"></a>
 			        </li>
 			        <li th:if="${policies.hasNext()}" class="mx-1">
@@ -280,16 +280,16 @@
             //선택 초기화 버튼
             resetButton.addEventListener('click', function() {
             	policyAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
-            	policyAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+            	policyAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
             	regionAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
-            	regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+            	regionAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
             	
             	policyFieldButtons.forEach(button => {
-                    button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    button.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                     button.classList.add('bg-gray-200', 'text-black');
                 });
             	regionButtons.forEach(button => {
-                    button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    button.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                     button.classList.add('bg-gray-200', 'text-black');
                 });
             	
@@ -301,38 +301,38 @@
             
             //내 정보로 초기화 버튼
             resetByMyInfo.addEventListener('click', function() {
-            	policyAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+            	policyAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
             	policyAllButton.classList.add('bg-gray-200', 'text-black');
-            	regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+            	regionAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
             	regionAllButton.classList.add('bg-gray-200', 'text-black');
                         	
             	policyFieldButtons.forEach(button => {
                     if (button.getAttribute('data-field') === interest) {
-                    	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
-                    	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                    	button.classList.remove('selected', 'bg-[#7167D3]', 'text-white', 'bg-gray-200', 'text-black');
+                    	button.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                     }
                     else{
-                    	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
+                    	button.classList.remove('selected', 'bg-[#7167D3]', 'text-white', 'bg-gray-200', 'text-black');
                     	button.classList.add('bg-gray-200', 'text-black');
                     }
                 });
             	regionButtons.forEach(button => {
             		if (button.getAttribute('data-field') === area) {
-                    	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
-                    	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                    	button.classList.remove('selected', 'bg-[#7167D3]', 'text-white', 'bg-gray-200', 'text-black');
+                    	button.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                     }
             		else{
-            			button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
+            			button.classList.remove('selected', 'bg-[#7167D3]', 'text-white', 'bg-gray-200', 'text-black');
             			button.classList.add('bg-gray-200', 'text-black');
             		}
                 });
 
             	// data-field가 'area'와 같은 경우와 다른 경우 처리 추가
                 if (regionAllButton.getAttribute('data-field') === area) {
-                    regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                    regionAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                     regionAllButton.classList.remove('bg-gray-200', 'text-black');
                 } else {
-                    regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    regionAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                     regionAllButton.classList.add('bg-gray-200', 'text-black');
                 }
             	
@@ -355,137 +355,137 @@
 
             policyAllButton.addEventListener('click', function () {
                 policyAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
-                policyAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                policyAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                 policyFieldButtons.forEach(button => {
-                    button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    button.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                     button.classList.add('bg-gray-200', 'text-black');
                 });
             });
 
             policyFieldButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    policyAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    policyAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                     policyAllButton.classList.add('bg-gray-200', 'text-black');                    
                     button.classList.toggle('selected');
                     button.classList.toggle('text-white');
-                    button.classList.toggle('bg-[#5856d6]');
+                    button.classList.toggle('bg-[#7167D3]');
                     button.classList.toggle('bg-gray-200',);
                     button.classList.toggle('text-black');
                     
-                    const allSelected = Array.from(policyFieldButtons).every(btn => btn.classList.contains('bg-[#5856d6]'));
+                    const allSelected = Array.from(policyFieldButtons).every(btn => btn.classList.contains('bg-[#7167D3]'));
 
                     if (allSelected) {
                         // 모든 필드 버튼의 선택을 해제
                         policyFieldButtons.forEach(btn => {
-                            btn.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                            btn.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                             btn.classList.add('bg-gray-200', 'text-black');
                         });
                         // 모든 필드 버튼 해제 후 all 버튼을 선택 상태로 변경
                         policyAllButton.classList.remove('bg-gray-200', 'text-black');
-                        policyAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                        policyAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                     } else {
                         // 개별 버튼의 상태에 따라 all 버튼의 선택 상태 변경
-                        const anySelected = Array.from(policyFieldButtons).some(btn => btn.classList.contains('bg-[#5856d6]'));
+                        const anySelected = Array.from(policyFieldButtons).some(btn => btn.classList.contains('bg-[#7167D3]'));
 
                         if (!anySelected) {
                             // 모든 필드 버튼이 해제된 경우 all 버튼을 선택 상태로 변경
                             policyAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
-                            policyAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                            policyAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                         } else {
                             // 일부 버튼만 선택된 경우 all 버튼을 해제 상태로 변경
-                            policyAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                            policyAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                             policyAllButton.classList.add('bg-gray-200', 'text-black');
                         }
                     }
                     
                     /* // Check if all policyFieldButtons are selected
-                    const allSelected = Array.from(policyFieldButtons).every(btn => btn.classList.contains('bg-[#5856d6]'));
+                    const allSelected = Array.from(policyFieldButtons).every(btn => btn.classList.contains('bg-[#7167D3]'));
                     
                     if (allSelected) {
                         policyFieldButtons.forEach(btn => {
-                            btn.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                            btn.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                             btn.classList.add('bg-gray-200', 'text-black');
                         });
                         policyAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
-                        policyAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                        policyAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                     } else {
-                        policyAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                        policyAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                         policyAllButton.classList.add('bg-gray-200', 'text-black');
                     } */
                 });
                 /* if (button.getAttribute('data-field') === interest) {
-                	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
-                	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                	button.classList.remove('selected', 'bg-[#7167D3]', 'text-white', 'bg-gray-200', 'text-black');
+                	button.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                 } */
             });
 
             regionAllButton.addEventListener('click', function () {
                 regionAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
-                regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                regionAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                 regionButtons.forEach(button => {
-                    button.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    button.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                     button.classList.add('bg-gray-200', 'text-black');
                 });
 				/* if (button.getAttribute('data-field') === area) {
-                	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
-                	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                	button.classList.remove('selected', 'bg-[#7167D3]', 'text-white', 'bg-gray-200', 'text-black');
+                	button.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                 } */
             });
 
             regionButtons.forEach(button => {
                 button.addEventListener('click', function () {
-                    regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    regionAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                     regionAllButton.classList.add('selected', 'bg-gray-200', 'text-black');
                     button.classList.toggle('selected');
                     button.classList.toggle('text-white');
-                    button.classList.toggle('bg-[#5856d6]');
+                    button.classList.toggle('bg-[#7167D3]');
                     button.classList.toggle('bg-gray-200',);
                     button.classList.toggle('text-black');
                     
-                    const allSelected = Array.from(regionButtons).every(btn => btn.classList.contains('bg-[#5856d6]'));
+                    const allSelected = Array.from(regionButtons).every(btn => btn.classList.contains('bg-[#7167D3]'));
 
                     if (allSelected) {
                         // 모든 필드 버튼의 선택을 해제
                         regionButtons.forEach(btn => {
-                            btn.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                            btn.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                             btn.classList.add('bg-gray-200', 'text-black');
                         });
                         // 모든 필드 버튼 해제 후 all 버튼을 선택 상태로 변경
                         regionAllButton.classList.remove('bg-gray-200', 'text-black');
-                        regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                        regionAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                     } else {
                         // 개별 버튼의 상태에 따라 all 버튼의 선택 상태 변경
-                        const anySelected = Array.from(regionButtons).some(btn => btn.classList.contains('bg-[#5856d6]'));
+                        const anySelected = Array.from(regionButtons).some(btn => btn.classList.contains('bg-[#7167D3]'));
 
                         if (!anySelected) {
                             // 모든 필드 버튼이 해제된 경우 all 버튼을 선택 상태로 변경
                             regionAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
-                            regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                            regionAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                         } else {
                             // 일부 버튼만 선택된 경우 all 버튼을 해제 상태로 변경
-                            regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                            regionAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                             regionAllButton.classList.add('bg-gray-200', 'text-black');
                         }
                     }
                     
                     /* // Check if all regionButtons are selected
-                    const allSelected = Array.from(regionButtons).every(btn => btn.classList.contains('bg-[#5856d6]'));
+                    const allSelected = Array.from(regionButtons).every(btn => btn.classList.contains('bg-[#7167D3]'));
                     
                     if (allSelected) {
                         regionButtons.forEach(btn => {
-                            btn.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                            btn.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                             btn.classList.add('bg-gray-200', 'text-black');
                         });
                         regionAllButton.classList.remove('selected', 'bg-gray-200', 'text-black');
-                        regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                        regionAllButton.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                     } else {
-                    	regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    	regionAllButton.classList.remove('selected', 'bg-[#7167D3]', 'text-white');
                     	regionAllButton.classList.add('bg-gray-200', 'text-black');
                     }*/            
                 });
 				/*if (button.getAttribute('data-field') === area) {
-                	button.classList.remove('selected', 'bg-[#5856d6]', 'text-white', 'bg-gray-200', 'text-black');
-                	button.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                	button.classList.remove('selected', 'bg-[#7167D3]', 'text-white', 'bg-gray-200', 'text-black');
+                	button.classList.add('selected', 'bg-[#7167D3]', 'text-white');
                 } */
             });
 

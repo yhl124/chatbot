@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <div class="w-full h-auto  relative overflow-hidden bg-white mx-auto">
+    <div class="h-full flex flex-col overflow-hidden bg-white mx-auto">
         <th:block th:replace="~{fragments/header :: header}"></th:block>    
         
         <form th:action="@{/mypage}" method="post" id="mypageForm" accept-charset="UTF-8" enctype="multipart/form-data">
@@ -23,7 +23,7 @@
             <input type="hidden" id="userArea" th:value="${user.area}" />
             <input type="hidden" id="userInterest" th:value="${user.interest}" />
             
-            <div class="flex flex-col justify-start items-center w-full max-w-sm mx-auto p-6 mt-20 gap-6 rounded-lg bg-white border border-[#d9d9d9]">
+            <div class="flex flex-col justify-start items-center w-full max-w-sm mx-auto p-6 mt-20 gap-6 rounded-lg bg-white border border-[#d9d9d9] mb-24">
             
                 <div class="flex justify-center items-center w-full relative overflow-hidden gap-2">
                     <div class="w-20 h-20 relative rounded-full overflow-hidden">
@@ -52,7 +52,7 @@
         
                 <div class="flex flex-col justify-start items-start w-full gap-2">
                     <p class="self-stretch text-base text-left text-[#1e1e1e]">이름</p>
-                    <input type="text" name="name" id="name" th:value="${user.name}" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" />
+                    <input type="text" name="name" id="name" th:value="${user.name}" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#7167D3]" />
                 </div>
 
                 <div class="flex flex-col w-full gap-2">
@@ -75,7 +75,7 @@
                     	<div class="flex justify-between items-center w-full">
                         	<p class="text-base text-left text-[#1e1e1e]">지역</p>
                         </div>
-                        <select name="area" id="area" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" >
+                        <select name="area" id="area" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#7167D3]" >
 						    <option value="서울시" selected>서울시</option>
 						    <option value="강남구">강남구</option>
 						    <option value="강동구">강동구</option>
@@ -109,7 +109,7 @@
                     	<div class="flex justify-between items-center w-full">
                         	<p class="text-base text-left text-[#1e1e1e]">관심 분야</p>
                         </div>
-                        <select name="interest" id="interest" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+                        <select name="interest" id="interest" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#7167D3]">
 						    <option value="일자리" seleted>일자리</option>
 						    <option value="주거">주거</option>
 						    <option value="교육">교육</option>
@@ -122,7 +122,7 @@
                     	<div class="flex justify-between items-center w-full">
                         	<p class="text-base text-left text-[#1e1e1e]">학력</p>
                         </div>
-                        <select name="academicAbility" id="academicAbility" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+                        <select name="academicAbility" id="academicAbility" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#7167D3]">
 						    <option value="고교 재학" seleted>고교 재학</option>
 						    <option value="고졸 예정">고졸 예정</option>
 						    <option value="대학 재학">대학 재학</option>
@@ -135,7 +135,7 @@
                     	<div class="flex justify-between items-center w-full">
                         	<p class="text-base text-left text-[#1e1e1e]">취업 상태</p>
                         </div>
-                        <select name="employment" id="employment" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]">
+                        <select name="employment" id="employment" class="w-full h-10 rounded-lg px-2 bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#7167D3]">
 						    <option value="미취업자" selected>미취업자</option>
 						    <option value="창업자">(예비)창업자</option>
 						    <option value="구직자">구직자</option>
@@ -149,13 +149,13 @@
                         <div id="emailCheckResult" class="text-red-500 text-sm"></div>
                     </div>
                     <div class="flex justify-between items-center w-full gap-2">
-                        <input type="email" th:value=${user.email} name="email" id="email" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#5856d6]" required />
-                        <button type="button" id="emailCheckBtn" class="disabled:bg-slate-400 hover:bg-[#5856d6] flex justify-center items-center h-10 px-3 whitespace-nowrap rounded-lg bg-[#2c2c2c] text-neutral-100">중복확인</button>
+                        <input type="email" th:value=${user.email} name="email" id="email" class="w-full h-10 px-4 py-3 rounded-lg bg-white border border-[#d9d9d9] focus:outline-none focus:border-[#7167D3]" required />
+                        <button type="button" id="emailCheckBtn" class="disabled:bg-slate-400 hover:bg-[#7167D3] flex justify-center items-center h-10 px-3 whitespace-nowrap rounded-lg bg-[#2c2c2c] text-neutral-100">중복확인</button>
                     </div>
                 </div>
         
                 <div class="flex justify-center items-center w-full gap-4">
-                    <button type="submit" class="hover:bg-[#5856d6] h-12 w-full p-3 bg-zinc-800 rounded-lg  justify-center items-center flex">
+                    <button type="submit" class="hover:bg-[#7167D3] h-12 w-full p-3 bg-zinc-800 rounded-lg  justify-center items-center flex">
                         <div class="text-neutral-100 text-base font-normal font-['Inter'] leading-none">수정하기</div>
                     </button>
                 </div>
