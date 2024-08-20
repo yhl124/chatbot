@@ -44,6 +44,7 @@ public class PolicyService implements IPolicyService {
 		return policyRepository.getPolicyFieldsStatistics();
 	}
 
+	/************
 	@Override
 	public List<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies,
 			List<String> selectedRegions) {
@@ -67,6 +68,7 @@ public class PolicyService implements IPolicyService {
 			List<String> selectedRegions, String age, String searchInput) {
 		return policyRepository.searchPolicy4(employment, academicAbility, selectedPolicies, selectedRegions, age, searchInput);
 	}
+	***********************/
 	//////////////////////////////////////
 	@Override
 	public Page<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies,

@@ -140,7 +140,7 @@ public class PolicyRepository implements IPolicyRepository {
 	}
 
 
-
+	/***
 	@Override//나이, 검색어 null
 	public List<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies,
 	                                  List<String> selectedRegions) {
@@ -276,12 +276,18 @@ public class PolicyRepository implements IPolicyRepository {
 	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
 
 	    // employment 조건 추가
-	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	        //sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
+	    else if(employment != null && !employment.isEmpty()){
+	    	sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	    }
 	    // academicAbility 조건 추가
-	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	        //sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    }
+	    else if(academicAbility != null && !academicAbility.isEmpty()) {
+	    	sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
 	    }
 
 	    // searchInput 조건 추가
@@ -409,7 +415,8 @@ public class PolicyRepository implements IPolicyRepository {
 	        return null;
 	    }
 	}
-
+	*****/
+	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	@Override
@@ -420,13 +427,20 @@ public class PolicyRepository implements IPolicyRepository {
 	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
 
 	    // employment 조건 추가
-	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	        //sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    	sql.append(" and ((고용상태 like ?) or (1=1))");
 	    }
-
+	    else if(employment != null && !employment.isEmpty()){
+	    	sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
 	    // academicAbility 조건 추가
-	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	        //sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    	sql.append(" and ((학력요구사항 like ?) or (1=1))");
+	    }
+	    else if(academicAbility != null && !academicAbility.isEmpty()) {
+	    	sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
 	    }
 
 	    // selectedPolicies 리스트에 대한 조건 추가
@@ -482,12 +496,22 @@ public class PolicyRepository implements IPolicyRepository {
 	        // 전체 결과 수 계산을 위한 쿼리 (페이지네이션 없이)
 	        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM policies WHERE 1=1");
 
-	        if (employment != null && !employment.isEmpty()) {
-	            countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	            //countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        	countSql.append(" AND ((고용상태 LIKE ?) or (1=1))");
 	        }
-	        if (academicAbility != null && !academicAbility.isEmpty()) {
-	            countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        else if (employment != null && !employment.isEmpty()) {
+	        	countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	        }
+	        if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	            //countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        	countSql.append(" AND ((학력요구사항 LIKE ?) or (1=1))");
+	        }
+	        else if(academicAbility != null && !academicAbility.isEmpty()) {
+	        	countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        }
+	        
+	        
 	        if (selectedPolicies != null && !selectedPolicies.isEmpty() && !selectedPolicies.get(0).equals("분야 전체")) {
 	            countSql.append(" AND ( 분야 IN (");
 
@@ -530,13 +554,20 @@ public class PolicyRepository implements IPolicyRepository {
 	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
 
 	    // employment 조건 추가
-	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	        //sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    	sql.append(" and ((고용상태 like ?) or (1=1))");
 	    }
-
+	    else if(employment != null && !employment.isEmpty()){
+	    	sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
 	    // academicAbility 조건 추가
-	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	        //sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    	sql.append(" and ((학력요구사항 like ?) or (1=1))");
+	    }
+	    else if(academicAbility != null && !academicAbility.isEmpty()) {
+	    	sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
 	    }
 
 	    // age 조건 추가
@@ -597,12 +628,21 @@ public class PolicyRepository implements IPolicyRepository {
 	        // 전체 결과 수 계산을 위한 쿼리 (페이지네이션 없이)
 	        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM policies WHERE 1=1");
 
-	        if (employment != null && !employment.isEmpty()) {
-	            countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	            //countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        	countSql.append(" AND ((고용상태 LIKE ?) or (1=1))");
 	        }
-	        if (academicAbility != null && !academicAbility.isEmpty()) {
-	            countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        else if (employment != null && !employment.isEmpty()) {
+	        	countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	        }
+	        if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	            //countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        	countSql.append(" AND ((학력요구사항 LIKE ?) or (1=1))");
+	        }
+	        else if(academicAbility != null && !academicAbility.isEmpty()) {
+	        	countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        }
+	        
 	        if (age != null && !age.isEmpty()) {
 	            countSql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
 	        }
@@ -646,13 +686,20 @@ public class PolicyRepository implements IPolicyRepository {
 	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
 
 	    // employment 조건 추가
-	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	        //sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    	sql.append(" and ((고용상태 like ?) or (1=1))");
 	    }
-
+	    else if(employment != null && !employment.isEmpty()){
+	    	sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
 	    // academicAbility 조건 추가
-	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	        //sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    	sql.append(" and ((학력요구사항 like ?) or (1=1))");
+	    }
+	    else if(academicAbility != null && !academicAbility.isEmpty()) {
+	    	sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
 	    }
 
 	    // searchInput 조건 추가
@@ -713,12 +760,21 @@ public class PolicyRepository implements IPolicyRepository {
 	        // 전체 결과 수 계산을 위한 쿼리 (페이지네이션 없이)
 	        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM policies WHERE 1=1");
 
-	        if (employment != null && !employment.isEmpty()) {
-	            countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	            //countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        	countSql.append(" AND ((고용상태 LIKE ?) or (1=1))");
 	        }
-	        if (academicAbility != null && !academicAbility.isEmpty()) {
-	            countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        else if (employment != null && !employment.isEmpty()) {
+	        	countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	        }
+	        if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	            //countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        	countSql.append(" AND ((학력요구사항 LIKE ?) or (1=1))");
+	        }
+	        else if(academicAbility != null && !academicAbility.isEmpty()) {
+	        	countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        }
+	        
 	        if (searchInput != null && !searchInput.isEmpty()) {
 	            countSql.append(" AND (정책명 LIKE ?)");
 	        }
@@ -762,15 +818,22 @@ public class PolicyRepository implements IPolicyRepository {
 	    StringBuilder sql = new StringBuilder("SELECT * FROM policies WHERE 1=1");
 
 	    // employment 조건 추가
-	    if (employment != null && !employment.isEmpty()) {
-	        sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	        //sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    	sql.append(" and ((고용상태 like ?) or (1=1))");
 	    }
-
+	    else if(employment != null && !employment.isEmpty()){
+	    	sql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	    }
 	    // academicAbility 조건 추가
-	    if (academicAbility != null && !academicAbility.isEmpty()) {
-	        sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	        //sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    	sql.append(" and ((학력요구사항 like ?) or (1=1))");
 	    }
-
+	    else if(academicAbility != null && !academicAbility.isEmpty()) {
+	    	sql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	    }
+	    
 	    // age 조건 추가
 	    if (age != null && !age.isEmpty()) {
 	        sql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
@@ -838,12 +901,21 @@ public class PolicyRepository implements IPolicyRepository {
 	        // 전체 결과 수 계산을 위한 쿼리 (페이지네이션 없이)
 	        StringBuilder countSql = new StringBuilder("SELECT COUNT(*) FROM policies WHERE 1=1");
 
-	        if (employment != null && !employment.isEmpty()) {
-	            countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        if (employment != null && !employment.isEmpty() && employment.equals("제한없음")) {
+	            //countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
+	        	countSql.append(" AND ((고용상태 LIKE ?) or (1=1))");
 	        }
-	        if (academicAbility != null && !academicAbility.isEmpty()) {
-	            countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        else if (employment != null && !employment.isEmpty()) {
+	        	countSql.append(" AND ((고용상태 LIKE ?) or (고용상태 in ('제한없음', '-')))");
 	        }
+	        if (academicAbility != null && !academicAbility.isEmpty() && academicAbility.equals("제한없음")) {
+	            //countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        	countSql.append(" AND ((학력요구사항 LIKE ?) or (1=1))");
+	        }
+	        else if(academicAbility != null && !academicAbility.isEmpty()) {
+	        	countSql.append(" AND ((학력요구사항 LIKE ?) or (학력요구사항 in ('제한없음', '-')))");
+	        }
+	        
 	        if (age != null && !age.isEmpty()) {
 	            countSql.append(" AND (((min_age <= ?) AND (? <= max_age)) or (min_age = '제한없음'))");
 	        }

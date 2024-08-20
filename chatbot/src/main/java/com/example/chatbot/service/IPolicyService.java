@@ -16,16 +16,16 @@ public interface IPolicyService {
 
 	Policy getPolicyByPolicyId(int policyId);
 	HashMap<String, Integer> getPolicyFieldsStatistics();
-	List<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies, List<String> selectedRegions);
-
-	List<Policy> searchPolicy2(String employment, String academicAbility, List<String> selectedPolicies,
-			List<String> selectedRegions, String age);
-
-	List<Policy> searchPolicy3(String employment, String academicAbility, List<String> selectedPolicies,
-			List<String> selectedRegions, String searchInput);
-
-	List<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
-			List<String> selectedRegions, String age, String searchInput);
+//	List<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies, List<String> selectedRegions);
+//
+//	List<Policy> searchPolicy2(String employment, String academicAbility, List<String> selectedPolicies,
+//			List<String> selectedRegions, String age);
+//
+//	List<Policy> searchPolicy3(String employment, String academicAbility, List<String> selectedPolicies,
+//			List<String> selectedRegions, String searchInput);
+//
+//	List<Policy> searchPolicy4(String employment, String academicAbility, List<String> selectedPolicies,
+//			List<String> selectedRegions, String age, String searchInput);
 	
     Page<Policy> searchPolicy1(String employment, String academicAbility, List<String> selectedPolicies, List<String> selectedRegions, Pageable pageable);
     Page<Policy> searchPolicy2(String employment, String academicAbility, List<String> selectedPolicies, List<String> selectedRegions, String age, Pageable pageable);
