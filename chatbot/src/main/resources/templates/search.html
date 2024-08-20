@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="/css/fontstyles.css">	
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/paginationjs@2.1.5/dist/pagination.min.css">
-	<script src="https://cdn.jsdelivr.net/npm/paginationjs@2.1.5/dist/pagination.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body class="min-w-40">
@@ -328,6 +326,15 @@
             			button.classList.add('bg-gray-200', 'text-black');
             		}
                 });
+
+            	// data-field가 'area'와 같은 경우와 다른 경우 처리 추가
+                if (regionAllButton.getAttribute('data-field') === area) {
+                    regionAllButton.classList.add('selected', 'bg-[#5856d6]', 'text-white');
+                    regionAllButton.classList.remove('bg-gray-200', 'text-black');
+                } else {
+                    regionAllButton.classList.remove('selected', 'bg-[#5856d6]', 'text-white');
+                    regionAllButton.classList.add('bg-gray-200', 'text-black');
+                }
             	
             	for (var i = 0; i < options.length; i++) {
                     if (options[i].value === userEmployment) {
