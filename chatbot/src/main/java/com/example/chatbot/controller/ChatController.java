@@ -140,7 +140,7 @@ public class ChatController {
         }
 
         // 챗봇 서버의 URL
-        // String chatbotUrl = "https://b725b6dc45f0.ngrok.app/botresponse";
+        //String chatbotUrl = "https://78d7-34-16-189-152.ngrok-free.app/botresponse";
         String chatbotUrl = "http://localhost:5000/botresponse";
         try {
             // 챗봇 서버로 메시지 전달을 위한 준비물

@@ -1,5 +1,8 @@
 package com.example.chatbot.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,7 +30,12 @@ public class ProfileController {
 			String[] mtypes = profile.getFileContentType().split("/");
 			headers.setContentType(new MediaType(mtypes[0], mtypes[1]));
 			headers.setContentLength(profile.getFileSize());
-			headers.setContentDispositionFormData("attachment", profile.getFileName());
+			try {
+				headers.setContentDispositionFormData("attachment", URLEncoder.encode(profile.getFileName(), "UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return new ResponseEntity<byte[]>(profile.getFileData(), headers, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<byte[]>(HttpStatus.NOT_FOUND);
